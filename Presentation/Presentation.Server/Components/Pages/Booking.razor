@@ -1,0 +1,39 @@
+﻿@page "/booking"
+@rendermode InteractiveServer
+@inject IBookingService _bookingService
+
+<h3>Opret booking</h3>
+
+<RadzenTemplateForm TItem="BookingCreateDto" Data=@_bookingModel Submit="@CreateBookingAsync">
+    <RadzenStack Gap="1.5rem">
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="NameRequiredInput">
+                Fulde navn <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+            </RadzenLabel>
+            <RadzenTextBox Name="NameRequiredInput" @bind-Value=@_bookingModel.GuestName Style="width: 100%; max-width: 400px;" />
+            <RadzenRequiredValidator Component="NameRequiredInput" Text="Navn skal tilføjes" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="StartDateInput">
+                Start dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+            </RadzenLabel>
+            <RadzenDatePicker Name="StartDateInput" @bind-Value="_bookingModel.StartDate" DateFormat="dd/MM/yyyy"
+                              Min="@DateTime.Now" Style="width:250px" />
+            <ValidationMessage For="@(() => _bookingModel.StartDate)" />
+            <RadzenRequiredValidator Component="StartDateInput" Text="Start dato skal sættes" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="EndDateInput">
+                Slut dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+            </RadzenLabel>
+            <RadzenDatePicker Name="EndDateInput" @bind-Value="_bookingModel.EndDate" DateFormat="dd/MM/yyyy"
+                              Min="@DateTime.Now" Style="width:250px" />
+            <ValidationMessage For="@(() => _bookingModel.StartDate)" />
+            <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
+        </RadzenStack>
+
+        <RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
+    </RadzenStack>
+</RadzenTemplateForm>

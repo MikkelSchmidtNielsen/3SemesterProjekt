@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.InversionOfControl.HttpClientSetup
+namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 {
     internal class HttpClientModule
     {
