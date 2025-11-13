@@ -7,7 +7,7 @@ using Domain.Models;
 
 namespace UnitTest.Domain.UnitTest
 {
-    public class ResourceTests
+    public class ResourceEntityTest
     {
         [Fact]
         public static void RessourceValidation_ShouldPass_WhenGivenCorrectInfo()
