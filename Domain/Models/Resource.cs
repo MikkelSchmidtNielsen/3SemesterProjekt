@@ -38,7 +38,7 @@ namespace Domain.Models
                 throw new Exception("Resource type is null.");
             }
             else
-            {
+        {
                 return true;
             }
         }
