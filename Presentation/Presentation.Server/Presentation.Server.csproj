@@ -14,4 +14,8 @@
     <PackageReference Include="Radzen.Blazor" Version="8.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Pages\GuestPages\" />
+  </ItemGroup>
+
 </Project>
