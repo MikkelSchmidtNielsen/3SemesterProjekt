@@ -1,6 +1,7 @@
 using Common.InversionOfControl;
 using Presentation.Client.Pages;
 using Presentation.Server.Components;
+using Radzen;
 
 namespace Presentation
 {
@@ -14,6 +15,9 @@ namespace Presentation
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents()
                 .AddInteractiveWebAssemblyComponents();
+
+            // Add Radzen components
+            builder.Services.AddRadzenComponents();
 
             // Register services to IoC
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
