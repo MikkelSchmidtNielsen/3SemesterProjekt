@@ -10,7 +10,7 @@ namespace UnitTest.Domain.UnitTest
     public class ResourceEntityTest
     {
         [Fact]
-        public static void RessourceValidation_ShouldPass_WhenGivenCorrectInfo()
+        public static void RessourceValidation_ShouldPass_WhenGivenValidInfo()
         {
             // Arrange
             int resourceId = 1;

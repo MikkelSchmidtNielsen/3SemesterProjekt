@@ -14,8 +14,6 @@
   <ItemGroup>
     <Folder Include="ApplicationDto\" />
     <Folder Include="InfrastructureInterfaces\" />
-    <Folder Include="Factories\" />
-    <Folder Include="RepositoryInterfaces\" />
     <Folder Include="Services\Command\" />
     <Folder Include="Services\Query\" />
   </ItemGroup>
