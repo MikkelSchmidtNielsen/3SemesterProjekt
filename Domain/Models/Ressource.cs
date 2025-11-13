@@ -25,9 +25,9 @@ namespace Domain.Models
 
         public bool ValidateInformation()
         {
-            if (ResourceID == 0 || ResourceID == null)
+            if (ResourceID == 0)
             {
-                throw new Exception("Resource ID is either 0 or null.");
+                throw new Exception("Resource ID is 0.");
             }
             else if (ResourceName == null)
             {
@@ -36,10 +36,6 @@ namespace Domain.Models
             else if(ResourceType == null)
             {
                 throw new Exception("Resource type is null.");
-            }
-            else if(ResourceBasePrice == null)
-            {
-                throw new Exception("Resource price is null.");
             }
             else
             {

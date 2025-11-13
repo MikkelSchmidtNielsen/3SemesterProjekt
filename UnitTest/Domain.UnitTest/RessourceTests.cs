@@ -27,5 +27,43 @@ namespace UnitTest.Domain.UnitTest
             Assert.Equal(ressourceType, ressource.ResourceType);
             Assert.Equal(ressourceBasePrice, ressource.ResourceBasePrice);
         }
+
+        [Fact]
+        public static void RessourceValidation_ShouldFail_IfIdIsZero()
+        {
+            // Arrange
+            int ressourceId = 0;
+            string ressourceName = "Luksushytte nr. 5";
+            string ressourceType = "Hytte";
+            double ressourceBasePrice = 899.95;
+
+            // Assert
+            Assert.Throws<Exception>(() => new Ressource(ressourceId, ressourceName, ressourceType, ressourceBasePrice));
+        }
+        [Fact]
+        public static void RessourceValidation_ShouldFail_IfNameIsNull()
+        {
+            // Arrange
+            int ressourceId = 1;
+            string ressourceName = null;
+            string ressourceType = "Hytte";
+            double ressourceBasePrice = 899.95;
+
+            // Assert
+            Assert.Throws<Exception>(() => new Ressource(ressourceId, ressourceName, ressourceType, ressourceBasePrice));
+        }
+        [Fact]
+        public static void RessourceValidation_ShouldFail_IfTypeIsNull()
+        {
+            // Arrange
+            int ressourceId = 1;
+            string ressourceName = "Luksushytte nr. 5";
+            string ressourceType = null;
+            double ressourceBasePrice = 899.95;
+
+            // Assert
+            Assert.Throws<Exception>(() => new Ressource(ressourceId, ressourceName, ressourceType, ressourceBasePrice));
+        }
+
     }
 }
