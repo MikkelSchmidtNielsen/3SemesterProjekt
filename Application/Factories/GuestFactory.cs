@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Application.Factories
 {
-	public class ResourceFactory : IResourceFactory
+	public class GuestFactory : IGuestFactory
 	{
-		public IResult<Resource> Create()
+		public IResult<Guest> Create()
 		{
 			throw new NotImplementedException();
 		}

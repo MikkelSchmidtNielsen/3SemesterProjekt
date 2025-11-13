@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.ResultInterfaces;
 using Domain.Models;
 
-namespace UnitTest.Domain.UnitTest
+namespace Domain.DomainInterfaces
 {
-    public class BookingEntityTest
-    {
-    }
+	public interface IResourceFactory
+	{
+		IResult<Resource> Create();
+	}
 }

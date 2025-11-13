@@ -1,6 +1,6 @@
-﻿using Application.RepositoryInterfaces;
-using Application.ServiceInterfaces.Command;
-using Application.Services.Command;
+﻿using Application.Factories;
+using Application.RepositoryInterfaces;
+using Domain.DomainInterfaces;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +17,16 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddDbContext<SqlServerDbContext>();
 
             //Add services
-            services.AddScoped<IBookingCreateCommand, BookingCreateCommand>();
 
             //Add repositories
-            services.AddTransient<IBookingRepository, BookingRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IResourceRepository, ResourceRepository>();
+            services.AddScoped<IGuestRepository, GuestRepository>();
+
+            //Add factories
+            services.AddScoped<IBookingFactory, BookingFactory>();
+            services.AddScoped<IResourceFactory, ResourceFactory>();
+            services.AddScoped<IGuestFactory, GuestFactory>();
         
 
             HttpClientModule.RegisterHttpClients(services, configuration);

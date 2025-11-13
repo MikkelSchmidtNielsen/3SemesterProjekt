@@ -9,7 +9,6 @@ namespace Domain.Models
     public class Guest
     {
         public int Id { get; init; }
-        public int bookingId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int PhoneNumber { get; set; }
@@ -19,7 +18,7 @@ namespace Domain.Models
         public string Address { get; set; }
 
         // Entity Framework
-        public Booking Booking { get;}
+        public List<Booking> Booking { get;}
 
         public Guest(int id, string firstName, string lastName, int phoneNumber, string email, string country, string language, string address)
         {
@@ -32,5 +31,10 @@ namespace Domain.Models
             Language = language;
             Address = address;
         }
-    }
+
+		private void ValidateGuestInformation()
+		{
+
+		}
+	}
 }
