@@ -9,12 +9,14 @@ namespace Domain.Models
     public class Booking
     {
         public int Id { get; private set; }
+        public string GuestName { get; private set; }
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }
 
-        public Booking(DateOnly startDate, DateOnly endDate, decimal totalPrice)
+        public Booking(string guestName, DateOnly startDate, DateOnly endDate, decimal totalPrice)
         {
+            GuestName = guestName;
             StartDate = startDate;
             EndDate = endDate;
             TotalPrice = totalPrice;
@@ -24,6 +26,12 @@ namespace Domain.Models
 
         private void ValidateBookingInformation()
         {
+            // Gæst navn kan ikke være tomt
+            if (string.IsNullOrWhiteSpace(GuestName))
+            {
+                throw new ArgumentException("Gæstens navn skal indtastes");
+            }
+            
             // Start dato er i nutid
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
