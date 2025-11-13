@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Ressource
+    public class Resource
     {
         public int ResourceID { get; init; }
         public string ResourceName { get; set; }
         public string ResourceType { get; set; }
         public double ResourceBasePrice { get; set; }
 
-        public Ressource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
+        public Resource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
         {
             ResourceID = resourceId;
             ResourceName = resourceName;
