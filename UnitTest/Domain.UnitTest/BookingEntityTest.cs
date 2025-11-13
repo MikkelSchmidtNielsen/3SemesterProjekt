@@ -27,6 +27,7 @@ namespace UnitTest.Domain.UnitTest
             Assert.Equal(totalPrice, booking.TotalPrice);
         }
 
+        [Theory]
         [InlineData("")]
         [InlineData(null)]
         public void BookingCreation_ShouldFail_WhenGivenGuestNameIsNullOrEmpty(string guestName)

@@ -1,23 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Common\Common.csproj" />
+		<ProjectReference Include="..\Domain\Domain.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ApplicationDto\" />
-    <Folder Include="InfrastructureInterfaces\" />
-    <Folder Include="Factories\" />
-    <Folder Include="RepositoryInterfaces\" />
-    <Folder Include="Services\Command\" />
-    <Folder Include="Services\Query\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="ApplicationDto\" />
+		<Folder Include="InfrastructureInterfaces\" />
+		<Folder Include="Factories\" />
+		<Folder Include="Services\Query\" />
+	</ItemGroup>
 
 </Project>

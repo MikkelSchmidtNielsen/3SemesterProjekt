@@ -1,4 +1,4 @@
-using Common.InversionOfControl;
+using InversionOfControlContainers.InversionOfControl;
 using Presentation.Server.Components;
 using Radzen;
 
