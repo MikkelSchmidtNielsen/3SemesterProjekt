@@ -26,6 +26,24 @@ namespace Domain.Models
             TotalPrice = totalPrice;
             Guest = guest;
             Resource = resource;
+
+            ValidateBookingInformation();
+        }
+
+        private void ValidateBookingInformation()
+        {
+            if (StartDate > EndDate)
+            {
+                throw new Exception();
+            }
+            if (StartDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                throw new Exception();
+            }
+            if (TotalPrice < 0 && TotalPrice == 0)
+            {
+                throw new Exception();
+            }
         }
     }
 }

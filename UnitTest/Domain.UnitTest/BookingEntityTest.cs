@@ -10,13 +10,37 @@ namespace UnitTest.Domain.UnitTest
     public class BookingEntityTest
     {
         [Fact]
+        public void GuestBookingShouldRequireAGuest()
+        {
+            // Arrange
+            
+
+            // Act
+
+
+            // Assert
+
+
+        }
+        [Fact]
+        public void GuestBookingShouldRequireAResource()
+        {
+            // Arrange
+
+
+            // Act
+
+
+            // Assert
+        }
+        [Fact]
         public void GuestBookingShouldCreateWhenGivenCorrectInformation()
         {
             // Arrange
             int guestId = 1;
-            
+
             int resourceId = 1;
-            
+
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             double totalPrice = 100;
