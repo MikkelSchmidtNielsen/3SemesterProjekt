@@ -2,6 +2,7 @@ name: Create & push docker environment for test
 
 on:
   pull_request:
+    branches: [ "development" ]
     types: [closed] 
 
 jobs:
