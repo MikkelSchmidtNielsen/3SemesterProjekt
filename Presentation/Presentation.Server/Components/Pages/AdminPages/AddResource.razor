@@ -1,0 +1,31 @@
+﻿@page "/admin/addresource"
+<div id="main-container">
+	<h1 id="header-text">Opret en ny ressource</h1>
+
+	<RadzenRow JustifyContent="JustifyContent.Center" Gap="20rem" class="rz-m-0 rz-m-md-12">
+		<div id="resource-details-container">
+			<form>
+				<label for="resource-name">Ressourcenavn</label><br />
+				<RadzenTextBox id="resource-name" Placeholder="Navn på ressource..."></RadzenTextBox><br />
+				<label for="resource-type">Ressourcetype</label><br />
+				<RadzenDropDown Value=@selectedResourceType Data=@resourceTypes /><br />
+				<label for="resource-price">Pris pr. dag</label><br />
+				<RadzenTextBox id="resource-price" Placeholder="Pris i DKK..."></RadzenTextBox><br />
+				<label for="resource-description">Beskrivelse</label><br />
+				<RadzenTextArea id="resource-description" Placeholder="Beskrivelse af ressource..."></RadzenTextArea>
+			</form>
+		</div>
+		<div id="image-upload-container">
+			<h2>billede her..</h2>
+			<RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Base">Upload billede...</RadzenButton>
+		</div>
+	</RadzenRow>
+	<div id="add-button">
+		<RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success">Opret</RadzenButton>
+	</div>
+</div>
+
+@code {
+	string selectedResourceType;
+	List<string> resourceTypes = new List<string>() { "Hytte", "Campingvognplads", "Teltplads" };
+}
