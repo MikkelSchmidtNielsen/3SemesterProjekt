@@ -9,9 +9,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Application.csproj" />
     <ProjectReference Include="..\..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\InversionOfControlContainers\InversionOfControlContainers.csproj" />
     <ProjectReference Include="..\Presentation.Client\Presentation.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.20" />
     <PackageReference Include="Radzen.Blazor" Version="8.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Components\Pages\AdminPages\" />
+    <Folder Include="Components\Pages\GuestPages\" />
   </ItemGroup>
 
 </Project>
