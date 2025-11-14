@@ -11,9 +11,9 @@ namespace Domain.Models
         public int Id { get; init; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public double BasePrice { get; set; }
+        public decimal BasePrice { get; set; }
 
-        public Resource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
+        public Resource(int resourceId, string resourceName, string resourceType, decimal resourceBasePrice)
         {
             Id = resourceId;
             Name = resourceName;

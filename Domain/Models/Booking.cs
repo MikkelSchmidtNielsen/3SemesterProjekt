@@ -47,6 +47,28 @@ namespace Domain.Models
             {
                 throw new Exception();
             }
+
+            //TotalPrice
+            if (TotalPrice < 0)
+            {
+                throw new Exception();
+            }
+            if (DecimalPlaces(TotalPrice) > 2)
+            {
+                throw new Exception();
+            }
+        }
+        /// <summary>
+        /// Hjælpemetode: Returnerer antallet af decimaler et tal har.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private int DecimalPlaces(decimal value)
+        {
+            value = Math.Abs(value);
+            int[] bits = decimal.GetBits(value);
+            byte scale = (byte)((bits[3] >> 16) & 0x7F);
+            return scale;
         }
     }
 }
