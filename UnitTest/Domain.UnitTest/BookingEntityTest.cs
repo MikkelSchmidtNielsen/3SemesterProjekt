@@ -24,7 +24,7 @@ namespace UnitTest.Domain.UnitTest
             // Act
             Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
-            Booking booking = new Booking(guest.Id, resource.ResourceID, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
+            Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
 
             // Assert
             Assert.Equal(guest.Id, booking.GuestId);
@@ -50,7 +50,7 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.ResourceID, guest.FirstName + guest.LastName, 
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, 
                 startDate, endDate, totalPrice));
         }
         [Fact]
@@ -69,7 +69,26 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.ResourceID, guest.FirstName + guest.LastName,
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
+                startDate, endDate, totalPrice));
+        }
+        [Fact]
+        public void GuestBookingStartDateIsSameDayAsEnddate()
+        {
+            // Arrange
+            int guestId = 1;
+            int resourceId = 1;
+
+            DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+            DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+            decimal totalPrice = 100;
+
+            // Act
+            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+
+            // Assert
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
                 startDate, endDate, totalPrice));
         }
     }

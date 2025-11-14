@@ -34,12 +34,16 @@ namespace Domain.Models
 
 		private void ValidateBookingInformation()
         {
-            // StartDate
+            // StartDate/EndDate
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
                 throw new Exception();
             }
             if (StartDate > EndDate)
+            {
+                throw new Exception();
+            }
+            if (StartDate == EndDate)
             {
                 throw new Exception();
             }
