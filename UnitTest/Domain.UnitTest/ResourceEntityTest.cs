@@ -22,7 +22,7 @@ namespace UnitTest.Domain.UnitTest
             Resource ressource = new Resource(resourceId, resourceName, resourceType, resourceBasePrice);
 
             // Assert
-            Assert.Equal(resourceId, ressource.ResourceID);
+            Assert.Equal(resourceId, ressource.Id);
             Assert.Equal(resourceName, ressource.ResourceName);
             Assert.Equal(resourceType, ressource.ResourceType);
             Assert.Equal(resourceBasePrice, ressource.ResourceBasePrice);

@@ -8,14 +8,15 @@ namespace Domain.Models
 {
     public class Resource
     {
-        public int ResourceID { get; init; }
+        public int Id { get; init; }
         public string ResourceName { get; set; }
         public string ResourceType { get; set; }
         public double ResourceBasePrice { get; set; }
+        public Booking Booking { get; }
 
         public Resource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
         {
-            ResourceID = resourceId;
+            Id = resourceId;
             ResourceName = resourceName;
             ResourceType = resourceType;
             ResourceBasePrice = resourceBasePrice;
@@ -25,7 +26,7 @@ namespace Domain.Models
 
         public bool ValidateInformation()
         {
-            if (ResourceID == 0)
+            if (Id == 0)
             {
                 throw new Exception("Resource ID is 0.");
             }

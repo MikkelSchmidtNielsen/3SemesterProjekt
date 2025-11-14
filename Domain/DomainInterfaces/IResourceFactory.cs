@@ -10,6 +10,6 @@ namespace Domain.DomainInterfaces
 {
 	public interface IResourceFactory
 	{
-		IResult<Resource> Create();
+		IResult<Resource> CreateResource();
 	}
 }

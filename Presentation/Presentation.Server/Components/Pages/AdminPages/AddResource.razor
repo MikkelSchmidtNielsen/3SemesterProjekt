@@ -10,7 +10,7 @@
 				<label for="resource-type">Ressourcetype</label><br />
 				<RadzenDropDown Value=@selectedResourceType Data=@resourceTypes /><br />
 				<label for="resource-price">Pris pr. dag</label><br />
-				<RadzenTextBox id="resource-price" Placeholder="Pris i DKK..."></RadzenTextBox><br />
+				<RadzenNumeric Value=@resourcePrice TValue="double" ShowUpDown="false" Placeholder="Pris i DKK..."></RadzenNumeric><br />
 				<label for="resource-description">Beskrivelse</label><br />
 				<RadzenTextArea id="resource-description" Placeholder="Beskrivelse af ressource..."></RadzenTextArea>
 			</form>
@@ -27,5 +27,6 @@
 
 @code {
 	string selectedResourceType;
+	double resourcePrice = 0;
 	List<string> resourceTypes = new List<string>() { "Hytte", "Campingvognplads", "Teltplads" };
 }

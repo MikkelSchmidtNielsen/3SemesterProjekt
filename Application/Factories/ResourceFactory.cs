@@ -11,7 +11,7 @@ namespace Application.Factories
 {
 	public class ResourceFactory : IResourceFactory
 	{
-		public IResult<Resource> Create()
+		public IResult<Resource> CreateResource()
 		{
 			throw new NotImplementedException();
 		}

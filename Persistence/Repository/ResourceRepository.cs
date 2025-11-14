@@ -1,4 +1,5 @@
 ﻿using Application.RepositoryInterfaces;
+using Domain.Models;
 using Persistence.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,9 @@ namespace Persistence.Repository
 		{
 			_db = db;
 		}
-	}
+        public async Task<Resource> GetResourceByResourceNameAsync(string resourceName)
+        {
+			throw new NotImplementedException();
+        }
+    }
 }
