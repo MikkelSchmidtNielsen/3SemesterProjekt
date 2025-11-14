@@ -22,13 +22,13 @@ namespace Application.Factories
 		}
 		public async Task<IResult<Resource>> CreateResourceAsync(Resource resource)
 		{
+
 			if (await _repository.GetResourceByResourceNameAsync(resource.Name) != null)
 			{
                 return Result<Resource>.Error(resource, new Exception("Ressourcen eksisterer allerede."));
             }
 			else
 			{
-
 				return Result<Resource>.Success(resource);
 			}
 		}

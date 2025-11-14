@@ -22,7 +22,7 @@ namespace Persistence.Repository
 
         public async Task<Resource> GetResourceByResourceNameAsync(string resourceName)
         {
-			return await _db.Resources.FirstOrDefaultAsync(x => x.Name == resourceName);
+			return await _db.Resources.FirstAsync(x => x.Name == resourceName);
         }
         public async Task<bool> AddResourceToDBAsync(Resource resource)
         {
