@@ -34,8 +34,8 @@ namespace Domain.Models
 
 		private void ValidateBookingInformation()
         {
-            // Id
-            if (Id <= 0)
+            // StartDate
+            if (StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
                 throw new Exception();
             }
