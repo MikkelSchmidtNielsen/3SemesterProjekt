@@ -39,6 +39,10 @@ namespace Domain.Models
             {
                 throw new Exception();
             }
+            if (StartDate > EndDate)
+            {
+                throw new Exception();
+            }
         }
     }
 }

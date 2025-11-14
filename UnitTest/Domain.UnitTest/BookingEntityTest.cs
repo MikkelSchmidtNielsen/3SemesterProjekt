@@ -53,6 +53,25 @@ namespace UnitTest.Domain.UnitTest
             Assert.Throws<Exception>(() => new Booking(guest.Id, resource.ResourceID, guest.FirstName + guest.LastName, 
                 startDate, endDate, totalPrice));
         }
+        [Fact]
+        public void GuestBookingStartDateIsGreatherThanEndDate()
+        {
+            // Arrange
+            int guestId = 1;
+            int resourceId = 1;
+
+            DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
+            DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+            decimal totalPrice = 100;
+
+            // Act
+            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+
+            // Assert
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.ResourceID, guest.FirstName + guest.LastName,
+                startDate, endDate, totalPrice));
+        }
     }
 }
 
