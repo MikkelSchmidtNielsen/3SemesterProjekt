@@ -35,7 +35,10 @@ namespace Domain.Models
 
 		private void ValidateBookingInformation()
         {
-
+            if (Id <= 0)
+            {
+                throw new Exception();
+            }
         }
     }
 }
