@@ -1,11 +1,13 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Persistence.EntityFramework.EfModelConfigurations;
 
 namespace Persistence.EntityFramework
 {
     public class SqlServerDbContext : DbContext
     {
         public DbSet<Booking> Bookings { get; set; } 
+        public DbSet<Resource> Resources { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -14,7 +16,7 @@ namespace Persistence.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Apply configurations
+            modelBuilder.ApplyConfiguration(new ResourceConfiguration());
         }
     }
 }
