@@ -23,9 +23,9 @@ namespace UnitTest.Domain.UnitTest
 
             // Assert
             Assert.Equal(resourceId, ressource.Id);
-            Assert.Equal(resourceName, ressource.ResourceName);
-            Assert.Equal(resourceType, ressource.ResourceType);
-            Assert.Equal(resourceBasePrice, ressource.ResourceBasePrice);
+            Assert.Equal(resourceName, ressource.Name);
+            Assert.Equal(resourceType, ressource.Type);
+            Assert.Equal(resourceBasePrice, ressource.BasePrice);
         }
 
         [Fact]

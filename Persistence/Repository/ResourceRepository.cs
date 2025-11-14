@@ -1,5 +1,6 @@
 ﻿using Application.RepositoryInterfaces;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,16 @@ namespace Persistence.Repository
 		{
 			_db = db;
 		}
+
+
         public async Task<Resource> GetResourceByResourceNameAsync(string resourceName)
         {
-			throw new NotImplementedException();
+			return await _db.Resources.FirstOrDefaultAsync(x => x.Name == resourceName);
+        }
+        public async Task<bool> AddResourceToDBAsync(Resource resource)
+        {
+            _db.Resources.Add(resource);
+            return true;
         }
     }
 }

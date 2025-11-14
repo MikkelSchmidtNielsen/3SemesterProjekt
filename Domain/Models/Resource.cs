@@ -9,17 +9,16 @@ namespace Domain.Models
     public class Resource
     {
         public int Id { get; init; }
-        public string ResourceName { get; set; }
-        public string ResourceType { get; set; }
-        public double ResourceBasePrice { get; set; }
-        public Booking Booking { get; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public double BasePrice { get; set; }
 
         public Resource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
         {
             Id = resourceId;
-            ResourceName = resourceName;
-            ResourceType = resourceType;
-            ResourceBasePrice = resourceBasePrice;
+            Name = resourceName;
+            Type = resourceType;
+            BasePrice = resourceBasePrice;
 
             ValidateInformation();
         }
@@ -30,11 +29,11 @@ namespace Domain.Models
             {
                 throw new Exception("Resource ID is 0.");
             }
-            else if (ResourceName == null)
+            else if (Name == null)
             {
                 throw new Exception("Resource name is null.");
             }
-            else if(ResourceType == null)
+            else if(Type == null)
             {
                 throw new Exception("Resource type is null.");
             }

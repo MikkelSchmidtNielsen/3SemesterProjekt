@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Application.Factories;
+using Application.RepositoryInterfaces;
+using Domain.Models;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +20,9 @@ namespace UnitTest.Application.UnitTest
             string resourceName = "Luksushytte nr. 5";
             string resourceType = "Hytte";
             double resourceBasePrice = 899.95;
+            Resource resource = new Resource(resourceId, resourceName, resourceType, resourceBasePrice);
+            Mock<IResourceRepository> repository = new Mock<IResourceRepository>();
+            ResourceFactory resourceFactory = new ResourceFactory(repository.Object);
 
             // Act
 
