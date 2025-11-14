@@ -1,0 +1,18 @@
+﻿#main-container {
+    background: #fff5f5FF;
+}
+
+#header-text {
+    margin: 48px auto auto 48px;
+    padding-top: 24px;
+}
+
+#resource-details-container {
+    padding-left: 2em;
+}
+
+#add-button {
+    padding-right: 20%;
+    padding-bottom: 20px;
+    padding-left: 70%;
+}
