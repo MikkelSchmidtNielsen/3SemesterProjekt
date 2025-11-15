@@ -13,6 +13,7 @@ namespace Domain.Models
         public string ResourceType { get; set; }
         public double ResourceBasePrice { get; set; }
 
+        private Resource() { }
         public Resource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
         {
             ResourceID = resourceId;

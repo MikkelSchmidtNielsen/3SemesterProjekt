@@ -20,6 +20,8 @@ namespace Domain.Models
         public Guest Guest { get; set; }
         public Resource Resource { get; set; }
 
+        private Booking() { }
+
 		public Booking(int id, int guestId, int resourceId, string guestName, DateOnly startDate, DateOnly endDate, decimal totalPrice)
 		{
 			Id = id;

@@ -10,6 +10,7 @@ namespace Application.InfrastructureInterfaces
 {
 	public interface ISendEmail
 	{
-		Task<IResult<SendEmailCommandDto>> SendEmail(SendEmailCommandDto dto);
+		public enum EmailSubject { OrderConfirmation }
+		IResult<SendEmailCommandDto> SendEmail(SendEmailCommandDto dto);
 	}
 }
