@@ -14,13 +14,21 @@ namespace Persistence.Repository
         {
             _db = db;
         }
+
+		// CREATE
         public async Task<IResult<Booking>> CreateBookingAsync(Booking booking)
         {
-            await _db.Bookings.AddAsync(booking);
+			try
+			{
+				await _db.Bookings.AddAsync(booking);
+				await _db.SaveChangesAsync();
 
-            await _db.SaveChangesAsync();
-
-            return Result<Booking>.Success(booking);
-        }
+				return Result<Booking>.Success(booking);
+			}
+			catch (Exception ex)
+			{
+				return Result<Booking>.Error(booking, ex);
+			}
+		}
     }
 }

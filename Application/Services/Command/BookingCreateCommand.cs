@@ -7,11 +7,6 @@ using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Command
 {
@@ -33,14 +28,32 @@ namespace Application.Services.Command
         public async Task<IResult<Booking>> CreateBookingAsync(BookingWithGuestCreateDto bookingCreateDto)
         {
             // Get resource by id for price calculation
-            Resource selectedResource = await _resourceIdQuery.GetResourceByIdAsync(bookingCreateDto.ResourceId);
+            IResult<Resource> resourceResult = await _resourceIdQuery.GetResourceByIdAsync(bookingCreateDto.ResourceId);
+
+            if (resourceResult.IsError())
+            {
+                IResultError<Resource> resourceError = resourceResult.GetError();
+
+				// Returns an error because the ressource could not be found, so no booking could be created
+				return Result<Booking>.Error(originalType: null!, exception: resourceError.Exception!);
+			}
+
+            Resource foundResource = resourceResult.GetSuccess().OriginalType;
 
             // Logic for calculating price
             int amountOfDays = bookingCreateDto.EndDate.DayNumber - bookingCreateDto.StartDate.DayNumber;
-            decimal totalPrice = selectedResource.BasePrice * amountOfDays;
+            decimal totalPrice = foundResource.BasePrice * amountOfDays;
 
             // Create guest
             IResult<Guest> guestResult = await _guestCreateCommand.CreateGuestAsync(bookingCreateDto.Guest);
+
+            if (guestResult.IsError())
+            {
+				IResultError<Guest> guestError = guestResult.GetError();
+
+				// Returns an error because the guest could not be created, so no booking exists
+				return Result<Booking>.Error(originalType: null!, exception: guestError.Exception!);
+			}
 
             Guest createdGuest = guestResult.GetSuccess().OriginalType;
 

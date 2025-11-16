@@ -1,11 +1,7 @@
 ﻿using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
+using Common.ResultInterfaces;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Query
 {
@@ -18,7 +14,7 @@ namespace Application.Services.Query
             _repo = repo;
         }
 
-        public async Task<Resource> GetResourceByIdAsync(int id)
+        public async Task<IResult<Resource>> GetResourceByIdAsync(int id)
         {
             return await _repo.GetResourceByIdAsync(id);
         }

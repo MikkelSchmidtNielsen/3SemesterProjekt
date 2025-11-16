@@ -11,7 +11,7 @@ namespace Application.RepositoryInterfaces
 {
 	public interface IGuestRepository
 	{
-        Task<Guest> GetGuestByIdAsync(int id);
+        Task<IResult<Guest>> GetGuestByIdAsync(int id);
         Task<IResult<Guest>> CreateGuestAsync(Guest guest);
     }
 }

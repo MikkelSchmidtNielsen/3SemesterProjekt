@@ -16,30 +16,46 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
+		// CREATE
         public async Task<IResult<Guest>> CreateGuestAsync(Guest guest)
         {
-            await _db.Guests.AddAsync(guest);
+			try
+			{
+				await _db.Guests.AddAsync(guest);
+				await _db.SaveChangesAsync();
 
-            await _db.SaveChangesAsync();
+				return Result<Guest>.Success(guest);
+			}
+			catch (Exception ex)
+			{
+				return Result<Guest>.Error(guest, ex);
+			}
+		}
 
-            return Result<Guest>.Success(guest);
-        }
-
-        public async Task<Guest> GetGuestByIdAsync(int id)
+		// READ
+        public async Task<IResult<Guest>> GetGuestByIdAsync(int id)
         {
-            Guest? guest;
+			try
+			{
+				Guest? guest = await _db.Guests
+					.FirstOrDefaultAsync(x => x.Id == id);
 
-            try
-            {
-                guest = await _db.Guests
-                    .FirstOrDefaultAsync(x => x.Id == id);
-            }
-            catch
-            {
-                throw new Exception("Kunne ikke finde");
-            }
+				if (guest == null)
+				{
+					// Returns invalid guest with exception
+					return Result<Guest>.Error(
+						originalType: null, 
+						exception: new Exception($"Gæst med id {id} blev ikke fundet.")
+					);
+				}
 
-            return guest;
-        }
+				return Result<Guest>.Success(guest);
+			}
+			catch (Exception ex)
+			{
+				// Returns invalid guest with exception
+				return Result<Guest>.Error(originalType: null, exception: ex);
+			}
+		}
     }
 }

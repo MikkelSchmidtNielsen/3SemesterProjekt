@@ -10,7 +10,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
     {
         string _bookingResult = "";
 
-        IEnumerable<Resource> _resources;
+        IEnumerable<Resource> _resources = Array.Empty<Resource>();
 
         BookingWithGuestCreateDto _bookingModel = new BookingWithGuestCreateDto
         {
@@ -21,9 +21,23 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         protected override async Task OnInitializedAsync()
         {
-            IEnumerable<Resource> resources = await _resourceQuery.GetAllResourcesAsync();
-            _resources = resources;
-        }
+            IResult<IEnumerable<Resource>> result = await _resourceQuery.GetAllResourcesAsync();
+
+            if (result.IsSucces())
+            {
+                IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
+
+                _resources = resources;
+            }
+            else
+            {
+                IResultError<IEnumerable<Resource>> error = result.GetError();
+
+                string message = error.Exception!.Message;
+
+                await DialogService.Alert(message, "Error");
+            }
+		}
 
         private async Task CreateBookingAsync(BookingWithGuestCreateDto model)
         {

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Common.ResultInterfaces;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Application.ServiceInterfaces.Query
 {
     public interface IGuestIdQuery
     {
-        Task<Guest> GetGuestByIdAsync(int id);
+        Task<IResult<Guest>> GetGuestByIdAsync(int id);
     }
 }

@@ -116,17 +116,5 @@ namespace Common
 
             return instance;
         }
-
-        /// <summary>
-        /// Gives the wrapper an error response without original type
-        /// </summary>
-        public static Result<T> Error(Exception exception)
-        {
-            Result<T> instance = new Result<T>(default!, exception);
-
-            instance.Outcome = ResultType.Error;
-
-            return instance;
-        }
     }
 }

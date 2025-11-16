@@ -32,25 +32,25 @@ namespace Domain.Models
 
         private void ValidateBookingInformation()
         {
-            // Start dato er i nutid
+            // Start date is future
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
                 throw new ArgumentException("Start datoen kan ikke være i fortiden");
             }
 
-            // Start dato er sat før slut dato
+            // Start date is before end date
             if (StartDate > EndDate)
             {
                 throw new ArgumentException("Slut datoen kan ikke være før start datoen");
             }
 
-            // Start og slut dato er forskellige
+            // Start and end date is different
             if (StartDate == EndDate)
             {
                 throw new ArgumentException("Start dato og slut dato må ikke være på samme dag");
             }
 
-            // Total pris er positiv
+            // Total price is positive
             if (TotalPrice < 0)
             {
                 throw new ArgumentException("Den totale pris kan ikke være negativ");

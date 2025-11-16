@@ -1,12 +1,9 @@
 ﻿using Application.RepositoryInterfaces;
+using Common;
+using Common.ResultInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
@@ -20,32 +17,44 @@ namespace Persistence.Repository
 		}
 
         // READ
-        public async Task<Resource> GetResourceByIdAsync(int id)
+        public async Task<IResult<Resource>> GetResourceByIdAsync(int id)
         {
-            Resource? resource;
+			try
+			{
+				Resource? resource = await _db.Resources
+					.FirstOrDefaultAsync(x => x.Id == id);
 
-            try
-            {
-                resource = await _db.Resources
-                    .FirstOrDefaultAsync(x => x.Id == id);
-            }
-            catch
-            {
-                throw new Exception("Kunne ikke finde");
-            }
+				if (resource == null)
+				{
+					// Returns invalid resource with exception
+					return Result<Resource>.Error(
+						originalType: null!,
+						exception: new Exception($"Ressource med id {id} blev ikke fundet.")
+					);
+				}
 
-            return resource;
-        }
+				return Result<Resource>.Success(resource);
+			}
+			catch (Exception ex)
+			{
+				// Returns invalid resource with exception
+				return Result<Resource>.Error(originalType: null!, exception: ex);
+			}
+		}
 
         // LIST
-        public async Task<IEnumerable<Resource>> GetAllResourcesAsync()
+        public async Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync()
         {
-            IEnumerable<Resource> resources = await _db.Resources
-                .ToListAsync();
-
-            return resources;
-        }
-
-        
+			try
+			{
+				IEnumerable<Resource> resources = await _db.Resources.ToListAsync();
+				return Result<IEnumerable<Resource>>.Success(resources);
+			}
+			catch (Exception ex)
+			{
+				// Returns invalid list with exception
+				return Result<IEnumerable<Resource>>.Error(originalType: null!, exception: ex);
+			}
+		}
     }
 }

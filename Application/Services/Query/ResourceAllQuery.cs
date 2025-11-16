@@ -1,5 +1,6 @@
 ﻿using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
+using Common.ResultInterfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Application.Services.Query
             _repo = repo;
         }
 
-        public Task<IEnumerable<Resource>> GetAllResourcesAsync()
+        public Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync()
         {
             return _repo.GetAllResourcesAsync();
         }

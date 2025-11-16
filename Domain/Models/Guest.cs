@@ -29,11 +29,29 @@ namespace Domain.Models
             Country = country;
             Language = language;
             Address = address;
+
+			ValidateGuestInformation();
         }
 
 		private void ValidateGuestInformation()
 		{
+			// First name must be provided
+			if (string.IsNullOrWhiteSpace(FirstName))
+			{
+				throw new ArgumentException("Fornavn skal tilføjes");
+			}
 
+			// Phone number must not be negative
+			if (PhoneNumber < 0)
+			{
+				throw new ArgumentException("Telefonnummer kan ikke være negativt");
+			}
+
+			// Email is optional, but if provided it must look like a valid email
+			if (string.IsNullOrWhiteSpace(Email) == false && Email.Contains('@') == false)
+			{
+				throw new ArgumentException("Email er ikke korrekt");
+			}
 		}
 	}
 }
