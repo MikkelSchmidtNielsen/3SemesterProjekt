@@ -8,32 +8,32 @@ namespace Domain.Models
 {
     public class Resource
     {
-        public int ResourceID { get; init; }
-        public string ResourceName { get; set; }
-        public string ResourceType { get; set; }
-        public double ResourceBasePrice { get; set; }
+        public int Id { get; init; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public decimal BasePrice { get; set; }
 
-        public Resource(int resourceId, string resourceName, string resourceType, double resourceBasePrice)
+        public Resource(int id, string name, string type, decimal basePrice)
         {
-            ResourceID = resourceId;
-            ResourceName = resourceName;
-            ResourceType = resourceType;
-            ResourceBasePrice = resourceBasePrice;
+            Id = id;
+            Name = name;
+            Type = type;
+            BasePrice = basePrice;
 
             ValidateInformation();
         }
 
         public bool ValidateInformation()
         {
-            if (ResourceID == 0)
+            if (Id == 0)
             {
                 throw new Exception("Resource ID is 0.");
             }
-            else if (ResourceName == null)
+            else if (Name == null)
             {
                 throw new Exception("Resource name is null.");
             }
-            else if(ResourceType == null)
+            else if(Type == null)
             {
                 throw new Exception("Resource type is null.");
             }

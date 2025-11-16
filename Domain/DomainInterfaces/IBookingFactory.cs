@@ -10,6 +10,6 @@ namespace Domain.DomainInterfaces
 {
 	public interface IBookingFactory
 	{
-		IResult<Booking> Create();
-	}
+		IResult<Booking> Create(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice);
+    }
 }

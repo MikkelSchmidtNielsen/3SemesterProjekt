@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\AdminPages\" />
     <Folder Include="Components\Pages\GuestPages\" />
   </ItemGroup>
 

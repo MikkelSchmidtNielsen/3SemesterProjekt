@@ -7,11 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.RepositoryInterfaces
+namespace Application.ServiceInterfaces.Command
 {
-	public interface IGuestRepository
-	{
-        Task<Guest> GetGuestByIdAsync(int id);
-        Task<IResult<Guest>> CreateGuestAsync(Guest guest);
+    public interface IGuestCreateCommand
+    {
+        public Task<IResult<Guest>> CreateGuestAsync(GuestCreateDto guestCreateDto);
     }
 }
