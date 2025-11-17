@@ -1,6 +1,7 @@
 ﻿using Application.Factories;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 
 namespace UnitTest.Application.UnitTest.FactoryTest
 {
@@ -11,23 +12,26 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 		{
 			// Arrange
 			BookingFactory factory = new BookingFactory();
-			int guestId = 1;
-			int resourceId = 1;
-			var startDate = DateOnly.FromDateTime(DateTime.Now);
-			var endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
-			decimal totalPrice = 100;
+			CreatedBookingDto dto = new CreatedBookingDto
+			{
+				Id = 1,
+				ResourceId = 1,
+				StartDate = DateOnly.FromDateTime(DateTime.Now),
+				EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+				TotalPrice = 100
+            };
 
 			// Act
-			IResult<Booking> result = factory.Create(guestId, resourceId, startDate, endDate, totalPrice);
+			IResult<Booking> result = factory.Create(dto);
 			IResultSuccess<Booking> succes = result.GetSuccess();
 
 			// Assert
 			Assert.True(result.IsSucces());
-			Assert.Equal(guestId, succes.OriginalType.GuestId);
-			Assert.Equal(resourceId, succes.OriginalType.ResourceId);
-			Assert.Equal(startDate, succes.OriginalType.StartDate);
-			Assert.Equal(endDate, succes.OriginalType.EndDate);
-			Assert.Equal(totalPrice, succes.OriginalType.TotalPrice);
+			Assert.Equal(dto.GuestId, succes.OriginalType.GuestId);
+			Assert.Equal(dto.ResourceId, succes.OriginalType.ResourceId);
+			Assert.Equal(dto.StartDate, succes.OriginalType.StartDate);
+			Assert.Equal(dto.EndDate, succes.OriginalType.EndDate);
+			Assert.Equal(dto.TotalPrice, succes.OriginalType.TotalPrice);
 		}
 	}
 }

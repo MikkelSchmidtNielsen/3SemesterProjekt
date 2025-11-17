@@ -1,6 +1,6 @@
 ﻿namespace Application.ApplicationDto.Command
 {
-    public class BookingWithGuestCreateDto
+    public class BookingCreateDto
     {
         public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }

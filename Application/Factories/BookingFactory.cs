@@ -2,14 +2,15 @@
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 
 namespace Application.Factories
 {
     public class BookingFactory : IBookingFactory
     {
-        public IResult<Booking> Create(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice)
+        public IResult<Booking> Create(CreatedBookingDto dto)
         {
-            Booking booking = new Booking(guestId, resourceId, startDate, endDate, totalPrice);
+            Booking booking = new Booking(dto.GuestId, dto.ResourceId, dto.StartDate, dto.EndDate, dto.TotalPrice);
 
             return Result<Booking>.Success(booking);
         }

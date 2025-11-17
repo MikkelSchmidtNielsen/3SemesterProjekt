@@ -18,7 +18,7 @@ namespace Domain.Models
         public string? Address { get; set; }
 
         // Entity Framework
-        public List<Booking> Booking { get;}
+        public List<Booking> Booking { get; }
 
         public Guest(string firstName, string? lastName, int phoneNumber, string? email, string? country, string? language, string? address)
         {
@@ -30,28 +30,34 @@ namespace Domain.Models
             Language = language;
             Address = address;
 
-			ValidateGuestInformation();
+            ValidateGuestInformation();
         }
 
-		private void ValidateGuestInformation()
-		{
-			// First name must be provided
-			if (string.IsNullOrWhiteSpace(FirstName))
-			{
-				throw new ArgumentException("Fornavn skal tilføjes");
-			}
+        private void ValidateGuestInformation()
+        {
+            // First name must be provided
+            if (string.IsNullOrWhiteSpace(FirstName))
+            {
+                throw new ArgumentException("Fornavn skal tilføjes");
+            }
 
-			// Phone number must not be negative
-			if (PhoneNumber < 0)
-			{
-				throw new ArgumentException("Telefonnummer kan ikke være negativt");
-			}
+            // Phone number must not be negative
+            if (PhoneNumber < 0)
+            {
+                throw new ArgumentException("Telefonnummer kan ikke være negativt");
+            }
 
-			// Email is optional, but if provided it must look like a valid email
-			if (string.IsNullOrWhiteSpace(Email) == false && Email.Contains('@') == false)
-			{
-				throw new ArgumentException("Email er ikke korrekt");
-			}
-		}
-	}
+            // Email is optional, if provided -> validate email: "@" and "." in correct order.
+            if (!string.IsNullOrWhiteSpace(Email))
+            {
+                int atIndex = Email.IndexOf('@');
+                int dotIndex = Email.LastIndexOf('.');
+
+                if (atIndex <= 0 || dotIndex <= atIndex + 1 || dotIndex == Email.Length - 1)
+                {
+                    throw new ArgumentException("Fejl i @ og/eller .");
+                }
+            }
+        }
+    }
 }

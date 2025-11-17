@@ -8,7 +8,7 @@
 
 <h3>Opret booking</h3>
 
-<RadzenTemplateForm TItem="BookingWithGuestCreateDto" Data=@_bookingModel Submit="@CreateBookingAsync">
+<RadzenTemplateForm TItem="BookingCreateDto" Data=@_bookingModel Submit="@CreateBookingAsync">
     <RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
             <RadzenLabel Component="FirstNameRequiredInput">

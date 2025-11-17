@@ -1,7 +1,9 @@
 ﻿using Application.ApplicationDto.Command;
+using Common;
 using Common.ExternalConfig;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using Radzen;
 
 namespace Presentation.Server.Components.Pages.AdminPages
@@ -12,7 +14,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         IEnumerable<Resource> _resources = Array.Empty<Resource>();
 
-        BookingWithGuestCreateDto _bookingModel = new BookingWithGuestCreateDto
+        BookingCreateDto _bookingModel = new BookingCreateDto
         {
             StartDate = DateOnly.FromDateTime(DateTime.Now),
             EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
@@ -39,7 +41,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
             }
 		}
 
-        private async Task CreateBookingAsync(BookingWithGuestCreateDto model)
+        private async Task CreateBookingAsync(BookingCreateDto model)
         {
             if (string.IsNullOrWhiteSpace(model.Guest.Address))
             {
@@ -55,28 +57,28 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 }
             }
 
-            IResult<Booking> result = await _bookingCommand.CreateBookingAsync(_bookingModel);
+            IResult<CreatedBookingDto> result = await _bookingCommand.CreateBookingAsync(_bookingModel);
 
             if (result.IsSucces())
             {
-                IResultSuccess<Booking> success = result.GetSuccess();
+                IResultSuccess<CreatedBookingDto> success = result.GetSuccess();
 
-                _bookingResult = $"Bookingen er oprettet for {success.OriginalType.Resource.Name} med en total pris på {success.OriginalType.TotalPrice}";
+                _bookingResult = $"Bookingen er oprettet for {success.OriginalType.ResourceId} med en total pris på {success.OriginalType.TotalPrice}";
             }
             else if (result.IsError())
             {
-                IResultError<Booking> error = result.GetError();
+                IResultError<CreatedBookingDto> error = result.GetError();
 
                 _bookingResult = $"{error.Exception!.Message}";
             }
             else if (result.IsConflict())
             {
-                IResultConflict<Booking> error = result.GetConflict();
+                IResultConflict<CreatedBookingDto> error = result.GetConflict();
 
                 _bookingResult = $"{error.Exception!.Message}";
             }
 
-            _bookingModel = new BookingWithGuestCreateDto
+            _bookingModel = new BookingCreateDto
             {
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
