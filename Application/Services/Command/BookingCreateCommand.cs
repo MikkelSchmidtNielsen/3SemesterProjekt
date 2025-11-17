@@ -104,6 +104,11 @@ namespace Application.Services.Command
             int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
             dto.TotalPrice = resource.BasePrice * days;
         }
+
+        protected void AddResourceToDto(CreatedBookingDto dto, Resource resource)
+        {
+
+        }
     }
 
 }

@@ -146,7 +146,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             // Verify mocks weren't called
             guestCreateCommand.Verify(command => command.CreateGuestAsync(It.IsAny<GuestCreateDto>()), Times.Never());
             bookingFactory.Verify(factory => factory.Create(It.IsAny<CreatedBookingDto>()), Times.Never);
-            repository.Verify(x => x.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+            repository.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Guest creation
             guestCreateCommand
-                .Setup(x => x.CreateGuestAsync(bookingDto.Guest))
+                .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
                 .ReturnsAsync(Result<Guest>.Error(originalType: null, exception: guestException));
 
             BookingCreateCommand sut = new BookingCreateCommand
@@ -202,7 +202,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Verify mocks weren't called
             bookingFactory.Verify(factory => factory.Create(It.IsAny<CreatedBookingDto>()), Times.Never);
-            repository.Verify(x => x.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+            repository.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
         [Fact]
@@ -237,19 +237,19 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Exception repoException = new Exception("Database error");
 
             resourceIdQuery
-                .Setup(x => x.GetResourceByIdAsync(bookingDto.ResourceId))
+                .Setup(query => query.GetResourceByIdAsync(bookingDto.ResourceId))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
             guestCreateCommand
-                .Setup(x => x.CreateGuestAsync(bookingDto.Guest))
+                .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
                 .ReturnsAsync(Result<Guest>.Success(guest));
 
             bookingFactory
-                .Setup(x => x.Create(It.IsAny<CreatedBookingDto>()))
+                .Setup(factory => factory.Create(It.IsAny<CreatedBookingDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             repository
-                .Setup(x => x.CreateBookingAsync(booking))
+                .Setup(repo => repo.CreateBookingAsync(booking))
                 .ReturnsAsync(Result<Booking>.Error(booking, repoException));
 
             BookingCreateCommand sut = new BookingCreateCommand(
@@ -279,6 +279,18 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         public void AddPriceToDto_CalculatesTotalPriceCorrectly(int start, int end, decimal expected)
         {
             // Arrange
+            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
+            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+
+            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
+                repository.Object,
+                resourceIdQuery.Object,
+                bookingFactory.Object,
+                guestCreateCommand.Object
+            );
+
             CreatedBookingDto dto = new CreatedBookingDto
             {
                 StartDate = new DateOnly(2025, 11, start),
@@ -292,14 +304,141 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 basePrice: 100
             );
 
-            BookingCreateCommandTestClass bookingCommand = new BookingCreateCommandTestClass();
+            
 
             // Act
-            bookingCommand.AddPriceToDto(dto, resource);
+            testClass.AddPriceToDto(dto, resource);
 
             // Assert
             Assert.Equal(expected, dto.TotalPrice);
         }
 
+        [Fact]
+        public void Error_ReturnsCreatedBookingDtoError_WithCorrectException()
+        {
+            // Arrange
+            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
+            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+
+            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
+                repository.Object,
+                resourceIdQuery.Object,
+                bookingFactory.Object,
+                guestCreateCommand.Object
+            );
+
+            CreatedBookingDto dto = new CreatedBookingDto
+            {
+                ResourceId = 1,
+                GuestId = 1,
+                TotalPrice = 100m,
+                StartDate = DateOnly.FromDateTime(DateTime.Now),
+                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(2))
+            };
+
+            Exception originalException = new Exception("Error");
+
+            Result<string> errorResult = Result<string>.Error(originalType: "original", exception: originalException);
+
+            // Act
+            IResult<CreatedBookingDto> result = testClass.Error(dto, errorResult);
+
+            // Assert
+            Assert.True(result.IsError());
+
+            IResultError<CreatedBookingDto> error = result.GetError();
+            Assert.Equal(dto, error.OriginalType);
+            Assert.Equal(originalException, error.Exception);
+        }
+
+        [Fact]
+        public async Task CreateGuestAsync_SetsGuestId_WhenGuestCreationSucceeds()
+        {
+            // Arrange
+            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
+            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+
+            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
+                repository.Object,
+                resourceIdQuery.Object,
+                bookingFactory.Object,
+                guestCreateCommand.Object
+            );
+
+            int guestId = 1;
+            Guest guest = new Guest("Mikkel", null, 0, null, null, null, null) 
+            {
+                Id = guestId 
+            };
+
+            CreatedBookingDto dto = new CreatedBookingDto();
+            BookingCreateDto bookingDto = new BookingCreateDto
+            {
+                Guest = new GuestCreateDto 
+                { 
+                    FirstName = "Mikkel" 
+                }
+            };
+
+            guestCreateCommand
+                .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
+                .ReturnsAsync(Result<Guest>.Success(guest));
+
+            // Act
+            IResult<Guest> result = await testClass.CreateGuestAsync(dto, bookingDto);
+
+            // Assert
+            Assert.True(result.IsSucces());
+            Assert.Equal(guestId, dto.GuestId); // dto.GuestId skal være sat
+            Assert.Equal(guest, result.GetSuccess().OriginalType);
+
+            guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
+        }
+
+        [Fact]
+        public async Task CreateGuestAsync_DoesntSetGuestId_WhenGuestCreationFails()
+        {
+            // Arrange
+            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
+            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+
+            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
+                repository.Object,
+                resourceIdQuery.Object,
+                bookingFactory.Object,
+                guestCreateCommand.Object
+            );
+
+            CreatedBookingDto dto = new CreatedBookingDto();
+            BookingCreateDto bookingDto = new BookingCreateDto
+            {
+                Guest = new GuestCreateDto
+                {
+                    FirstName = "Mikkel"
+                }
+            };
+
+            Exception exception = new Exception("Error");
+
+            guestCreateCommand
+                .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
+                .ReturnsAsync(Result<Guest>.Error(null!, exception));
+
+            // Act
+            IResult<Guest> result = await testClass.CreateGuestAsync(dto, bookingDto);
+
+            // Assert
+            Assert.True(result.IsError());
+            Assert.Equal(0, dto.GuestId);
+            Assert.Equal(exception, result.GetError().Exception);
+
+            guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
+        }
     }
 }

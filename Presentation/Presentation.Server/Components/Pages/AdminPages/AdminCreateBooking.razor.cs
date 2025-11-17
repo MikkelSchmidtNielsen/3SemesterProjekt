@@ -1,6 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
 using Common;
-using Common.ExternalConfig;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
@@ -14,7 +13,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         IEnumerable<Resource> _resources = Array.Empty<Resource>();
 
-        BookingCreateDto _bookingModel = new BookingCreateDto
+        BookingModel _bookingModel = new BookingModel
         {
             StartDate = DateOnly.FromDateTime(DateTime.Now),
             EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
@@ -41,7 +40,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
             }
 		}
 
-        private async Task CreateBookingAsync(BookingCreateDto model)
+        private async Task CreateBookingAsync(BookingModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Guest.Address))
             {
@@ -57,13 +56,15 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 }
             }
 
-            IResult<CreatedBookingDto> result = await _bookingCommand.CreateBookingAsync(_bookingModel);
+            BookingCreateDto dto = Mapper.Map<BookingCreateDto>(model);
+
+            IResult<CreatedBookingDto> result = await _bookingCommand.CreateBookingAsync(dto);
 
             if (result.IsSucces())
             {
                 IResultSuccess<CreatedBookingDto> success = result.GetSuccess();
 
-                _bookingResult = $"Bookingen er oprettet for {success.OriginalType.ResourceId} med en total pris på {success.OriginalType.TotalPrice}";
+                _bookingResult = $"Bookingen er oprettet for {_resources.FirstOrDefault(resource => resource.Id == model.ResourceId)!.Name} med en total pris på {success.OriginalType.TotalPrice}";
             }
             else if (result.IsError())
             {
@@ -78,12 +79,20 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 _bookingResult = $"{error.Exception!.Message}";
             }
 
-            _bookingModel = new BookingCreateDto
+            _bookingModel = new BookingModel
             {
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 Guest = new GuestCreateDto()
             };
         }
+    }
+
+    internal class BookingModel
+    {
+        public int ResourceId { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public GuestCreateDto Guest { get; set; }
     }
 }

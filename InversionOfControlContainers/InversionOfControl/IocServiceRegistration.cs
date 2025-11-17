@@ -40,7 +40,6 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IResourceFactory, ResourceFactory>();
             services.AddScoped<IGuestFactory, GuestFactory>();
         
-
             HttpClientModule.RegisterHttpClients(services, configuration);
         }
     }

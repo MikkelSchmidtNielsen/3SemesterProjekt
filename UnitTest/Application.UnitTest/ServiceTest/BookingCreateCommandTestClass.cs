@@ -1,30 +1,33 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.RepositoryInterfaces;
+using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
+using Application.Services.Command;
 using Common.ResultInterfaces;
+using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
-    internal class BookingCreateCommandTestClass
+    internal class BookingCreateCommandTestClass : BookingCreateCommand
     {
-        new public IResult<CreatedBookingDto> Error<T>(CreatedBookingDto dto, IResult<T> errorResult)
+        public BookingCreateCommandTestClass(IBookingRepository repository, IResourceIdQuery resourceQuery, IBookingFactory factory, IGuestCreateCommand guestCommand)
+            : base(repository, resourceQuery, factory, guestCommand) {}
+
+        public new IResult<CreatedBookingDto> Error<T>(CreatedBookingDto dto, IResult<T> errorResult)
         {
-            return Error(dto, errorResult);
+            return base.Error(dto, errorResult);
         }
 
         new public async Task<IResult<Guest>> CreateGuestAsync(CreatedBookingDto dto, BookingCreateDto input)
         {
-            return await CreateGuestAsync(dto, input);
+            return await base.CreateGuestAsync(dto, input);
         }
 
         new public void AddPriceToDto(CreatedBookingDto dto, Resource resource)
         {
-            AddPriceToDto(dto, resource);
+            base.AddPriceToDto(dto, resource);
         }
     }
 }
