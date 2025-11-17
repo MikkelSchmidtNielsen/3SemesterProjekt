@@ -13,9 +13,10 @@
 
   <ItemGroup>
     <Folder Include="InfrastructureInterfaces\" />
+    <Folder Include="ServiceInterfaces\Command\" />
+    <Folder Include="ServiceInterfaces\Query\" />
+    <Folder Include="Services\Command\" />
+    <Folder Include="Services\Query\" />
   </ItemGroup>
-	<ItemGroup>
-		<Folder Include="InfrastructureInterfaces\" />
-	</ItemGroup>
 
 </Project>
