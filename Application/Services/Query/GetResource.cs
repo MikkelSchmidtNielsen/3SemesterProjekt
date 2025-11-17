@@ -1,0 +1,14 @@
+﻿using Application.ServiceInterfaces.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Services.Query
+{
+    internal class GetResource : IGetResource
+    {
+
+    }
+}
