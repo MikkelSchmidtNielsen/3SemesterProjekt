@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 
 namespace Domain.DomainInterfaces
 {
 	public interface IResourceFactory
 	{
-		Task<IResult<Resource>> CreateResourceAsync(Resource resource);
+		Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto);
 	}
 }

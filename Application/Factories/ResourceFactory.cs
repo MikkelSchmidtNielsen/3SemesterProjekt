@@ -3,6 +3,7 @@ using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -20,17 +21,19 @@ namespace Application.Factories
 		{
 			_repository = repository;
 		}
-		public async Task<IResult<Resource>> CreateResourceAsync(Resource resource)
+		public async Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto)
 		{
-			Resource resourceAlreadyInDatabase = await _repository.GetResourceByResourceNameAsync(resource.Name);
+			Resource resourceAlreadyInDatabase = await _repository.GetResourceByResourceNameAsync(dto.Name);
 
 			if (resourceAlreadyInDatabase != null)
 			{
-                return Result<Resource>.Error(resource, new Exception("Ressourcen eksisterer allerede."));
+                return Result<Resource>.Error(resourceAlreadyInDatabase, new Exception("Ressourcen eksisterer allerede."));
             }
 			else
 			{
-				return Result<Resource>.Success(resource);
+                Resource resource = new Resource(dto);
+				await _repository.AddResourceToDBAsync(resource);
+                return Result<Resource>.Success(null);
 			}
 		}
 	}
