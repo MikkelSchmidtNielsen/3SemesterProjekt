@@ -270,5 +270,36 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(booking.ResourceId, error.OriginalType.ResourceId);
             Assert.Equal(repoException, error.Exception);
         }
+
+        [Theory]
+        [InlineData(1, 3, 300)]
+        [InlineData(1, 5, 500)]
+        [InlineData(1, 30, 3000)]
+        [InlineData(3, 4, 200)]
+        public void AddPriceToDto_CalculatesTotalPriceCorrectly(int start, int end, decimal expected)
+        {
+            // Arrange
+            CreatedBookingDto dto = new CreatedBookingDto
+            {
+                StartDate = new DateOnly(2025, 11, start),
+                EndDate = new DateOnly(2025, 11, end)
+            };
+
+            Resource resource = new Resource(
+                id: 1,
+                name: "Test Hytte",
+                type: "Hytte",
+                basePrice: 100
+            );
+
+            BookingCreateCommandTestClass bookingCommand = new BookingCreateCommandTestClass();
+
+            // Act
+            bookingCommand.AddPriceToDto(dto, resource);
+
+            // Assert
+            Assert.Equal(expected, dto.TotalPrice);
+        }
+
     }
 }

@@ -75,7 +75,7 @@ namespace Application.Services.Command
         /// <summary>
         /// Creates a standardized error result for booking creation.
         /// </summary>
-        private IResult<CreatedBookingDto> Error<T>(CreatedBookingDto dto, IResult<T> errorResult)
+        protected IResult<CreatedBookingDto> Error<T>(CreatedBookingDto dto, IResult<T> errorResult)
         {
             return Result<CreatedBookingDto>.Error(dto, errorResult.GetError().Exception!);
         }
@@ -83,7 +83,7 @@ namespace Application.Services.Command
         /// <summary>
         /// Creates guest and adds id to dto if succeeded
         /// </summary>
-        private async Task<IResult<Guest>> CreateGuestAsync(CreatedBookingDto dto, BookingCreateDto input)
+        protected async Task<IResult<Guest>> CreateGuestAsync(CreatedBookingDto dto, BookingCreateDto input)
         {
             IResult<Guest> guestResult = await _guestCreateCommand.CreateGuestAsync(input.Guest);
 
@@ -98,7 +98,7 @@ namespace Application.Services.Command
         /// <summary>
         /// Calculates and adds price to dto
         /// </summary>
-        private void AddPriceToDto(CreatedBookingDto dto, Resource resource)
+        protected void AddPriceToDto(CreatedBookingDto dto, Resource resource)
         {
             // Today + total days of staying
             int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
