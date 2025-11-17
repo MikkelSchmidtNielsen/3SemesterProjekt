@@ -22,6 +22,7 @@ COPY Persistence/*.csproj Persistence/
 COPY Presentation/Presentation.Client/*.csproj Presentation/Presentation.Client/
 COPY Presentation/Presentation.Server/*.csproj Presentation/Presentation.Server/
 COPY UnitTest/*.csproj UnitTest/
+COPY InversionOfControlContainers/*.csproj InversionOfControlContainers/
 
 # Forbind projectreferencer
 RUN dotnet restore "3SemesterProjekt.sln"
@@ -34,6 +35,7 @@ COPY Infrastructure/ Infrastructure/
 COPY Persistence/ Persistence/
 COPY Presentation/Presentation.Client Presentation/Presentation.Client/
 COPY Presentation/Presentation.Server Presentation/Presentation.Server/
+COPY InversionOfControlContainers/ InversionOfControlContainers
 
 # Byg projektet med tidligere sat konfiguration
 RUN dotnet build "Presentation/Presentation.Server/Presentation.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build

@@ -33,8 +33,8 @@ namespace Domain.Models
             ValidateGuestInformation();
         }
 
-        private void ValidateGuestInformation()
-        {
+		private void ValidateGuestInformation()
+		{
             // First name must be provided
             if (string.IsNullOrWhiteSpace(FirstName))
             {
@@ -58,6 +58,6 @@ namespace Domain.Models
                     throw new ArgumentException("Fejl i @ og/eller .");
                 }
             }
-        }
-    }
+		}
+	}
 }

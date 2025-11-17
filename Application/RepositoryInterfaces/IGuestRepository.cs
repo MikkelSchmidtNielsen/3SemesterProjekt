@@ -13,5 +13,5 @@ namespace Application.RepositoryInterfaces
 	{
         Task<IResult<Guest>> GetGuestByIdAsync(int id);
         Task<IResult<Guest>> CreateGuestAsync(Guest guest);
-    }
+	}
 }

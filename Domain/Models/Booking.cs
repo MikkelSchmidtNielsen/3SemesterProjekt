@@ -24,7 +24,7 @@
             ValidateBookingInformation();
 		}
 
-        private void ValidateBookingInformation()
+		private void ValidateBookingInformation()
         {
             // Start date is future
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))

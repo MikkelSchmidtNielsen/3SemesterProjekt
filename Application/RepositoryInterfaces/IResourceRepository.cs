@@ -7,5 +7,5 @@ namespace Application.RepositoryInterfaces
 	{
 		Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
 		Task<IResult<Resource>> GetResourceByIdAsync(int id);
-    }
+	}
 }

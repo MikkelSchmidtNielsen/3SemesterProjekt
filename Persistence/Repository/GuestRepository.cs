@@ -57,5 +57,5 @@ namespace Persistence.Repository
 				return Result<Guest>.Error(originalType: null, exception: ex);
 			}
 		}
-    }
+	}
 }

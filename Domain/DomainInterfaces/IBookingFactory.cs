@@ -7,5 +7,5 @@ namespace Domain.DomainInterfaces
 	public interface IBookingFactory
 	{
 		IResult<Booking> Create(CreatedBookingDto dto);
-    }
+	}
 }

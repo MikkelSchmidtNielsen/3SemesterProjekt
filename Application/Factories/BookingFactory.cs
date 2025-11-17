@@ -6,13 +6,13 @@ using Domain.ModelsDto;
 
 namespace Application.Factories
 {
-    public class BookingFactory : IBookingFactory
-    {
+	public class BookingFactory : IBookingFactory
+	{
         public IResult<Booking> Create(CreatedBookingDto dto)
-        {
+		{
             Booking booking = new Booking(dto.GuestId, dto.ResourceId, dto.StartDate, dto.EndDate, dto.TotalPrice);
 
             return Result<Booking>.Success(booking);
-        }
-    }
+		}
+	}
 }

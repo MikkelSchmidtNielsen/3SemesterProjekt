@@ -56,5 +56,5 @@ namespace Persistence.Repository
 				return Result<IEnumerable<Resource>>.Error(originalType: null!, exception: ex);
 			}
 		}
-    }
+	}
 }
