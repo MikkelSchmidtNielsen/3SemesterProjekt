@@ -1,32 +1,67 @@
 ﻿@page "/admin/addresource"
+@inject DialogService DialogService
+@inject ICreateResourceService _createResourceService
+@rendermode InteractiveServer
+<RadzenDialog/>
+
+
 <div id="main-container">
 	<h1 id="header-text">Opret en ny ressource</h1>
-
-	<RadzenRow JustifyContent="JustifyContent.Center" Gap="20rem" class="rz-m-0 rz-m-md-12">
-		<div id="resource-details-container">
-			<form>
-				<label for="resource-name">Ressourcenavn</label><br />
-				<RadzenTextBox id="resource-name" Placeholder="Navn på ressource..."></RadzenTextBox><br />
-				<label for="resource-type">Ressourcetype</label><br />
-				<RadzenDropDown Value=@selectedResourceType Data=@resourceTypes /><br />
-				<label for="resource-price">Pris pr. dag</label><br />
-				<RadzenNumeric Value=@resourcePrice TValue="double" ShowUpDown="false" Placeholder="Pris i DKK..."></RadzenNumeric><br />
-				<label for="resource-description">Beskrivelse</label><br />
-				<RadzenTextArea id="resource-description" Placeholder="Beskrivelse af ressource..."></RadzenTextArea>
-			</form>
-		</div>
-		<div id="image-upload-container">
-			<h2>billede her..</h2>
-			<RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Base">Upload billede...</RadzenButton>
-		</div>
-	</RadzenRow>
-	<div id="add-button">
-		<RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success">Opret</RadzenButton>
-	</div>
+		<RadzenTemplateForm TItem="ResourceModel" Data="@resourceModel" Submit="@ShowDialog">
+			<RadzenRow JustifyContent="JustifyContent.Center" Gap="20rem" class="rz-m-0 rz-m-md-12">
+				<label for="Name">Ressourcenavn</label><br />
+				<RadzenTextBox Name="Name" @bind-Value=resourceModel.Name Placeholder="Navn på ressource..."></RadzenTextBox><br />
+				<RadzenRequiredValidator Component="Name" Text="Angiv venligst ressourcenavn."></RadzenRequiredValidator><br/>
+				<label for="Type">Ressourcetype</label><br />
+				<RadzenDropDown Name="Type" @bind-Value=resourceModel.Type TValue="string" Data=@resourceTypes /><br />
+				<RadzenRequiredValidator Component="Type" Text="Angiv venligst ressourcetype."></RadzenRequiredValidator><br/>
+				<label for="BasePrice">Pris pr. dag</label><br />
+				<RadzenNumeric Name="BasePrice" @bind-Value=resourceModel.BasePrice TValue="decimal" ShowUpDown="false" Placeholder="Pris i DKK..."></RadzenNumeric><br />
+				<RadzenRequiredValidator Component="BasePrice" Text="Angiv venligst pris pr. dag i DKK."></RadzenRequiredValidator><br/>
+				<label for="Description">Beskrivelse</label><br />
+				<RadzenTextArea id="Description" @bind-Value=resourceModel.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea><br/>
+			</RadzenRow>
+				<div id="add-button">
+					<RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit">Opret</RadzenButton>
+				</div>
+		</RadzenTemplateForm>
+	
 </div>
 
 @code {
 	string selectedResourceType;
-	double resourcePrice = 0;
 	List<string> resourceTypes = new List<string>() { "Hytte", "Campingvognplads", "Teltplads" };
+	
+	class ResourceModel
+	{
+		public string Name { get; set; }
+		public string Type { get; set; }
+		public decimal BasePrice { get; set; }
+		public string? Description { get; set; }
+	}
+
+	ResourceModel resourceModel = new ResourceModel();
+
+	private async Task ShowDialog(ResourceModel resourceModel)
+	{
+		var result = await DialogService.OpenAsync("Oprettelse af ny ressource", ds =>
+        @<RadzenStack Gap="1.5rem">
+            <h3>Ønsker du at tilføje en ny ressource med følgende informationer?</h3>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ja" Click="() => CreateResource(resourceModel, ds)" Style="width: 80px;" />
+                    <RadzenButton Text="Nej" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+	);
+	}
+
+	private async Task CreateResource(ResourceModel resourceModel, DialogService ds)
+	{
+		var uiDto = Mapper.Map<UICreateResourceDto>(resourceModel);
+		await _createResourceService.CreateResourceAsync(uiDto);
+
+		ds.Close(true);
+	}
 }

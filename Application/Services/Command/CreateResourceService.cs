@@ -1,5 +1,6 @@
 ﻿using Application.Factories;
 using Application.ServiceInterfaces.Command;
+using Application.ApplicationDto.Command;
 using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
@@ -9,16 +10,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.DomainInterfaces;
 
 namespace Application.Services.Command
 {
     public class CreateResourceService : ICreateResourceService
     {
-        private readonly ResourceFactory _factory;
+        private readonly IResourceFactory _factory;
 
-        public async Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto)
+        public CreateResourceService(IResourceFactory factory)
         {
-            var checkIfNameAlreadyExists = await _factory.CreateResourceAsync(dto);
+            _factory = factory;
+        }
+
+        public async Task<IResult<Resource>> CreateResourceAsync(UICreateResourceDto dto)
+        {
+            var domainDto = Mapper.Map<CreateResourceDto>(dto);
+
+            var checkIfNameAlreadyExists = await _factory.CreateResourceAsync(domainDto);
 
             if (checkIfNameAlreadyExists.IsError())
             {
