@@ -8,7 +8,7 @@
 <div id="main-container">
 	<h1 id="header-text">Opret en ny ressource</h1>
 		<RadzenTemplateForm TItem="ResourceModel" Data="@resourceModel" Submit="@ShowDialog">
-			<RadzenRow JustifyContent="JustifyContent.Center" Gap="20rem" class="rz-m-0 rz-m-md-12">
+			<div id="resource-details-container">
 				<label for="Name">Ressourcenavn</label><br />
 				<RadzenTextBox Name="Name" @bind-Value=resourceModel.Name Placeholder="Navn på ressource..."></RadzenTextBox><br />
 				<RadzenRequiredValidator Component="Name" Text="Angiv venligst ressourcenavn."></RadzenRequiredValidator><br/>
@@ -20,10 +20,10 @@
 				<RadzenRequiredValidator Component="BasePrice" Text="Angiv venligst pris pr. dag i DKK."></RadzenRequiredValidator><br/>
 				<label for="Description">Beskrivelse</label><br />
 				<RadzenTextArea id="Description" @bind-Value=resourceModel.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea><br/>
-			</RadzenRow>
 				<div id="add-button">
 					<RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit">Opret</RadzenButton>
 				</div>
+			</div>
 		</RadzenTemplateForm>
 </div>
 
@@ -46,6 +46,10 @@
 		var result = await DialogService.OpenAsync("Oprettelse af ny ressource", ds =>
         @<RadzenStack Gap="1.5rem">
             <h3>Ønsker du at tilføje en ny ressource med følgende informationer?</h3>
+			<p><b>Navn: </b>@resourceModel.Name</p>
+			<p><b>Type: </b>@resourceModel.Type</p>
+			<p><b>Pris pr. dag: </b>@resourceModel.BasePrice ,-</p>
+			<p><b>Beskrivelse: </b>@resourceModel.Description</p>
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
                 <RadzenStack Orientation="Orientation.Horizontal">
                     <RadzenButton Text="Ja" Click="() => CreateResource(resourceModel, ds)" Style="width: 80px;" />

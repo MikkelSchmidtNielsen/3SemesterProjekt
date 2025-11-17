@@ -5,10 +5,12 @@
 #header-text {
     margin: 48px auto auto 48px;
     padding-top: 24px;
+    text-align: center;
 }
 
 #resource-details-container {
-    padding-left: 2em;
+    display: flex;
+    justify-content: center;
 }
 
 #add-button {
