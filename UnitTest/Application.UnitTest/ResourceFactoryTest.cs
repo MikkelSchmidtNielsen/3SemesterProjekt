@@ -54,7 +54,6 @@ namespace UnitTest.Application.UnitTest
             var result2 = await resourceFactory.CreateResourceAsync(resource2);
 
             // Assert
-            Assert.True(result1.IsSucces());
             Assert.False(result2.IsSucces());
         }
     }

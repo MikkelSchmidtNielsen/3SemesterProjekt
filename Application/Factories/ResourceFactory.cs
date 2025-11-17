@@ -22,8 +22,9 @@ namespace Application.Factories
 		}
 		public async Task<IResult<Resource>> CreateResourceAsync(Resource resource)
 		{
+			Resource resourceAlreadyInDatabase = await _repository.GetResourceByResourceNameAsync(resource.Name);
 
-			if (await _repository.GetResourceByResourceNameAsync(resource.Name) != null)
+			if (resourceAlreadyInDatabase != null)
 			{
                 return Result<Resource>.Error(resource, new Exception("Ressourcen eksisterer allerede."));
             }
