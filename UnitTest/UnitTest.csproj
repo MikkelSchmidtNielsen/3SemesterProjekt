@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application.UnitTest\" />
     <Folder Include="Common.UnitTest\" />
     <Folder Include="Persistence.UnitTest\" />
   </ItemGroup>
