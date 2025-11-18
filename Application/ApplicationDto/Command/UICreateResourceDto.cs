@@ -11,6 +11,7 @@ namespace Application.ApplicationDto.Command
         public string Name { get; set; }
         public string Type { get; set; }
         public decimal BasePrice { get; set; }
+        public int Location {  get; set; }
         public string? Description { get; set; }
     }
 }

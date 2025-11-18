@@ -50,6 +50,7 @@ namespace UnitTest.Application.UnitTest
                 Name = "Luksushytte nr. 5",
                 Type = "Hytte",
                 BasePrice = 899.95M,
+                Location = 4,
                 Description = null
             };
             Resource resource = new Resource(dto1);
@@ -58,13 +59,14 @@ namespace UnitTest.Application.UnitTest
                 Name = "Luksushytte nr. 5",
                 Type = "Teltplads",
                 BasePrice = 999.95M,
+                Location = 7,
                 Description = null
             };
 
             Mock<IResourceRepository> repository = new Mock<IResourceRepository>();
             ResourceFactory resourceFactory = new ResourceFactory(repository.Object);
             repository.Setup(x => x.GetResourceByResourceNameAsync(dto2.Name)).ReturnsAsync(resource);
-            
+
 
             // Act
             var result2 = await resourceFactory.CreateResourceAsync(dto2);

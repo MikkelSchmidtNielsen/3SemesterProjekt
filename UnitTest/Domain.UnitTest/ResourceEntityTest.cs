@@ -16,10 +16,11 @@ namespace UnitTest.Domain.UnitTest
             int resourceId = 1;
             string resourceName = "Luksushytte nr. 5";
             string resourceType = "Hytte";
+            int location = 4;
             decimal resourceBasePrice = 899.95M;
 
             // Act
-            Resource ressource = new Resource(resourceId, resourceName, resourceType, resourceBasePrice, null);
+            Resource ressource = new Resource(resourceId, resourceName, resourceType, resourceBasePrice, location, null);
 
             // Assert
             Assert.Equal(resourceId, ressource.Id);
@@ -34,10 +35,11 @@ namespace UnitTest.Domain.UnitTest
             int resourceId = 1;
             string resourceName = null;
             string resourceType = "Hytte";
+            int location = 4;
             decimal resourceBasePrice = 899.95M;
 
             // Assert
-            Assert.Throws<Exception>(() => new Resource(resourceId, resourceName, resourceType, resourceBasePrice, null));
+            Assert.Throws<Exception>(() => new Resource(resourceId, resourceName, resourceType, resourceBasePrice, location, null));
         }
         [Fact]
         public static void RessourceValidation_ShouldFail_IfTypeIsNull()
@@ -46,10 +48,11 @@ namespace UnitTest.Domain.UnitTest
             int resourceId = 1;
             string resourceName = "Luksushytte nr. 5";
             string resourceType = null;
+            int location = 4;
             decimal resourceBasePrice = 899.95M;
 
             // Assert
-            Assert.Throws<Exception>(() => new Resource(resourceId, resourceName, resourceType, resourceBasePrice, null));
+            Assert.Throws<Exception>(() => new Resource(resourceId, resourceName, resourceType, resourceBasePrice, location, null));
         }
 
     }

@@ -23,17 +23,22 @@ namespace Application.Factories
 		}
 		public async Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto)
 		{
-			Resource resourceAlreadyInDatabase = await _repository.GetResourceByResourceNameAsync(dto.Name);
+			var resourceNameResult = await _repository.GetResourceByResourceNameAsync(dto.Name);
+			var resourceLocationResult = await _repository.GetResourceByLocation(dto.Location);
 
-			if (resourceAlreadyInDatabase != null)
+			if (resourceNameResult.IsSucces())
 			{
-                return Result<Resource>.Error(resourceAlreadyInDatabase, new Exception("Ressourcen eksisterer allerede."));
+                return Result<Resource>.Error(resourceNameResult.GetSuccess().OriginalType, new Exception("En ressource med dette navn eksisterer allerede."));
             }
+			else if (resourceLocationResult.IsSucces())
+			{
+				return Result<Resource>.Error(resourceLocationResult.GetSuccess().OriginalType, new Exception("Der findes allerede en ressource på denne placering."));
+			}
 			else
 			{
                 Resource resource = new Resource(dto);
 				await _repository.AddResourceToDBAsync(resource);
-                return Result<Resource>.Success(null);
+                return Result<Resource>.Success(resource);
 			}
 		}
 	}

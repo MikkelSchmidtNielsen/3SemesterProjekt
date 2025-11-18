@@ -13,15 +13,17 @@ namespace Domain.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public decimal BasePrice { get; set; }
+        public int Location { get; set; }
         public string? Description { get; set; }
         public bool IsAvailable { get; set; }
 
-        public Resource(int resourceId, string resourceName, string resourceType, decimal resourceBasePrice, string? description)
+        public Resource(int resourceId, string resourceName, string resourceType, decimal resourceBasePrice, int location, string? description)
         {
             Id = resourceId;
             Name = resourceName;
             Type = resourceType;
             BasePrice = resourceBasePrice;
+            Location = location;
             Description = description;
             IsAvailable = true;
 
@@ -34,10 +36,15 @@ namespace Domain.Models
             Name = dto.Name;
             Type = dto.Type;
             BasePrice = dto.BasePrice;
+            Location = dto.Location;
             Description = dto.Description;
             IsAvailable = true;
 
             ValidateInformation();
+        }
+        private Resource()
+        {
+
         }
 
         public bool ValidateInformation()

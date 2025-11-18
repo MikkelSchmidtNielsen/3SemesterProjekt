@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Common.ResultInterfaces;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace Application.RepositoryInterfaces
 {
 	public interface IResourceRepository
 	{
-		public Task<Resource> GetResourceByResourceNameAsync(string resourceName);
-		public Task<bool> AddResourceToDBAsync(Resource resource);
+		public Task<IResult<Resource>> GetResourceByResourceNameAsync(string resourceName);
+		public Task<IResult<Resource>> GetResourceByLocation(int resourceLocation);
+		public Task<IResult<Resource>> AddResourceToDBAsync(Resource resource);
 	}
 }

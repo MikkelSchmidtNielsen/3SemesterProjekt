@@ -1,4 +1,6 @@
 ﻿using Application.RepositoryInterfaces;
+using Common;
+using Common.ResultInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
@@ -19,15 +21,61 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
+        public async Task<IResult<Resource>> GetResourceByResourceNameAsync(string resourceName)
+        {
+            //try
+            //{
+            //    var resource = await _db.Resources.FirstAsync(x => x.Name == resourceName);
+            //    return Result<Resource>.Success(resource);
+            //}
+            //catch (InvalidOperationException ex)
+            //{
+            //    return Result<Resource>.Error(null, ex);
+            //}
 
-        public async Task<Resource> GetResourceByResourceNameAsync(string resourceName)
-        {
-			return await _db.Resources.FirstAsync(x => x.Name == resourceName);
+            Resource? resource = await _db.Resources.FirstOrDefaultAsync(x => x.Name == resourceName);
+
+            if (resource is null)
+            {
+                return Result<Resource>.Error(null, new Exception("En ressource med dette navn eksisterer ikke."));
+            }
+            else
+            {
+                return Result<Resource>.Success(resource);
+            }
         }
-        public async Task<bool> AddResourceToDBAsync(Resource resource)
+
+        public async Task<IResult<Resource>> GetResourceByLocation(int resourceLocation)
         {
-            _db.Resources.Add(resource);
-            return true;
+            Resource? resource = await _db.Resources.FirstOrDefaultAsync(x => x.Location == resourceLocation);
+
+            if (resource is null)
+            {
+                return Result<Resource>.Error(null, new Exception("Der kunne ikke findes en ressource med det valgte pladsnr."));
+            }
+            else
+            {
+                return Result<Resource>.Success(resource);
+            }
         }
+        public async Task<IResult<Resource>> AddResourceToDBAsync(Resource resource)
+        {
+            //try
+            //{
+            //    await _db.Resources.AddAsync(resource);
+            
+            //    return Result<Resource>.Success(resource);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Result<Resource>.Error(resource, ex);
+            //}
+
+            await _db.Resources.AddAsync(resource);
+            await _db.SaveChangesAsync();
+            return Result<Resource>.Success(resource);
+
+        }
+
     }
 }

@@ -29,14 +29,7 @@ namespace Application.Services.Command
 
             var checkIfNameAlreadyExists = await _factory.CreateResourceAsync(domainDto);
 
-            if (checkIfNameAlreadyExists.IsError())
-            {
-                return Result<Resource>.Error(originalType: null, new Exception("Der findes allerede en ressource med dette navn."));
-            }
-            else
-            {
-                return Result<Resource>.Success(originalType: null);
-            }
+            return checkIfNameAlreadyExists;
         }
     }
 }
