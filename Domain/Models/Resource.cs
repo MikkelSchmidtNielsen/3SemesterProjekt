@@ -14,6 +14,7 @@ namespace Domain.Models
         public string Type { get; set; }
         public decimal BasePrice { get; set; }
         public string? Description { get; set; }
+        public bool IsAvailable { get; set; }
 
         public Resource(int resourceId, string resourceName, string resourceType, decimal resourceBasePrice, string? description)
         {
@@ -22,6 +23,7 @@ namespace Domain.Models
             Type = resourceType;
             BasePrice = resourceBasePrice;
             Description = description;
+            IsAvailable = true;
 
             ValidateInformation();
 
@@ -33,6 +35,7 @@ namespace Domain.Models
             Type = dto.Type;
             BasePrice = dto.BasePrice;
             Description = dto.Description;
+            IsAvailable = true;
 
             ValidateInformation();
         }

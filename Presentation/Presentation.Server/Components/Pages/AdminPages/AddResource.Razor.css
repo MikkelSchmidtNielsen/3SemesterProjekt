@@ -1,16 +1,16 @@
 ﻿#main-container {
     background: #fff5f5FF;
+    margin-inline: auto;
+    max-width: fit-content;
 }
 
 #header-text {
-    margin: 48px auto auto 48px;
-    padding-top: 24px;
-    text-align: center;
+    padding: 24px 24px 0px 24px;
 }
 
 #resource-details-container {
-    display: flex;
-    justify-content: center;
+    margin-inline: auto;
+    max-width: fit-content;
 }
 
 #add-button {

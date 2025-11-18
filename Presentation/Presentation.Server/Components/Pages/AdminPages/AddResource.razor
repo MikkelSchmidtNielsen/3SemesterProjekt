@@ -6,7 +6,7 @@
 
 
 <div id="main-container">
-	<h1 id="header-text">Opret en ny ressource</h1>
+	<h1 id="header-text">Opret en ny ressource</h1><br/>
 		<RadzenTemplateForm TItem="ResourceModel" Data="@resourceModel" Submit="@ShowDialog">
 			<div id="resource-details-container">
 				<label for="Name">Ressourcenavn</label><br />
@@ -28,7 +28,6 @@
 </div>
 
 @code {
-	string selectedResourceType;
 	List<string> resourceTypes = new List<string>() { "Hytte", "Campingvognplads", "Teltplads" };
 	
 	class ResourceModel
