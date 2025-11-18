@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto.Command
 {
-    public class BookingWithGuestAndTotalPriceDto
+    public class BookingWithTotalPriceDto
     {
         public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
