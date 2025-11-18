@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common.ResultInterfaces;
+using Domain.Models;
 
 namespace Application.RepositoryInterfaces
 {
 	public interface IResourceRepository
 	{
+		Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
+		Task<IResult<Resource>> GetResourceByIdAsync(int id);
 	}
 }

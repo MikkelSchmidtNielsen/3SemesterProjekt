@@ -1,19 +1,18 @@
-﻿using Common.ResultInterfaces;
+﻿using Common;
+using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.ModelsDto;
 
 namespace Application.Factories
 {
 	public class BookingFactory : IBookingFactory
 	{
-		public IResult<Booking> Create()
+        public IResult<Booking> Create(BookingCreateFactoryDto dto)
 		{
-			throw new NotImplementedException();
+            Booking booking = new Booking(dto.GuestId, dto.ResourceId, dto.StartDate, dto.EndDate, dto.TotalPrice);
+
+            return Result<Booking>.Success(booking);
 		}
 	}
 }
