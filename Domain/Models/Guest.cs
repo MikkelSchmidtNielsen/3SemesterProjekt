@@ -18,7 +18,7 @@ namespace Domain.Models
         public string? Address { get; private set; }
 
         // Entity Framework
-        public List<Booking> Booking { get; }
+        public List<Booking>? Booking { get; }
 
         public Guest(string firstName, string? lastName, int? phoneNumber, string? email, string? country, string? language, string? address)
         {

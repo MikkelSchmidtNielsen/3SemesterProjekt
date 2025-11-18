@@ -37,7 +37,7 @@ namespace Persistence.Repository
         {
 			try
 			{
-				Guest? guest = await _db.Guests
+				Guest guest = await _db.Guests
 					.FirstAsync(x => x.Id == id);
 
 				return Result<Guest>.Success(guest);

@@ -51,7 +51,7 @@ namespace Application.Services.Command
             }
 
             // Create booking
-            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(Mapper.Map<BookingCreateFactoryDto>(bookingCreateDto));
+            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(Mapper.Map<BookingCreateFactoryDto>(dto));
 
             if (bookingCreateRequest.IsError())
             {

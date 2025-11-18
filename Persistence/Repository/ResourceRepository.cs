@@ -21,7 +21,7 @@ namespace Persistence.Repository
         {
 			try
 			{
-				Resource? resource = await _db.Resources
+				Resource resource = await _db.Resources
 					.FirstAsync(x => x.Id == id);
 
 				return Result<Resource>.Success(resource);
