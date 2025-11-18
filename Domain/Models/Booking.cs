@@ -3,15 +3,15 @@
     public class Booking
     {
         public int Id { get; init; }
-        public int GuestId { get; set; }
-        public int ResourceId { get; set; }
+        public int GuestId { get; private set; }
+        public int ResourceId { get; private set; }
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }
 
         // Entity Framework
-        public Guest Guest { get; set; }
-        public Resource Resource { get; set; }
+        public Guest Guest { get; }
+        public Resource Resource { get; }
 
         public Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice)
 		{

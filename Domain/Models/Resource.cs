@@ -9,9 +9,9 @@ namespace Domain.Models
     public class Resource
     {
         public int Id { get; init; }
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public decimal BasePrice { get; set; }
+        public string Name { get; private set; }
+        public string Type { get; private set; }
+        public decimal BasePrice { get; private set; }
 
         public Resource(int id, string name, string type, decimal basePrice)
         {
