@@ -11,8 +11,9 @@ namespace Application.ApplicationDto.Command
 {
 	public record SendEmailCommandDto
 	{
-		public string ReceiverEmail { get; set; }
 		public EmailSubject Subject { get; set; }
 		public Booking Booking { get; set; }
+		public Guest Guest { get; set; }
+		public Resource Resource { get; set; }
 	}
 }

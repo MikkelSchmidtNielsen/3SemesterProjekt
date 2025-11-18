@@ -23,28 +23,20 @@ namespace UnitTest.Infrastructure.UnitTest
 			// Arrange
 			ISendEmail.EmailSubject subject = ISendEmail.EmailSubject.OrderConfirmation;
 
-			string resourceName = "HytteA";
-			string resourceType = "Hytte";
 			Resource resource = Impression.Of<Resource>().
-									With("ResourceName", resourceName).
-									With("ResourceType", resourceType).
 									WithDefaults().
 									Create();
 
-			string GuestName = "CustomerName";
-			DateOnly startDate = DateOnly.FromDateTime(DateTime.Today);
-			DateOnly endDate = DateOnly.FromDateTime(DateTime.Today.AddDays(5));
-			Decimal totalPrice = 1200;
+			Guest guest = Impression.Of<Guest>().
+                                    With("Email", emailInWrongFormat).	
+									WithDefaults().
+									Create();
+
 			Booking booking = Impression.Of<Booking>().
-									With("Resource", resource).
-									With("GuestName", GuestName).
-									With("StartDate", startDate).
-									With("EndDate", endDate).
-									With("TotalPrice", totalPrice).
 									WithDefaults().
 									Create();
 
-			SendEmailCommandDto emailDto = new SendEmailCommandDto() { ReceiverEmail = emailInWrongFormat, Subject = subject, Booking = booking };
+			SendEmailCommandDto emailDto = new SendEmailCommandDto() { Subject = subject, Booking = booking, Guest = guest, Resource = resource };
 
 			SendEmailMailKitUnitTestClass mailKit = new SendEmailMailKitUnitTestClass();
 
@@ -59,28 +51,20 @@ namespace UnitTest.Infrastructure.UnitTest
 			string email = "noreply@danline.dk";
 			ISendEmail.EmailSubject subject = ISendEmail.EmailSubject.OrderConfirmation;
 
-			string resourceName = "HytteA";
-			string resourceType = "Hytte";
 			Resource resource = Impression.Of<Resource>().
-									With("ResourceName", resourceName).
-									With("ResourceType", resourceType).
-									WithDefaults().
+									Randomize().
 									Create();
 
-			string GuestName = "CustomerName";
-			DateOnly startDate = DateOnly.FromDateTime(DateTime.Today);
-			DateOnly endDate = DateOnly.FromDateTime(DateTime.Today.AddDays(5));
-			Decimal totalPrice = 1200;
+			Guest guest = Impression.Of<Guest>().
+									With("Email", email).
+									Randomize().
+									Create();
+
 			Booking booking = Impression.Of<Booking>().
-									With("Resource", resource).
-									With("GuestName", GuestName).
-									With("StartDate", startDate).
-									With("EndDate", endDate).
-									With("TotalPrice", totalPrice).
-									WithDefaults().
+									Randomize().
 									Create();
 
-			SendEmailCommandDto emailDto = new SendEmailCommandDto() { ReceiverEmail = email, Subject = subject, Booking = booking };
+			SendEmailCommandDto emailDto = new SendEmailCommandDto() { Subject = subject, Booking = booking, Guest = guest, Resource = resource };
 
 			SendEmailMailKitUnitTestClass mailKit = new SendEmailMailKitUnitTestClass();
 
@@ -95,31 +79,21 @@ namespace UnitTest.Infrastructure.UnitTest
 		public void CreateMessage_ShouldPass_WhenGivenDtoWithAllInformation()
 		{
 			// Arrange
-			string email = "noreply@danline.dk";
 			ISendEmail.EmailSubject subject = ISendEmail.EmailSubject.OrderConfirmation;
 
-			string resourceName = "HytteA";
-			string resourceType = "Hytte";
 			Resource resource = Impression.Of<Resource>().
-									With("ResourceName", resourceName).
-									With("ResourceType", resourceType).
-									WithDefaults().
+									Randomize().
 									Create();
 
-			string GuestName = "CustomerName";
-			DateOnly startDate = DateOnly.FromDateTime(DateTime.Today);
-			DateOnly endDate = DateOnly.FromDateTime(DateTime.Today.AddDays(5));
-			Decimal totalPrice = 1200;
+			Guest guest = Impression.Of<Guest>().
+									Randomize().
+									Create();
+
 			Booking booking = Impression.Of<Booking>().
-									With("Resource", resource).
-									With("GuestName", GuestName).
-									With("StartDate", startDate).
-									With("EndDate", endDate).
-									With("TotalPrice", totalPrice).
-									WithDefaults().
+									Randomize().
 									Create();
 
-			SendEmailCommandDto emailDto = new SendEmailCommandDto() { ReceiverEmail = email, Subject = subject, Booking = booking };
+			SendEmailCommandDto emailDto = new SendEmailCommandDto() { Subject = subject, Booking = booking, Guest = guest, Resource = resource };
 
 			SendEmailMailKitUnitTestClass mailKit = new SendEmailMailKitUnitTestClass();
 
@@ -135,29 +109,22 @@ namespace UnitTest.Infrastructure.UnitTest
 		public void CreateMessage_ShouldThrowException_WhenGivenDtoWithMissingCustomerName()
 		{
 			// Arrange
-			string email = "noreply@danline.dk";
 			ISendEmail.EmailSubject subject = ISendEmail.EmailSubject.OrderConfirmation;
 
-			string resourceName = "HytteA";
-			string resourceType = "Hytte";
 			Resource resource = Impression.Of<Resource>().
-									With("ResourceName", resourceName).
-									With("ResourceType", resourceType).
-									WithDefaults().
+									Randomize().
 									Create();
 
-			DateOnly startDate = DateOnly.FromDateTime(DateTime.Today);
-			DateOnly endDate = DateOnly.FromDateTime(DateTime.Today.AddDays(5));
-			Decimal totalPrice = 1200;
+			Guest guest = Impression.Of<Guest>().
+									With("FirstName", null).
+									Randomize().
+									Create();
+
 			Booking booking = Impression.Of<Booking>().
-									With("Resource", resource).
-									With("GuestName", null).
-									With("StartDate", startDate).
-									With("EndDate", endDate).
-									With("TotalPrice", totalPrice).
+									Randomize().
 									Create();
 
-			SendEmailCommandDto emailDto = new SendEmailCommandDto() { ReceiverEmail = email, Subject = subject, Booking = booking };
+			SendEmailCommandDto emailDto = new SendEmailCommandDto() { Subject = subject, Booking = booking, Guest = guest, Resource = resource };
 
 			SendEmailMailKitUnitTestClass mailKit = new SendEmailMailKitUnitTestClass();
 

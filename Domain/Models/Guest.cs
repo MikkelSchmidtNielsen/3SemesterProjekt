@@ -20,6 +20,8 @@ namespace Domain.Models
         // Entity Framework
         public List<Booking>? Booking { get; }
 
+        private Guest() { }
+
         public Guest(string firstName, string? lastName, int? phoneNumber, string? email, string? country, string? language, string? address)
         {
             FirstName = firstName;

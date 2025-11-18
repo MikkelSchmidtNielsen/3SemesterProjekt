@@ -38,7 +38,7 @@ namespace Infrastructure.Email
 		}
 		protected static string ValidateEmail(SendEmailCommandDto dto)
 		{
-			if (!MailboxAddress.TryParse(dto.ReceiverEmail, out MailboxAddress mail))
+			if (!MailboxAddress.TryParse(dto.Guest.Email, out MailboxAddress mail))
 			{
 				throw new Exception("Email was in wrong format");
 			}
@@ -51,21 +51,21 @@ namespace Infrastructure.Email
 
 		protected static string CreateMessage(SendEmailCommandDto dto)
 		{
-			if (string.IsNullOrWhiteSpace(dto.Booking.GuestName))
+			if (dto.Guest.FirstName is null || string.IsNullOrWhiteSpace(dto.Guest.FirstName))
 			{
 				throw new Exception("Missing Information About the booking");
 			}
 
 			return $@"
-					Hej {dto.Booking.GuestName},
+					Hej {dto.Guest.FirstName},
 
 					Tak for din booking!
 
 					Her er detaljerne for din reservation:
 
 					Ressource:
-					- Navn: {dto.Booking.Resource.ResourceName}
-					- Type: {dto.Booking.Resource.ResourceType}
+					- Navn: {dto.Resource.Name}
+					- Type: {dto.Resource.Type}
 
 					Periode:
 					- Startdato: {dto.Booking.StartDate:dd-MM-yyyy}
