@@ -15,11 +15,6 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         public BookingCreateCommandTestClass(IBookingRepository repository, IResourceIdQuery resourceQuery, IBookingFactory factory, IGuestCreateCommand guestCommand)
             : base(repository, resourceQuery, factory, guestCommand) {}
 
-        public new IResult<CreatedBookingDto> Error<T>(CreatedBookingDto dto, IResult<T> errorResult)
-        {
-            return base.Error(dto, errorResult);
-        }
-
         new public async Task<IResult<Guest>> CreateGuestAsync(CreatedBookingDto dto, BookingCreateDto input)
         {
             return await base.CreateGuestAsync(dto, input);

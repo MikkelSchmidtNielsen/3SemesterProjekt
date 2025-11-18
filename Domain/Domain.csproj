@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ModelsDto\" />
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 

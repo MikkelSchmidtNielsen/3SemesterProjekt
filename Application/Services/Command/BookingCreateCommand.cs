@@ -36,8 +36,8 @@ namespace Application.Services.Command
             if (resourceResult.IsError())
             {
 				// Returns an error because the ressource could not be found, so no booking could be created
-				return Error(dto, resourceResult);
-			}
+				return Result<CreatedBookingDto>.Error(dto, resourceResult.GetError().Exception!);
+            }
 
             AddPriceToDto(dto, resourceResult.GetSuccess().OriginalType);
 
@@ -47,15 +47,15 @@ namespace Application.Services.Command
             if (guestResult.IsError())
             {
 				// Returns an error because the guest could not be created, so no booking exists
-				return Error(dto, guestResult);
-			}
+				return Result<CreatedBookingDto>.Error(dto, guestResult.GetError().Exception!);
+            }
 
             // Create booking
             IResult<Booking> bookingCreateResult = _bookingFactory.Create(dto);
 
             if (bookingCreateResult.IsError())
             {
-                return Error(dto, bookingCreateResult);
+                return Result<CreatedBookingDto>.Error(dto, bookingCreateResult.GetError().Exception!);
             }
 
             // Creates booking in db
@@ -63,21 +63,13 @@ namespace Application.Services.Command
 
             if (repoResult.IsError())
             {
-                return Error(dto, repoResult);
+                return Result<CreatedBookingDto>.Error(dto, repoResult.GetError().Exception!);
             }
 
             // Mapping the final booking
             CreatedBookingDto finalDto = Mapper.Map<CreatedBookingDto>(repoResult.GetSuccess().OriginalType);
 
             return Result<CreatedBookingDto>.Success(finalDto);
-        }
-
-        /// <summary>
-        /// Creates a standardized error result for booking creation.
-        /// </summary>
-        protected IResult<CreatedBookingDto> Error<T>(CreatedBookingDto dto, IResult<T> errorResult)
-        {
-            return Result<CreatedBookingDto>.Error(dto, errorResult.GetError().Exception!);
         }
 
         /// <summary>
@@ -103,11 +95,6 @@ namespace Application.Services.Command
             // Today + total days of staying
             int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
             dto.TotalPrice = resource.BasePrice * days;
-        }
-
-        protected void AddResourceToDto(CreatedBookingDto dto, Resource resource)
-        {
-
         }
     }
 

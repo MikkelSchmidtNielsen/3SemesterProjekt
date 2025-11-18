@@ -314,46 +314,6 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         }
 
         [Fact]
-        public void Error_ReturnsCreatedBookingDtoError_WithCorrectException()
-        {
-            // Arrange
-            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
-            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
-            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-
-            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
-                repository.Object,
-                resourceIdQuery.Object,
-                bookingFactory.Object,
-                guestCreateCommand.Object
-            );
-
-            CreatedBookingDto dto = new CreatedBookingDto
-            {
-                ResourceId = 1,
-                GuestId = 1,
-                TotalPrice = 100m,
-                StartDate = DateOnly.FromDateTime(DateTime.Now),
-                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(2))
-            };
-
-            Exception originalException = new Exception("Error");
-
-            Result<string> errorResult = Result<string>.Error(originalType: "original", exception: originalException);
-
-            // Act
-            IResult<CreatedBookingDto> result = testClass.Error(dto, errorResult);
-
-            // Assert
-            Assert.True(result.IsError());
-
-            IResultError<CreatedBookingDto> error = result.GetError();
-            Assert.Equal(dto, error.OriginalType);
-            Assert.Equal(originalException, error.Exception);
-        }
-
-        [Fact]
         public async Task CreateGuestAsync_SetsGuestId_WhenGuestCreationSucceeds()
         {
             // Arrange

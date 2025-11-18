@@ -1,9 +1,11 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
+using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 
 namespace Application.Services.Command
 {
@@ -20,15 +22,9 @@ namespace Application.Services.Command
 
         public async Task<IResult<Guest>> CreateGuestAsync(GuestCreateDto guestCreateDto)
         {
-            IResult<Guest> result = _guestFactory.Create(
-                guestCreateDto.FirstName, 
-                guestCreateDto.LastName, 
-                guestCreateDto.PhoneNumber, 
-                guestCreateDto.Email, 
-                guestCreateDto.Country,
-                guestCreateDto.Language,
-                guestCreateDto.Address
-            );
+            CreatedGuestDto dto = Mapper.Map<CreatedGuestDto>(guestCreateDto);
+
+            IResult<Guest> result = _guestFactory.Create(dto);
 
             if (result.IsSucces())
             {

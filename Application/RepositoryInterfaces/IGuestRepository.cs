@@ -1,6 +1,6 @@
-﻿using Application.ApplicationDto.Command;
-using Common.ResultInterfaces;
+﻿using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

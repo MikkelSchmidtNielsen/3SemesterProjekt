@@ -1,37 +1,41 @@
 ﻿using Application.Factories;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 
 namespace UnitTest.Application.UnitTest.FactoryTest
 {
     public class GuestFactoryTest
     {
-		[Fact]
-		public void FactoryCreation_ShouldReturnSuccess_WhenGivenCorrectGuest()
-		{
-			// Arrange
-			GuestFactory factory = new GuestFactory();
-			string firstName = "Mikkel";
-			string lastName = "Schmidt";
-			int phoneNumber = 12345678;
-			string email = "test@test.com";
-			string country = "Danmark";
-			string language = "Dansk";
-			string address = "Vejvej 12";
+        [Fact]
+        public void FactoryCreation_ShouldReturnSuccess_WhenGivenCorrectGuest()
+        {
+            // Arrange
+            GuestFactory factory = new GuestFactory();
+            CreatedGuestDto dto = new CreatedGuestDto
+            {
+                FirstName = "Mikkel",
+                LastName = "Schmidt",
+                PhoneNumber = 12345678,
+                Email = "test@test.com",
+                Country = "Danmark",
+                Language = "Dansk",
+                Address = "Vejvej 12"
+            };
 
-			// Act
-			IResult<Guest> result = factory.Create(firstName, lastName, phoneNumber, email, country, language, address);
-			IResultSuccess<Guest> success = result.GetSuccess();
+            // Act
+            IResult<Guest> result = factory.Create(dto);
+            IResultSuccess<Guest> success = result.GetSuccess();
 
-			// Assert
-			Assert.True(result.IsSucces());
-			Assert.Equal(firstName, success.OriginalType.FirstName);
-			Assert.Equal(lastName, success.OriginalType.LastName);
-			Assert.Equal(phoneNumber, success.OriginalType.PhoneNumber);
-			Assert.Equal(email, success.OriginalType.Email);
-			Assert.Equal(country, success.OriginalType.Country);
-			Assert.Equal(language, success.OriginalType.Language);
-			Assert.Equal(address, success.OriginalType.Address);
-		}
-	}
+            // Assert
+            Assert.True(result.IsSucces());
+            Assert.Equal(dto.FirstName, success.OriginalType.FirstName);
+            Assert.Equal(dto.LastName, success.OriginalType.LastName);
+            Assert.Equal(dto.PhoneNumber, success.OriginalType.PhoneNumber);
+            Assert.Equal(dto.Email, success.OriginalType.Email);
+            Assert.Equal(dto.Country, success.OriginalType.Country);
+            Assert.Equal(dto.Language, success.OriginalType.Language);
+            Assert.Equal(dto.Address, success.OriginalType.Address);
+        }
+    }
 }
