@@ -22,16 +22,7 @@ namespace Persistence.Repository
 			try
 			{
 				Resource? resource = await _db.Resources
-					.FirstOrDefaultAsync(x => x.Id == id);
-
-				if (resource == null)
-				{
-					// Returns invalid resource with exception
-					return Result<Resource>.Error(
-						originalType: null!,
-						exception: new Exception($"Ressource med id {id} blev ikke fundet.")
-					);
-				}
+					.FirstAsync(x => x.Id == id);
 
 				return Result<Resource>.Success(resource);
 			}

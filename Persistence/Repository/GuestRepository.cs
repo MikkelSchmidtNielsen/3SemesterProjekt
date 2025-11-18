@@ -38,23 +38,14 @@ namespace Persistence.Repository
 			try
 			{
 				Guest? guest = await _db.Guests
-					.FirstOrDefaultAsync(x => x.Id == id);
-
-				if (guest == null)
-				{
-					// Returns invalid guest with exception
-					return Result<Guest>.Error(
-						originalType: null, 
-						exception: new Exception($"Gæst med id {id} blev ikke fundet.")
-					);
-				}
+					.FirstAsync(x => x.Id == id);
 
 				return Result<Guest>.Success(guest);
 			}
 			catch (Exception ex)
 			{
 				// Returns invalid guest with exception
-				return Result<Guest>.Error(originalType: null, exception: ex);
+				return Result<Guest>.Error(originalType: null!, exception: ex);
 			}
 		}
 	}
