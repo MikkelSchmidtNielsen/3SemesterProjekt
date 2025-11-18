@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto.Command
 {
-    public class GuestCreateBookingDto
+    public class GuestCreateBookingRequestDto
     {
-        public int GuestId { get; set; }
+        public string Email { get; set; }
         public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }

@@ -10,6 +10,6 @@ namespace Application.RepositoryInterfaces
 {
 	public interface IGuestRepository
 	{
-        Task<IResult<Guest>> GetGuestByIdAsync(int id);
+        Task<IResult<Guest>> GetGuestByEmailAsync(string email);
     }
 }

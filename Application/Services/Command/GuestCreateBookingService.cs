@@ -1,8 +1,10 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
+using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +28,24 @@ namespace Application.Services.Command
             _guestCreateUser = guestCreateUser;
         }
 
-        public async Task<IResult<Booking>> GuestCreateBookingAsync(GuestCreateBookingDto guestCreateBookingDto)
+        public async Task<IResult<GuestCreateBookingRequestResultDto>> GuestCreateBookingAsync(GuestCreateBookingRequestDto guestCreateBookingRequestCommandDto)
         {
-            IResult<Guest> guest = await _guestRepository.GetGuestByIdAsync(guestCreateBookingDto.GuestId);
+            // Create a new DTO to handle the returns guestCreateBookingRequestCommandDto request
+            GuestCreateBookingRequestResultDto domainDto = Mapper.Map<GuestCreateBookingRequestResultDto>(guestCreateBookingRequestCommandDto);
 
-            IResult<Resource> resource = await _resourceRepository.GetResourceByIdAsync(guestCreateBookingDto.ResourceId);
+            IResult<Guest> guestUserRequest = await _guestRepository.GetGuestByEmailAsync(guestCreateBookingRequestCommandDto.Email);
+
+
+
+            if (guestUserRequest.IsSucces() == false)
+            {
+                return Result<GuestCreateBookingRequestResultDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
+            }
+            
+
+
+
+            IResult<Resource> resource = await _resourceRepository.GetResourceByIdAsync(guestCreateBookingRequestCommandDto.ResourceId);
 
 
 

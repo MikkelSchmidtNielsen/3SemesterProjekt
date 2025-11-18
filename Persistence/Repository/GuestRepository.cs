@@ -1,4 +1,6 @@
 ﻿using Application.RepositoryInterfaces;
+using Common.ResultInterfaces;
+using Domain.Models;
 using Persistence.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -16,5 +18,10 @@ namespace Persistence.Repository
 		{
 			_db = db;
 		}
-	}
+
+        public Task<IResult<Guest>> GetGuestByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

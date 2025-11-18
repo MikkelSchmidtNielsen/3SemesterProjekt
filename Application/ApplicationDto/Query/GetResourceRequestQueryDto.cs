@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto.Query
 {
-    public class GetResourceDto
+    public class GetResourceRequestQueryDto
     {
         public int Id { get; set; }
     }

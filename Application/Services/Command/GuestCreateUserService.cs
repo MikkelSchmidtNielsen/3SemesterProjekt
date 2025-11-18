@@ -17,11 +17,11 @@ namespace Application.Services.Command
     public class GuestCreateUserService : IGuestCreateUserService
     {
         private readonly IGuestFactory _guestFactory;
-        private readonly IGuestRepository guestRepository;
+        private readonly IGuestRepository _guestRepository;
 
 
 
-        public async Task<IResult<Guest>> GuestCreateUserAsync(GuestCreateUserRequestDto guestCreateUserRequestDto)
+        public async Task<IResult<Guest>> GuestCreateUserAsync(GuestCreateUserRequestCommandDto guestCreateUserRequestDto)
         {
             var domainDto = Mapper.Map<GuestCreateUserFactoryDto>(guestCreateUserRequestDto);
 
