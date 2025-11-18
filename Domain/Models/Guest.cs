@@ -20,9 +20,8 @@ namespace Domain.Models
         // Entity Framework
         public List<Booking> Booking { get;}
 
-        public Guest(int id, string firstName, string lastName, int phoneNumber, string email, string country, string language, string address)
+        public Guest(string firstName, string lastName, int phoneNumber, string email, string country, string language, string address)
         {
-            Id = id;
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;

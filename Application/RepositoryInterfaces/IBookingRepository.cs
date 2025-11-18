@@ -1,4 +1,5 @@
-﻿using Common.ResultInterfaces;
+﻿using Common;
+using Common.ResultInterfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,6 @@ namespace Application.RepositoryInterfaces
 {
     public interface IBookingRepository
     {
+        Task<IResult<Booking>> GuestCreateBookingAsync(Booking booking);
     }
 }
