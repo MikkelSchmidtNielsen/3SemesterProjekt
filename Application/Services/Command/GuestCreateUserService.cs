@@ -21,22 +21,22 @@ namespace Application.Services.Command
 
 
 
-        public async Task<IResult<Guest>> GuestCreateUserAsync(GuestCreateUserDto guestCreateUserDto)
+        public async Task<IResult<Guest>> GuestCreateUserAsync(GuestCreateUserRequestDto guestCreateUserRequestDto)
         {
-            var domainDto = Mapper.Map<GuestCreateUserFactoryDto>(guestCreateUserDto);
+            var domainDto = Mapper.Map<GuestCreateUserFactoryDto>(guestCreateUserRequestDto);
 
-            IResult<Guest> guestRequest = _guestFactory.Create(domainDto);
+            IResult<Guest> guestCreateRequest = _guestFactory.Create(domainDto);
 
-            if (guestRequest.IsSucces() == false)
+            if (guestCreateRequest.IsSucces() == false)
             {
-                return guestRequest;
+                return guestCreateRequest;
             }
 
 
  
 
 
-            return Result<Guest>.Error(guestRequest.GetError().OriginalType, new Exception());
+            return Result<Guest>.Error(guestCreateRequest.GetError().OriginalType, new Exception());
         }
     }
 }
