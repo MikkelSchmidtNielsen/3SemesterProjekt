@@ -11,7 +11,7 @@ namespace Domain.Models
         public int Id { get; init; }
         public string FirstName { get; private set; }
         public string? LastName { get; private set; }
-        public int PhoneNumber { get; private set; }
+        public int? PhoneNumber { get; private set; }
         public string? Email { get; private set; }
         public string? Country { get; private set; }
         public string? Language { get; private set; }
@@ -20,7 +20,7 @@ namespace Domain.Models
         // Entity Framework
         public List<Booking> Booking { get; }
 
-        public Guest(string firstName, string? lastName, int phoneNumber, string? email, string? country, string? language, string? address)
+        public Guest(string firstName, string? lastName, int? phoneNumber, string? email, string? country, string? language, string? address)
         {
             FirstName = firstName;
             LastName = lastName;
