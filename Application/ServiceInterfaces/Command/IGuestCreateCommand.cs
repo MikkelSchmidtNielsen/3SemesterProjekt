@@ -11,6 +11,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface IGuestCreateCommand
     {
-        public Task<IResult<Guest>> CreateGuestAsync(GuestCreateDto guestCreateDto);
+        public Task<IResult<Guest>> CreateGuestAsync(GuestCreateRequestDto guestCreateDto);
     }
 }

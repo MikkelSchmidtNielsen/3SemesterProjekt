@@ -19,7 +19,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 			Mock<IGuestFactory> guestFactory = new Mock<IGuestFactory>();
 			Mock<IGuestRepository> repo = new Mock<IGuestRepository>();
 
-            GuestCreateDto createDto = new GuestCreateDto();
+            GuestCreateRequestDto createDto = new GuestCreateRequestDto();
             Guest guest = new Guest("Mikkel", null, null, null, null, null, null);
             Exception repoException = new Exception("Database error");
 
@@ -53,7 +53,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 			Mock<IGuestFactory> guestFactory = new Mock<IGuestFactory>();
 			Mock<IGuestRepository> repo = new Mock<IGuestRepository>();
 
-			GuestCreateDto createDto = new GuestCreateDto();
+			GuestCreateRequestDto createDto = new GuestCreateRequestDto();
 			Guest guest = new Guest("Mikkel", null, null, null, null, null, null);
 			Exception repoException = new Exception("Database error");
 

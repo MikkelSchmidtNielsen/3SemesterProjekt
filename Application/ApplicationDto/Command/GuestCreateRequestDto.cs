@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto.Command
 {
-    public class GuestCreateDto
+    public class GuestCreateRequestDto
     {
         public string FirstName { get; set; }
         public string? LastName { get; set; }

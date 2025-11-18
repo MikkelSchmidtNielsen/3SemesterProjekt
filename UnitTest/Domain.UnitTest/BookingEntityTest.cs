@@ -23,6 +23,8 @@ namespace UnitTest.Domain.UnitTest
             Booking booking = new Booking(guestId, ressourceId, startDate, endDate, totalPrice);
 
             // Assert
+            Assert.Equal(guestId, booking.GuestId);
+            Assert.Equal(ressourceId, booking.ResourceId);
             Assert.Equal(startDate, booking.StartDate);
             Assert.Equal(endDate, booking.EndDate);
             Assert.Equal(totalPrice, booking.TotalPrice);

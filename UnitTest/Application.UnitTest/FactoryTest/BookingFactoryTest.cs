@@ -12,8 +12,8 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 		{
 			// Arrange
 			BookingFactory factory = new BookingFactory();
-			CreatedBookingDto dto = new CreatedBookingDto
-			{
+			BookingCreateFactoryDto dto = new BookingCreateFactoryDto
+            {
 				Id = 1,
 				ResourceId = 1,
 				StartDate = DateOnly.FromDateTime(DateTime.Now),

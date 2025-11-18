@@ -20,7 +20,7 @@ namespace Application.Services.Command
             _repo = repo;
         }
 
-        public async Task<IResult<Guest>> CreateGuestAsync(GuestCreateDto guestCreateDto)
+        public async Task<IResult<Guest>> CreateGuestAsync(GuestCreateRequestDto guestCreateDto)
         {
             CreatedGuestDto dto = Mapper.Map<CreatedGuestDto>(guestCreateDto);
 

@@ -2,7 +2,7 @@
 
 namespace Domain.ModelsDto
 {
-    public class CreatedBookingDto
+    public class BookingRequestResultDto
     {
         public int Id { get; set; }
         public int GuestId { get; set; }

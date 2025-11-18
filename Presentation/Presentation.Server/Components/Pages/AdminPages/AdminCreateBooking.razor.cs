@@ -17,7 +17,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
         {
             StartDate = DateOnly.FromDateTime(DateTime.Now),
             EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-            Guest = new GuestCreateDto()
+            Guest = new GuestCreateRequestDto()
         };
 
         protected override async Task OnInitializedAsync()
@@ -56,25 +56,25 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 }
             }
 
-            BookingCreateDto dto = Mapper.Map<BookingCreateDto>(model);
+            BookingCreateRequestDto dto = Mapper.Map<BookingCreateRequestDto>(model);
 
-            IResult<CreatedBookingDto> result = await _bookingCommand.CreateBookingAsync(dto);
+            IResult<BookingRequestResultDto> result = await _bookingCommand.CreateBookingAsync(dto);
 
             if (result.IsSucces())
             {
-                IResultSuccess<CreatedBookingDto> success = result.GetSuccess();
+                IResultSuccess<BookingRequestResultDto> success = result.GetSuccess();
 
                 _bookingResult = $"Bookingen er oprettet for {_resources.FirstOrDefault(resource => resource.Id == model.ResourceId)!.Name} med en total pris på {success.OriginalType.TotalPrice}";
             }
             else if (result.IsError())
             {
-                IResultError<CreatedBookingDto> error = result.GetError();
+                IResultError<BookingRequestResultDto> error = result.GetError();
 
                 _bookingResult = $"{error.Exception!.Message}";
             }
             else if (result.IsConflict())
             {
-                IResultConflict<CreatedBookingDto> error = result.GetConflict();
+                IResultConflict<BookingRequestResultDto> error = result.GetConflict();
 
                 _bookingResult = $"{error.Exception!.Message}";
             }
@@ -83,7 +83,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
             {
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-                Guest = new GuestCreateDto()
+                Guest = new GuestCreateRequestDto()
             };
         }
     }
@@ -93,6 +93,6 @@ namespace Presentation.Server.Components.Pages.AdminPages
         public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
-        public GuestCreateDto Guest { get; set; }
+        public GuestCreateRequestDto Guest { get; set; }
     }
 }

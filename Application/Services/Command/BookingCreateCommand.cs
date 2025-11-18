@@ -25,57 +25,60 @@ namespace Application.Services.Command
             _guestCreateCommand = guestCreateCommand;
         }
 
-        public async Task<IResult<CreatedBookingDto>> CreateBookingAsync(BookingCreateDto bookingCreateDto)
+        public async Task<IResult<BookingRequestResultDto>> CreateBookingAsync(BookingCreateRequestDto bookingCreateDto)
         {
             // Creates dto to handle different returns
-            CreatedBookingDto dto = Mapper.Map<CreatedBookingDto>(bookingCreateDto);
+            BookingRequestResultDto dto = Mapper.Map<BookingRequestResultDto>(bookingCreateDto);
 
             // Get resource by id for price calculation
-            IResult<Resource> resourceResult = await _resourceIdQuery.GetResourceByIdAsync(bookingCreateDto.ResourceId);
+            IResult<Resource> resourceQueryRequest = await _resourceIdQuery.GetResourceByIdAsync(bookingCreateDto.ResourceId);
 
-            if (resourceResult.IsError())
+            if (resourceQueryRequest.IsError())
             {
 				// Returns an error because the ressource could not be found, so no booking could be created
-				return Result<CreatedBookingDto>.Error(dto, resourceResult.GetError().Exception!);
+				return Result<BookingRequestResultDto>.Error(dto, resourceQueryRequest.GetError().Exception!);
             }
 
-            AddPriceToDto(dto, resourceResult.GetSuccess().OriginalType);
+            AddPriceToDto(dto, resourceQueryRequest.GetSuccess().OriginalType);
 
             // Create guest
-            IResult<Guest> guestResult = await CreateGuestAsync(dto, bookingCreateDto);
+            IResult<Guest> guestCreateRequest = await CreateGuestAsync(dto, bookingCreateDto);
 
-            if (guestResult.IsError())
+            if (guestCreateRequest.IsError())
             {
 				// Returns an error because the guest could not be created, so no booking exists
-				return Result<CreatedBookingDto>.Error(dto, guestResult.GetError().Exception!);
+				return Result<BookingRequestResultDto>.Error(dto, guestCreateRequest.GetError().Exception!);
             }
 
             // Create booking
-            IResult<Booking> bookingCreateResult = _bookingFactory.Create(dto);
+            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(Mapper.Map<BookingCreateFactoryDto>(bookingCreateDto));
 
-            if (bookingCreateResult.IsError())
+            if (bookingCreateRequest.IsError())
             {
-                return Result<CreatedBookingDto>.Error(dto, bookingCreateResult.GetError().Exception!);
+                return Result<BookingRequestResultDto>.Error(dto, bookingCreateRequest.GetError().Exception!);
             }
 
             // Creates booking in db
-            IResult<Booking> repoResult = await _repository.CreateBookingAsync(bookingCreateResult.GetSuccess().OriginalType);
+            IResult<Booking> repoCreateBookingRequest = await _repository.CreateBookingAsync(bookingCreateRequest.GetSuccess().OriginalType);
 
-            if (repoResult.IsError())
+            if (repoCreateBookingRequest.IsSucces())
             {
-                return Result<CreatedBookingDto>.Error(dto, repoResult.GetError().Exception!);
+                // Mapping the final booking
+                BookingRequestResultDto finalDto = Mapper.Map<BookingRequestResultDto>(repoCreateBookingRequest.GetSuccess().OriginalType);
+
+                return Result<BookingRequestResultDto>.Success(finalDto);
             }
-
-            // Mapping the final booking
-            CreatedBookingDto finalDto = Mapper.Map<CreatedBookingDto>(repoResult.GetSuccess().OriginalType);
-
-            return Result<CreatedBookingDto>.Success(finalDto);
+            else
+            {
+                return Result<BookingRequestResultDto>.Error(dto, repoCreateBookingRequest.GetError().Exception!);
+            }
+            // NEEDS A CONFLICT RETURN
         }
 
         /// <summary>
         /// Creates guest and adds id to dto if succeeded
         /// </summary>
-        protected async Task<IResult<Guest>> CreateGuestAsync(CreatedBookingDto dto, BookingCreateDto input)
+        protected async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
         {
             IResult<Guest> guestResult = await _guestCreateCommand.CreateGuestAsync(input.Guest);
 
@@ -90,13 +93,12 @@ namespace Application.Services.Command
         /// <summary>
         /// Calculates and adds price to dto
         /// </summary>
-        protected void AddPriceToDto(CreatedBookingDto dto, Resource resource)
+        protected void AddPriceToDto(BookingRequestResultDto dto, Resource resource)
         {
             // Today + total days of staying
             int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
             dto.TotalPrice = resource.BasePrice * days;
         }
     }
-
 }
 

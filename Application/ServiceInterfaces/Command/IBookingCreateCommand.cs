@@ -6,6 +6,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface IBookingCreateCommand
     {
-        Task<IResult<CreatedBookingDto>> CreateBookingAsync(BookingCreateDto bookingCreateDto);
+        Task<IResult<BookingRequestResultDto>> CreateBookingAsync(BookingCreateRequestDto bookingCreateDto);
     }
 }

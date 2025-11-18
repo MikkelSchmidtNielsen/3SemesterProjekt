@@ -15,12 +15,12 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         public BookingCreateCommandTestClass(IBookingRepository repository, IResourceIdQuery resourceQuery, IBookingFactory factory, IGuestCreateCommand guestCommand)
             : base(repository, resourceQuery, factory, guestCommand) {}
 
-        new public async Task<IResult<Guest>> CreateGuestAsync(CreatedBookingDto dto, BookingCreateDto input)
+        new public async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
         {
             return await base.CreateGuestAsync(dto, input);
         }
 
-        new public void AddPriceToDto(CreatedBookingDto dto, Resource resource)
+        new public void AddPriceToDto(BookingRequestResultDto dto, Resource resource)
         {
             base.AddPriceToDto(dto, resource);
         }

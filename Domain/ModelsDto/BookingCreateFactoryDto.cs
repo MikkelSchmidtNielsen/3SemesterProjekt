@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.ApplicationDto.Command
+namespace Domain.ModelsDto
 {
-    public class BookingWithTotalPriceDto
+    public class BookingCreateFactoryDto
     {
+        public int Id { get; set; }
+        public int GuestId { get; set; }
         public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public decimal TotalPrice { get; set; }
-        public GuestCreateDto Guest { get; set; }
     }
 }
