@@ -1,6 +1,7 @@
 ﻿using Application.ApplicationDto.Command;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface IGuestCreateBookingService
     {
-        Task<IResult<Booking>> GuestCreateBookingAsync(GuestCreateBookingRequestDto guestCreateBookingDto);
+        Task<IResult<GuestCreateBookingRequestResultDto>> GuestCreateBookingAsync(GuestCreateBookingRequestDto guestCreateBookingDto);
     }
 }

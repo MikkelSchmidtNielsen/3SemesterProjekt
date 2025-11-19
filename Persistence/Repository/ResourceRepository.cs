@@ -1,4 +1,8 @@
 ﻿using Application.RepositoryInterfaces;
+using Common;
+using Common.ResultInterfaces;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -16,5 +20,19 @@ namespace Persistence.Repository
 		{
 			_db = db;
 		}
-	}
+
+        public async Task<IResult<Resource>> GetResourceByIdAsync(int id)
+        {
+            try
+            {
+                Resource resource = await _db.Resources.FirstAsync(x => x.Id == id);
+
+                return Result<Resource>.Success(resource);
+            }
+            catch (Exception ex)
+            {
+                return Result<Resource>.Error(originalType: null!, exception: ex);
+            }
+        }
+    }
 }
