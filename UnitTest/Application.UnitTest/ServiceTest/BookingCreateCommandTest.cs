@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -9,6 +10,7 @@ using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
 using Moq;
+using UnitTest.UnitTestHelpingTools;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
@@ -22,8 +24,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
-            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -67,9 +70,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 EndDate = bookingDto.EndDate,
                 TotalPrice = 300
             };
+            SendEmailCommandDto sendEmailDto = Impression.Of<SendEmailCommandDto>().Randomize().Create();
 
-            // Mock Resource query
-            resourceIdQuery
+
+			// Mock Resource query
+			resourceIdQuery
                 .Setup(query => query.GetResourceByIdAsync(bookingDto.ResourceId))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
@@ -88,12 +93,18 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 .Setup(repo => repo.CreateBookingAsync(booking))
                 .ReturnsAsync(Result<Booking>.Success(booking));
 
+            // Mock ISendEmail
+            sendEmail
+                .Setup(send => send.SendEmail(It.IsAny<SendEmailCommandDto>()))
+                .Returns(Result<SendEmailCommandDto>.Success(sendEmailDto));
+
             BookingCreateCommand sut = new BookingCreateCommand
             (
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             // Act
@@ -124,8 +135,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
-            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -144,7 +156,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             // Act
@@ -172,8 +185,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
-            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -206,7 +220,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             // Act
@@ -234,8 +249,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
-            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -292,7 +308,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             // Act
@@ -319,13 +336,15 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+            Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
             BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass
             (
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             BookingRequestResultDto dto = new BookingRequestResultDto
@@ -340,9 +359,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 name: "Test Hytte",
                 type: "Hytte",
                 basePrice: 100
-            );
-
-            
+            ); 
 
             // Act
             testClass.AddPriceToDto(dto, resource);
@@ -351,7 +368,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(expected, dto.TotalPrice);
         }
 
-        [Fact]
+
+
+		[Fact]
         public async Task CreateGuestAsync_SetsGuestId_WhenGuestCreationSucceeds()
         {
             // Arrange
@@ -359,13 +378,15 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
-            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass
+			BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass
             (
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             int guestId = 1;
@@ -415,12 +436,14 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
-            BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
+			BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
-                guestCreateCommand.Object
+                guestCreateCommand.Object,
+                sendEmail.Object
             );
 
             BookingRequestResultDto dto = new BookingRequestResultDto();

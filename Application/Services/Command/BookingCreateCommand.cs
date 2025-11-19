@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -16,16 +17,18 @@ namespace Application.Services.Command
         private readonly IResourceIdQuery _resourceIdQuery;
         private readonly IBookingFactory _bookingFactory;
         private readonly IGuestCreateCommand _guestCreateCommand;
+        private readonly ISendEmail _sendEmail;
 
-        public BookingCreateCommand(IBookingRepository repository, IResourceIdQuery resourceIdQuery, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand)
-        {
-            _repository = repository;
-            _resourceIdQuery = resourceIdQuery;
-            _bookingFactory = bookingFactory;
-            _guestCreateCommand = guestCreateCommand;
-        }
+		public BookingCreateCommand(IBookingRepository repository, IResourceIdQuery resourceIdQuery, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail)
+		{
+			_repository = repository;
+			_resourceIdQuery = resourceIdQuery;
+			_bookingFactory = bookingFactory;
+			_guestCreateCommand = guestCreateCommand;
+			_sendEmail = sendEmail;
+		}
 
-        public async Task<IResult<BookingRequestResultDto>> CreateBookingAsync(BookingCreateRequestDto bookingCreateDto)
+		public async Task<IResult<BookingRequestResultDto>> CreateBookingAsync(BookingCreateRequestDto bookingCreateDto)
         {
             // Creates dto to handle different returns
             BookingRequestResultDto dto = Mapper.Map<BookingRequestResultDto>(bookingCreateDto);
@@ -63,6 +66,20 @@ namespace Application.Services.Command
 
             if (repoCreateBookingRequest.IsSucces())
             {
+                if (guestCreateRequest.GetSuccess().OriginalType.Email is not null)
+                {
+                    Booking emailBooking = bookingCreateRequest.GetSuccess().OriginalType;
+                    Guest emailGuest = guestCreateRequest.GetSuccess().OriginalType;
+                    Resource emailResource = resourceQueryRequest.GetSuccess().OriginalType;
+
+                    var emailResult = SendEmail(emailBooking, emailGuest, emailResource);
+
+					if (!emailResult.IsSucces())
+					{
+						return Result<BookingRequestResultDto>.Error(dto, repoCreateBookingRequest.GetError().Exception!);
+					}
+				}
+
                 // Mapping the final booking
                 BookingRequestResultDto finalDto = Mapper.Map<BookingRequestResultDto>(repoCreateBookingRequest.GetSuccess().OriginalType);
 
@@ -89,6 +106,20 @@ namespace Application.Services.Command
 
             return guestResult;
         }
+        private IResult<SendEmailCommandDto> SendEmail(Booking booking, Guest guest, Resource resource)
+        {
+			SendEmailCommandDto emailDto = new SendEmailCommandDto()
+			{
+				Subject = ISendEmail.EmailSubject.OrderConfirmation,
+				Booking = booking,
+				Guest = guest,
+				Resource = resource
+			};
+
+			var emailResult = _sendEmail.SendEmail(emailDto);
+
+            return emailResult;
+		}
 
         /// <summary>
         /// Calculates and adds price to dto

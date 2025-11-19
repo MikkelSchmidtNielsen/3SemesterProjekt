@@ -13,6 +13,8 @@
         public Guest Guest { get; }
         public Resource Resource { get; }
 
+        private Booking() { }
+
         public Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice)
 		{
 			GuestId = guestId;
