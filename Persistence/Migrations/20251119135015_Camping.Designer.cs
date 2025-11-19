@@ -12,7 +12,7 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251119121204_Camping")]
+    [Migration("20251119135015_Camping")]
     partial class Camping
     {
         /// <inheritdoc />
@@ -42,9 +42,6 @@ namespace Persistence.Migrations
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ResourceId1")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
@@ -56,8 +53,6 @@ namespace Persistence.Migrations
                     b.HasIndex("GuestId");
 
                     b.HasIndex("ResourceId");
-
-                    b.HasIndex("ResourceId1");
 
                     b.ToTable("Booking", (string)null);
                 });
@@ -139,14 +134,10 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.Resource", "Resource")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Domain.Models.Resource", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("ResourceId1");
 
                     b.Navigation("Guest");
 

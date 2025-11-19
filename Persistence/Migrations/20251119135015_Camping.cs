@@ -58,8 +58,7 @@ namespace Persistence.Migrations
                     ResourceId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ResourceId1 = table.Column<int>(type: "int", nullable: true)
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,11 +75,6 @@ namespace Persistence.Migrations
                         principalTable: "Resource",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Booking_Resource_ResourceId1",
-                        column: x => x.ResourceId1,
-                        principalTable: "Resource",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -92,11 +86,6 @@ namespace Persistence.Migrations
                 name: "IX_Booking_ResourceId",
                 table: "Booking",
                 column: "ResourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Booking_ResourceId1",
-                table: "Booking",
-                column: "ResourceId1");
         }
 
         /// <inheritdoc />
