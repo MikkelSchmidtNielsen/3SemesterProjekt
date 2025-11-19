@@ -1,6 +1,7 @@
 ﻿using Application.Factories;
 using Application.RepositoryInterfaces;
 using Castle.Core.Resource;
+using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
@@ -29,7 +30,8 @@ namespace UnitTest.Application.UnitTest
                 Description = null
             };
             Mock<IResourceRepository> repository = new Mock<IResourceRepository>();
-            repository.Setup(x => x.GetResourceByResourceNameAsync(dto1.Name));
+            repository.Setup(x => x.GetResourceByResourceNameAsync(dto1.Name)).ReturnsAsync(Result<Resource>.Error(null, new Exception("En ressource med dette navn eksisterer ikke.")));
+            repository.Setup(y => y.GetResourceByLocationAsync(dto1.Location)).ReturnsAsync(Result<Resource>.Error(null, new Exception("Der kunne ikke findes en ressource med det valgte pladsnr.")));
             ResourceFactory resourceFactory = new ResourceFactory(repository.Object);
 
             // Act
@@ -45,16 +47,8 @@ namespace UnitTest.Application.UnitTest
         public async Task ResourceCreation_ShouldFail_IfResourceWithSameNameAlreadyExists()
         {
             // Arrange
-            CreateResourceDto dto1 = new CreateResourceDto
-            {
-                Name = "Luksushytte nr. 5",
-                Type = "Hytte",
-                BasePrice = 899.95M,
-                Location = 4,
-                Description = null
-            };
-            Resource resource = new Resource(dto1);
-            CreateResourceDto dto2 = new CreateResourceDto
+            Resource existingResource = new Resource("Luksushytte nr. 5", "Hytte", 899.95M, 4, null);
+            CreateResourceDto newResourceDto = new CreateResourceDto
             {
                 Name = "Luksushytte nr. 5",
                 Type = "Teltplads",
@@ -65,11 +59,37 @@ namespace UnitTest.Application.UnitTest
 
             Mock<IResourceRepository> repository = new Mock<IResourceRepository>();
             ResourceFactory resourceFactory = new ResourceFactory(repository.Object);
-            repository.Setup(x => x.GetResourceByResourceNameAsync(dto2.Name)).ReturnsAsync(resource);
+            repository.Setup(x => x.GetResourceByResourceNameAsync(newResourceDto.Name)).ReturnsAsync(Result<Resource>.Success(existingResource));
 
 
             // Act
-            var result2 = await resourceFactory.CreateResourceAsync(dto2);
+            var result2 = await resourceFactory.CreateResourceAsync(newResourceDto);
+
+            // Assert
+            Assert.False(result2.IsSucces());
+        }
+        [Fact]
+        public async Task ResourceCreation_ShouldFail_IfThereIsAnExistingResourceOnGivenLocation()
+        {
+            // Arrange
+            Resource existingResource = new Resource("Luksushytte nr. 5", "Hytte", 899.95M, 4, null);
+            CreateResourceDto newResourceDto = new CreateResourceDto
+            {
+                Name = "Luksushytte nr. 5",
+                Type = "Teltplads",
+                BasePrice = 999.95M,
+                Location = 4,
+                Description = null
+            };
+
+            Mock<IResourceRepository> repository = new Mock<IResourceRepository>();
+            ResourceFactory resourceFactory = new ResourceFactory(repository.Object);
+            repository.Setup(x => x.GetResourceByResourceNameAsync(newResourceDto.Name)).ReturnsAsync(Result<Resource>.Success(existingResource));
+            repository.Setup(x => x.GetResourceByLocationAsync(newResourceDto.Location)).ReturnsAsync(Result<Resource>.Success(existingResource));
+
+
+            // Act
+            var result2 = await resourceFactory.CreateResourceAsync(newResourceDto);
 
             // Assert
             Assert.False(result2.IsSucces());

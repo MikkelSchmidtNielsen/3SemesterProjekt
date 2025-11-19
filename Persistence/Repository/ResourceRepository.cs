@@ -23,21 +23,11 @@ namespace Persistence.Repository
 
         public async Task<IResult<Resource>> GetResourceByResourceNameAsync(string resourceName)
         {
-            //try
-            //{
-            //    var resource = await _db.Resources.FirstAsync(x => x.Name == resourceName);
-            //    return Result<Resource>.Success(resource);
-            //}
-            //catch (InvalidOperationException ex)
-            //{
-            //    return Result<Resource>.Error(null, ex);
-            //}
-
             Resource? resource = await _db.Resources.FirstOrDefaultAsync(x => x.Name == resourceName);
 
             if (resource is null)
             {
-                return Result<Resource>.Error(null, new Exception("En ressource med dette navn eksisterer ikke."));
+                return Result<Resource>.Error(resource, new Exception("En ressource med dette navn eksisterer ikke."));
             }
             else
             {
@@ -45,13 +35,13 @@ namespace Persistence.Repository
             }
         }
 
-        public async Task<IResult<Resource>> GetResourceByLocation(int resourceLocation)
+        public async Task<IResult<Resource>> GetResourceByLocationAsync(int resourceLocation)
         {
             Resource? resource = await _db.Resources.FirstOrDefaultAsync(x => x.Location == resourceLocation);
 
             if (resource is null)
             {
-                return Result<Resource>.Error(null, new Exception("Der kunne ikke findes en ressource med det valgte pladsnr."));
+                return Result<Resource>.Error(resource, new Exception("Der kunne ikke findes en ressource med det valgte pladsnr."));
             }
             else
             {
@@ -60,21 +50,17 @@ namespace Persistence.Repository
         }
         public async Task<IResult<Resource>> AddResourceToDBAsync(Resource resource)
         {
-            //try
-            //{
-            //    await _db.Resources.AddAsync(resource);
-            
-            //    return Result<Resource>.Success(resource);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return Result<Resource>.Error(resource, ex);
-            //}
+            try
+            {
+                await _db.Resources.AddAsync(resource);
+                await _db.SaveChangesAsync();
 
-            await _db.Resources.AddAsync(resource);
-            await _db.SaveChangesAsync();
-            return Result<Resource>.Success(resource);
-
+                return Result<Resource>.Success(resource);
+            }
+            catch (Exception ex)
+            {
+                return Result<Resource>.Error(resource, ex);
+            }
         }
 
     }

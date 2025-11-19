@@ -24,7 +24,7 @@ namespace Application.Factories
 		public async Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto)
 		{
 			var resourceNameResult = await _repository.GetResourceByResourceNameAsync(dto.Name);
-			var resourceLocationResult = await _repository.GetResourceByLocation(dto.Location);
+			var resourceLocationResult = await _repository.GetResourceByLocationAsync(dto.Location);
 
 			if (resourceNameResult.IsSucces())
 			{

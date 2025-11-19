@@ -11,7 +11,7 @@ namespace Application.RepositoryInterfaces
 	public interface IResourceRepository
 	{
 		public Task<IResult<Resource>> GetResourceByResourceNameAsync(string resourceName);
-		public Task<IResult<Resource>> GetResourceByLocation(int resourceLocation);
+		public Task<IResult<Resource>> GetResourceByLocationAsync(int resourceLocation);
 		public Task<IResult<Resource>> AddResourceToDBAsync(Resource resource);
 	}
 }

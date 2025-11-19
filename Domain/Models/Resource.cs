@@ -30,6 +30,18 @@ namespace Domain.Models
             ValidateInformation();
 
         }
+        public Resource(string resourceName, string resourceType, decimal resourceBasePrice, int location, string? description)
+        {
+            Name = resourceName;
+            Type = resourceType;
+            BasePrice = resourceBasePrice;
+            Location = location;
+            Description = description;
+            IsAvailable = true;
+
+            ValidateInformation();
+
+        }
 
         public Resource(CreateResourceDto dto)
         {

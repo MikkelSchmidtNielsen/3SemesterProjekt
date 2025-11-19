@@ -18,11 +18,11 @@
 				<RadzenDropDown Name="Type" @bind-Value=resourceModel.Type TValue="string" Data=@resourceTypes /><br />
 				<RadzenRequiredValidator Component="Type" Text="Angiv venligst ressourcetype."></RadzenRequiredValidator><br/>
 				<label for="BasePrice">Pris pr. dag</label><br />
-				<RadzenNumeric Name="BasePrice" @bind-Value=resourceModel.BasePrice TValue="decimal" ShowUpDown="false" Placeholder="Pris i DKK..."></RadzenNumeric><br />
+				<RadzenNumeric Name="BasePrice" Min="0"  @bind-Value=resourceModel.BasePrice TValue="decimal" ShowUpDown="false" Placeholder="Pris i DKK..."></RadzenNumeric><br />
 				<RadzenRequiredValidator Component="BasePrice" Text="Angiv venligst pris pr. dag i DKK."></RadzenRequiredValidator><br/>
 				<label for="Location">Pladsnummer</label><br />
-				<RadzenNumeric Name="BasePrice" @bind-Value=resourceModel.Location TValue="int" ShowUpDown="false" Placeholder="Pladsnr..."></RadzenNumeric><br />
-				<RadzenRequiredValidator Component="BasePrice" Text="Angiv venligst pladsnr."></RadzenRequiredValidator><br/>
+				<RadzenNumeric Name="Location" Min="1" @bind-Value=resourceModel.Location TValue="int" ShowUpDown="false" Placeholder="Pladsnr..."></RadzenNumeric><br />
+				<RadzenRequiredValidator Component="Location" Text="Angiv venligst pladsnr."></RadzenRequiredValidator><br/>
 				<label for="Description">Beskrivelse</label><br />
 				<RadzenTextArea id="Description" @bind-Value=resourceModel.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea><br/>
 				<div id="add-button">
@@ -40,12 +40,13 @@
 	{
 		public string Name { get; set; }
 		public string Type { get; set; }
-		public decimal BasePrice { get; set; }
-		public int Location { get; set;  }
+		public decimal BasePrice { get; set; } = 0;
+		public int Location { get; set; } = 1;
 		public string? Description { get; set; }
 	}
 
 	ResourceModel resourceModel = new ResourceModel();
+
 
 	private async Task ShowDialog(ResourceModel resourceModel)
 	{
