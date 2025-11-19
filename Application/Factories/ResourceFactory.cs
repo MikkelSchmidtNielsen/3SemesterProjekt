@@ -37,7 +37,6 @@ namespace Application.Factories
 			else
 			{
                 Resource resource = new Resource(dto);
-				await _repository.AddResourceToDBAsync(resource);
                 return Result<Resource>.Success(resource);
 			}
 		}
