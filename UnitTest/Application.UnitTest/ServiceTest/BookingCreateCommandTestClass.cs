@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -12,10 +13,13 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 {
     internal class BookingCreateCommandTestClass : BookingCreateCommand
     {
-        public BookingCreateCommandTestClass(IBookingRepository repository, IResourceIdQuery resourceQuery, IBookingFactory factory, IGuestCreateCommand guestCommand)
-            : base(repository, resourceQuery, factory, guestCommand) {}
+		public BookingCreateCommandTestClass(IBookingRepository repository, IResourceIdQuery resourceIdQuery, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail) 
+            : base(repository, resourceIdQuery, bookingFactory, guestCreateCommand, sendEmail)
+		{
+		}
+        private BookingCreateCommandTestClass() : base() { }
 
-        new public async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
+		new public async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
         {
             return await base.CreateGuestAsync(dto, input);
         }
