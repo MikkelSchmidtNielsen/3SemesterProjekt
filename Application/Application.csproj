@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="InfrastructureInterfaces\" />
+    <Folder Include="ApplicationDto\Query\" />
     <Folder Include="ServiceInterfaces\Command\" />
     <Folder Include="ServiceInterfaces\Query\" />
     <Folder Include="Services\Command\" />

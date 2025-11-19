@@ -13,6 +13,7 @@ namespace Domain.Models
         public string Type { get; private set; }
         public decimal BasePrice { get; private set; }
 
+        private Resource() { }
         public Resource(int id, string name, string type, decimal basePrice)
         {
             Id = id;
