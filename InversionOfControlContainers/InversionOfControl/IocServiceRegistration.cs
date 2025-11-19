@@ -11,7 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.EntityFramework;
 using Persistence.Repository;
+using Infrastructure.Email;
 using System.ComponentModel.Design;
+using Application.InfrastructureInterfaces;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -26,12 +28,12 @@ namespace InversionOfControlContainers.InversionOfControl
 
             //Add services
             services.AddScoped<ICreateResourceService, CreateResourceService>();
-
             services.AddScoped<IBookingCreateCommand, BookingCreateCommand>();
             services.AddScoped<IGuestCreateCommand, GuestCreateCommand>();
             services.AddScoped<IGuestIdQuery, GuestIdQuery>();
             services.AddScoped<IResourceAllQuery, ResourceAllQuery>();
             services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
+            services.AddScoped<ISendEmail, SendEmailMailKit>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();

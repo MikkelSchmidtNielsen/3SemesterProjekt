@@ -30,8 +30,6 @@ namespace Domain.Models
 
             ValidateInformation();
         }
-
-        private Resource() { }
         public Resource(int id, string name, string type, decimal basePrice)
         {
             Id = id;

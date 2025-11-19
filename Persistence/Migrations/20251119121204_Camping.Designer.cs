@@ -12,7 +12,7 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251119103927_Camping")]
+    [Migration("20251119121204_Camping")]
     partial class Camping
     {
         /// <inheritdoc />
