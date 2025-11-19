@@ -10,9 +10,15 @@ namespace Application.Factories
 	{
         public IResult<Booking> Create(BookingCreateFactoryDto dto)
 		{
-            Booking booking = new Booking(dto.GuestId, dto.ResourceId, dto.StartDate, dto.EndDate, dto.TotalPrice);
-
-            return Result<Booking>.Success(booking);
+			try
+			{
+                Booking booking = new Booking(dto.GuestId, dto.ResourceId, dto.StartDate, dto.EndDate, dto.TotalPrice);
+				return Result<Booking>.Success(booking);
+            }
+			catch (Exception ex)
+			{
+				return Result<Booking>.Error(null, ex);
+			}
 		}
 	}
 }

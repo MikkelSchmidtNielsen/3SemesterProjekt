@@ -12,8 +12,8 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251118102442_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251119103927_Camping")]
+    partial class Camping
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace Persistence.Migrations
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ResourceId1")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
@@ -53,6 +56,8 @@ namespace Persistence.Migrations
                     b.HasIndex("GuestId");
 
                     b.HasIndex("ResourceId");
+
+                    b.HasIndex("ResourceId1");
 
                     b.ToTable("Booking", (string)null);
                 });
@@ -103,6 +108,15 @@ namespace Persistence.Migrations
                     b.Property<decimal>("BasePrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Location")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -130,6 +144,10 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.Resource", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("ResourceId1");
+
                     b.Navigation("Guest");
 
                     b.Navigation("Resource");
@@ -138,6 +156,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Models.Guest", b =>
                 {
                     b.Navigation("Booking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Resource", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }
