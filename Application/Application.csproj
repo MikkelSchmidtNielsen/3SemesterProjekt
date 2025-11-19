@@ -19,8 +19,5 @@
     <Folder Include="Services\Command\" />
     <Folder Include="Services\Query\" />
   </ItemGroup>
-	<ItemGroup>
-		<Folder Include="Services\Query\" />
-	</ItemGroup>
 
 </Project>

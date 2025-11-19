@@ -27,7 +27,6 @@ namespace Application.Services.Command
 			_guestCreateCommand = guestCreateCommand;
 			_sendEmail = sendEmail;
 		}
-        protected BookingCreateCommand() { }
 
 		public async Task<IResult<BookingRequestResultDto>> CreateBookingAsync(BookingCreateRequestDto bookingCreateDto)
         {

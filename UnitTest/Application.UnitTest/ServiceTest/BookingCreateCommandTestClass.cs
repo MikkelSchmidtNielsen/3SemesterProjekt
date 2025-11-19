@@ -17,7 +17,6 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             : base(repository, resourceIdQuery, bookingFactory, guestCreateCommand, sendEmail)
 		{
 		}
-        private BookingCreateCommandTestClass() : base() { }
 
 		new public async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
         {

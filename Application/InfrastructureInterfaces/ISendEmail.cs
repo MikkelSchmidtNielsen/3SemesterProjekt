@@ -11,6 +11,6 @@ namespace Application.InfrastructureInterfaces
 	public interface ISendEmail
 	{
 		public enum EmailSubject { OrderConfirmation }
-		IResult<SendEmailCommandDto> SendEmail(SendEmailCommandDto dto);
+		public IResult<SendEmailCommandDto> SendEmail(SendEmailCommandDto dto);
 	}
 }
