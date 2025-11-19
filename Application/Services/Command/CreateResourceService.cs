@@ -18,7 +18,7 @@ namespace Application.Services.Command
     public class CreateResourceService : ICreateResourceService
     {
         private readonly IResourceFactory _factory;
-        readonly IResourceRepository _repository;
+        private readonly IResourceRepository _repository;
 
         public CreateResourceService(IResourceFactory factory, IResourceRepository repository)
         {
