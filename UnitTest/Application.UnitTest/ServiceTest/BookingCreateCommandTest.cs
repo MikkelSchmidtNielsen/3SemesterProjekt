@@ -10,6 +10,7 @@ using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
 using Moq;
+using System.Data.Common;
 using UnitTest.UnitTestHelpingTools;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
@@ -42,10 +43,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             Resource resource = new Resource
             (
-                id: 1,
                 name: "Test Hytte",
                 type: "Hytte",
-                basePrice: 100
+                basePrice: 100,
+                location: 3,
+                description: null
             );
 
             Guest guest = new Guest
@@ -197,10 +199,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             Resource resource = new Resource
             (
-                id: 1,
                 name: "Test Hytte",
                 type: "Hytte",
-                basePrice: 100
+                basePrice: 100,
+                location: 3,
+                description: null
             );
 
             Exception guestException = new Exception("Guest creation failed");
@@ -267,10 +270,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             Resource resource = new Resource
             (
-                id: 1,
                 name: "Test Hytte",
                 type: "Hytte",
-                basePrice: 100
+                basePrice: 100,
+                location: 3,
+                description: null
             );
 
             Guest guest = new Guest
@@ -355,10 +359,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             Resource resource = new Resource
             (
-                id: 1,
                 name: "Test Hytte",
                 type: "Hytte",
-                basePrice: 100
+                basePrice: 100,
+                location: 3,
+                description: null
             ); 
 
             // Act

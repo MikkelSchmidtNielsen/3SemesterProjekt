@@ -18,33 +18,11 @@ namespace Domain.Models
         public bool IsAvailable { get; set; }
         public List<Booking>? Bookings { get; }
 
-        public Resource(int resourceId, string resourceName, string resourceType, decimal resourceBasePrice, int location, string? description)
+        public Resource(string name, string type, decimal basePrice, int location, string? description)
         {
-            Id = resourceId;
-            Name = resourceName;
-            Type = resourceType;
-            BasePrice = resourceBasePrice;
-            Location = location;
-            Description = description;
-            IsAvailable = true;
-
-            ValidateInformation();
-        }
-        public Resource(int id, string name, string type, decimal basePrice)
-        {
-            Id = id;
             Name = name;
             Type = type;
             BasePrice = basePrice;
-
-            ValidateInformation();
-
-        }
-        public Resource(string resourceName, string resourceType, decimal resourceBasePrice, int location, string? description)
-        {
-            Name = resourceName;
-            Type = resourceType;
-            BasePrice = resourceBasePrice;
             Location = location;
             Description = description;
             IsAvailable = true;
