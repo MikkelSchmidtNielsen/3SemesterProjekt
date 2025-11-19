@@ -1,37 +1,23 @@
-﻿namespace Presentation.Server.Components.Pages.BookingPages
-{
-    public class GuestBooking
-    {
-
-    }
-}
-
-/*
- * using Application.ApplicationDto.Command;
-using Common;
+﻿using Application.ServiceInterfaces.Query;
 using Common.ResultInterfaces;
 using Domain.Models;
-using Domain.ModelsDto;
 using Radzen;
 
-namespace Presentation.Server.Components.Pages.AdminPages
+namespace Presentation.Server.Components.Pages.BookingPages
 {
-    public partial class AdminCreateBooking
+    public partial class GuestBooking
     {
-        string _bookingResult = "";
-
         IEnumerable<Resource> _resources = Array.Empty<Resource>();
 
-        BookingModel _bookingModel = new BookingModel
+        GuestBookingModel _guestBookingModel = new GuestBookingModel
         {
-            StartDate = DateOnly.FromDateTime(DateTime.Now),
-            EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-            Guest = new GuestCreateRequestDto()
-        };
+            // Email
+            // 
+        }
 
         protected override async Task OnInitializedAsync()
         {
-            IResult<IEnumerable<Resource>> result = await _resourceQuery.GetAllResourcesAsync();
+            IResult<IEnumerable<Resource>> result = await _getAllResourcesService.GetAllResourcesAsync();
 
             if (result.IsSucces())
             {
@@ -47,7 +33,37 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
                 await DialogService.Alert(message, "Error");
             }
-		}
+        }
+    }
+    internal class GuestBookingModel
+    {
+        public string Email { get; set; }
+        public int ResourceId { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public decimal TotalPrice { get; set; }
+    }
+}
+
+
+using Application.ApplicationDto.Command;
+using Common;
+using Domain.ModelsDto;
+
+namespace Presentation.Server.Components.Pages.AdminPages
+{
+    public partial class AdminCreateBooking
+    {
+        string _bookingResult = "";
+
+        IEnumerable<Resource> _resources = Array.Empty<Resource>();
+
+        BookingModel _bookingModel = new BookingModel
+        {
+            StartDate = DateOnly.FromDateTime(DateTime.Now),
+            EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+            Guest = new GuestCreateRequestDto()
+        };
 
         private async Task CreateBookingAsync(BookingModel model)
         {

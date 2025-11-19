@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.ServiceInterfaces.Query
 {
-    public interface IGetAllResources
+    public interface IGetAllResourcesService
     {
         Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
     }

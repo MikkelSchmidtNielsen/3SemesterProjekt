@@ -1,5 +1,7 @@
 ﻿using Application.Factories;
 using Application.RepositoryInterfaces;
+using Application.ServiceInterfaces.Query;
+using Application.Services.Query;
 using Domain.DomainInterfaces;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,7 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddDbContext<SqlServerDbContext>();
 
             //Add services
+            services.AddScoped<IGetAllResourcesService, GetAllResourcesService>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();

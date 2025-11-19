@@ -34,5 +34,18 @@ namespace Persistence.Repository
                 return Result<Resource>.Error(originalType: null!, exception: ex);
             }
         }
+        public async Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync()
+        {
+            try
+            {
+                IEnumerable<Resource> resources = await _db.Resources.ToListAsync();
+                return Result<IEnumerable<Resource>>.Success(resources);
+            }
+            catch (Exception ex)
+            {
+                // Returns invalid list with exception
+                return Result<IEnumerable<Resource>>.Error(originalType: null!, exception: ex);
+            }
+        }
     }
 }

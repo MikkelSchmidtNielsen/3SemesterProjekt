@@ -11,5 +11,6 @@ namespace Application.RepositoryInterfaces
 	public interface IResourceRepository
 	{
         Task<IResult<Resource>> GetResourceByIdAsync(int id);
+        Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
     }
 }
