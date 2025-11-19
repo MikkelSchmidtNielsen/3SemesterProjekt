@@ -24,7 +24,13 @@ namespace Infrastructure.Email
 				string emailInCorrectFormat = ValidateEmail(dto);
 
 				// Creates the message
-				string message = CreateMessage(dto);
+				string message = "";
+				switch (dto.Subject)
+				{
+					case ISendEmail.EmailSubject.OrderConfirmation:
+						message = CreateMessageOrderConfirmation(dto);
+						break;
+				}
 
 				// Sends the email
 				SendEmail(emailInCorrectFormat, dto.Subject, message);
@@ -49,7 +55,7 @@ namespace Infrastructure.Email
 			return mail.Address;
 		}
 
-		protected static string CreateMessage(SendEmailCommandDto dto)
+		protected static string CreateMessageOrderConfirmation(SendEmailCommandDto dto)
 		{
 			if (dto.Guest.FirstName is null || string.IsNullOrWhiteSpace(dto.Guest.FirstName))
 			{

@@ -98,7 +98,7 @@ namespace UnitTest.Infrastructure.UnitTest
 			SendEmailMailKitUnitTestClass mailKit = new SendEmailMailKitUnitTestClass();
 
 			// Act
-			string message = mailKit.CreateMessage(emailDto);
+			string message = mailKit.CreateMessageOrderConfirmation(emailDto);
 
 			// Assert
 			Assert.NotEmpty(message);
@@ -129,7 +129,7 @@ namespace UnitTest.Infrastructure.UnitTest
 			SendEmailMailKitUnitTestClass mailKit = new SendEmailMailKitUnitTestClass();
 
 			// Act & Assert
-			Assert.Throws<Exception>(() => mailKit.CreateMessage(emailDto));
+			Assert.Throws<Exception>(() => mailKit.CreateMessageOrderConfirmation(emailDto));
 		}
 	}
 }

@@ -16,10 +16,15 @@ namespace UnitTest.Infrastructure.UnitTest
 		{
 			return SendEmailMailKit.ValidateEmail(dto);
 		}
-		public new string CreateMessage(SendEmailCommandDto dto)
+		public new string CreateMessageOrderConfirmation(SendEmailCommandDto dto)
 		{
-			return SendEmailMailKit.CreateMessage(dto);
+			return SendEmailMailKit.CreateMessageOrderConfirmation(dto);
 		}
+
+		/// <summary>
+		/// Only used to test if it can send an email. DO NOT USE or TEST
+		/// </summary>
+		/// <param name="dto"></param>
 		public new void SendEmail(SendEmailCommandDto dto)
 		{
 			base.SendEmail(dto);
