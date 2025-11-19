@@ -1,5 +1,6 @@
 ﻿using Common.ResultInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Domain.DomainInterfaces
 {
 	public interface IGuestFactory
 	{
-		IResult<Guest> Create();
+		IResult<Guest> Create(CreatedGuestDto dto);
 	}
 }

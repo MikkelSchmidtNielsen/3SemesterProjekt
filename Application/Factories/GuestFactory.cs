@@ -1,6 +1,9 @@
-﻿using Common.ResultInterfaces;
+﻿using Application.ApplicationDto.Command;
+using Common;
+using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +14,11 @@ namespace Application.Factories
 {
 	public class GuestFactory : IGuestFactory
 	{
-		public IResult<Guest> Create()
+		public IResult<Guest> Create(CreatedGuestDto dto)
 		{
-			throw new NotImplementedException();
+			Guest guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);
+
+			return Result<Guest>.Success(guest);
 		}
 	}
 }

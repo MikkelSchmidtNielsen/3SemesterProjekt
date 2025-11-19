@@ -17,9 +17,5 @@
     <Folder Include="ServiceInterfaces\Query\" />
     <Folder Include="Services\Query\" />
   </ItemGroup>
-	<ItemGroup>
-		<Folder Include="InfrastructureInterfaces\" />
-		<Folder Include="Services\Query\" />
-	</ItemGroup>
 
 </Project>

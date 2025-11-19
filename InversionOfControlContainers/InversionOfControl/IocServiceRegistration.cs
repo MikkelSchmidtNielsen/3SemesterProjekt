@@ -1,7 +1,10 @@
 ﻿using Application.Factories;
 using Application.RepositoryInterfaces;
-using Application.Services.Command;
 using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
+using Application.Services.Command;
+using Application.Services.Query;
+using Common.ExternalConfig;
 using Domain.DomainInterfaces;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
@@ -16,11 +19,19 @@ namespace InversionOfControlContainers.InversionOfControl
     {
         public static void RegisterService(IServiceCollection services, IConfiguration configuration)
         {
+            ConfigurationDictionary.CreateDictionary(configuration);
+
             //Add DbContext
             services.AddDbContext<SqlServerDbContext>();
 
             //Add services
             services.AddScoped<ICreateResourceService, CreateResourceService>();
+
+            services.AddScoped<IBookingCreateCommand, BookingCreateCommand>();
+            services.AddScoped<IGuestCreateCommand, GuestCreateCommand>();
+            services.AddScoped<IGuestIdQuery, GuestIdQuery>();
+            services.AddScoped<IResourceAllQuery, ResourceAllQuery>();
+            services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();

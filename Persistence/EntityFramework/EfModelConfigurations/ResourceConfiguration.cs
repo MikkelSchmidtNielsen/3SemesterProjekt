@@ -1,15 +1,15 @@
-﻿using System;
+using System;
+﻿using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.Models;
 
 namespace Persistence.EntityFramework.EfModelConfigurations
 {
-    internal class ResourceConfiguration : IEntityTypeConfiguration<Resource>
+    public class ResourceConfiguration : IEntityTypeConfiguration<Resource>
     {
         public void Configure(EntityTypeBuilder<Resource> builder)
         {

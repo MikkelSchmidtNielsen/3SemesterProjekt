@@ -1,0 +1,74 @@
+﻿@page "/admin-create-booking"
+@using Domain.Models
+@rendermode InteractiveServer
+@inject DialogService DialogService
+@inject IBookingCreateCommand _bookingCommand
+@inject IResourceAllQuery _resourceQuery
+<RadzenDialog />
+
+<PageTitle>Booking</PageTitle>
+
+<h3>Opret booking</h3>
+
+<RadzenTemplateForm TItem="BookingModel" Data=@_bookingModel Submit="@CreateBookingAsync">
+    <RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="FirstNameRequiredInput">
+                Fornavn <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+            </RadzenLabel>
+            <RadzenTextBox Name="FirstNameRequiredInput" @bind-Value=@_bookingModel.Guest.FirstName Style="width: 100%; max-width: 400px;" />
+            <RadzenRequiredValidator Component="FirstNameRequiredInput" Text="Navn skal tilføjes" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="LastNameInput"> Efternavn </RadzenLabel>
+            <RadzenTextBox Name="LastNameInput" @bind-Value=@_bookingModel.Guest.LastName Style="width: 100%; max-width: 400px;" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="AddressInput"> Adresse </RadzenLabel>
+            <RadzenTextBox Name="AddressInput" @bind-Value=@_bookingModel.Guest.Address Style="width: 100%; max-width: 400px;" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="EmailInput"> Email </RadzenLabel>
+            <RadzenTextBox Name="EmailInput" @bind-Value=@_bookingModel.Guest.Email Style="width: 100%; max-width: 400px;" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
+            @if (_resources != null && _resources.Any())
+            {
+                <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+            }
+            else
+            {
+                <RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" />
+            }
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="StartDateInput">
+                Start dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+            </RadzenLabel>
+            <RadzenDatePicker Name="StartDateInput" @bind-Value="_bookingModel.StartDate" DateFormat="dd/MM/yyyy"
+                              Min="@DateTime.Now" Style="width:250px" />
+            <ValidationMessage For="@(() => _bookingModel.StartDate)" />
+            <RadzenRequiredValidator Component="StartDateInput" Text="Start dato skal sættes" />
+        </RadzenStack>
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Component="EndDateInput">
+                Slut dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+            </RadzenLabel>
+            <RadzenDatePicker Name="EndDateInput" @bind-Value="_bookingModel.EndDate" DateFormat="dd/MM/yyyy"
+                              Min="@DateTime.Now" Style="width:250px" />
+            <ValidationMessage For="@(() => _bookingModel.StartDate)" />
+            <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
+        </RadzenStack>
+
+        <RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
+<p>Message: @_bookingResult</p>
