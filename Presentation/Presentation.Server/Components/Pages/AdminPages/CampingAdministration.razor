@@ -5,6 +5,9 @@
 	<h1 id="header-text">Administrer campingplads</h1>
 	<h3 id="current-date">@currentDate</h3>
 
+	<RadzenToggleButton Text="Check-ind" @bind-Value=@checkInActive ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
+	<RadzenToggleButton />
+
 	@* Check-in button
 	Check-out button
 
@@ -14,4 +17,6 @@
 
 @code {
 	DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+	bool checkInActive = true;
+	bool checkOutActive = false;
 }
