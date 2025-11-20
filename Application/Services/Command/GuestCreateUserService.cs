@@ -19,11 +19,9 @@ namespace Application.Services.Command
         private readonly IGuestFactory _guestFactory;
         private readonly IGuestRepository _guestRepository;
 
-
-
-        public async Task<IResult<Guest>> GuestCreateUserAsync(GuestCreateUserRequestCommandDto guestCreateUserRequestDto)
+        public async Task<IResult<Guest>> GuestCreateUserAsync(GuestCreateUserDto guestCreateUserDto)
         {
-            var domainDto = Mapper.Map<GuestCreateUserFactoryDto>(guestCreateUserRequestDto);
+            var domainDto = Mapper.Map<GuestCreateUserDomainDto>(guestCreateUserDto);
 
             IResult<Guest> guestCreateRequest = _guestFactory.Create(domainDto);
 

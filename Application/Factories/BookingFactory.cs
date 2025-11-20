@@ -17,7 +17,13 @@ namespace Application.Factories
         {
             try
             {
-                Booking booking = new Booking(dto.Guest.Id, dto.Resource.Id, dto.Guest.FirstName, dto.StartDate, dto.EndDate, dto.TotalPrice);
+                Booking booking = new Booking(
+                    dto.Guest.Id,
+                    dto.Resource.Id,
+                    dto.Guest.FirstName,
+                    dto.StartDate,
+                    dto.EndDate,
+                    dto.TotalPrice);
                 return Result<Booking>.Success(booking);
             }
             catch (Exception ex)

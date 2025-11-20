@@ -20,6 +20,7 @@ namespace Application.Services.Command
         private readonly IResourceRepository _resourceRepository;
         private readonly IBookingRepository _bookingRepository;
         private readonly IBookingFactory _bookingFactory;
+        private readonly IGuestCreateUserService _guestCreateUserService;
 
         public GuestCreateBookingService(IGuestRepository guestRepository, IResourceRepository resourceRepository, IBookingRepository bookingRepository, IBookingFactory bookingFactory)
         {
@@ -49,7 +50,8 @@ namespace Application.Services.Command
             }
             Guest guestResult = guestUserRequest.GetSuccess().OriginalType;
 
-
+            // If not, create the user
+            //IResult<Guest> guestCreateUserRequest = await _guestCreateUserService.GuestCreateUserAsync(); 
 
             // Get the resource
             IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(inputDto.ResourceId);

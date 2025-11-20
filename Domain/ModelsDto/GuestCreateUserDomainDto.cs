@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.ApplicationDto.Command
+namespace Domain.ModelsDto
 {
-    public class GuestCreateUserRequestCommandDto
+    public class GuestCreateUserDomainDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

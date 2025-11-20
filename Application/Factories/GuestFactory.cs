@@ -14,18 +14,25 @@ namespace Application.Factories
 {
     public class GuestFactory : IGuestFactory
     {
-        public IResult<Guest> Create(GuestCreateUserFactoryDto guestCreateUserFactoryDto)
+        public IResult<Guest> Create(GuestCreateUserDomainDto guestCreateUserDomainDto)
         {
-            Guest guest = new Guest
-                (guestCreateUserFactoryDto.FirstName,
-                guestCreateUserFactoryDto.LastName,
-                guestCreateUserFactoryDto.PhoneNumber,
-                guestCreateUserFactoryDto.Email,
-                guestCreateUserFactoryDto.Country,
-                guestCreateUserFactoryDto.Language,
-                guestCreateUserFactoryDto.Address);
+            try
+            {
+                Guest guest = new Guest(
+                    guestCreateUserDomainDto.FirstName,
+                    guestCreateUserDomainDto.LastName,
+                    guestCreateUserDomainDto.PhoneNumber,
+                    guestCreateUserDomainDto.Email,
+                    guestCreateUserDomainDto.Country,
+                    guestCreateUserDomainDto.Language,
+                    guestCreateUserDomainDto.Address);
 
-            return Result<Guest>.Success(guest);
+                return Result<Guest>.Success(guest);
+            }
+            catch (Exception ex)
+            {
+                return Result<Guest>.Error(null, ex!);
+            }
         }
     }
 }
