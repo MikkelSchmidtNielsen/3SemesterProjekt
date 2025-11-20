@@ -6,8 +6,19 @@
 
 #header-text {
     padding: 24px 24px 0px 24px;
+    text-align: center;
 }
 
 #current-date{
-    padding: 12px 12px 0px 12px;
+    text-align: center;
+}
+
+#buttons{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#booking-table{
+    width: 80%;
+    margin: auto;
 }

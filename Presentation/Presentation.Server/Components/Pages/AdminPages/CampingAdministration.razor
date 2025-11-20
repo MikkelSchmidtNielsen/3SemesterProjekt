@@ -1,17 +1,57 @@
 ﻿@page "/admin/managecamp"
-<h3>CampingAdministration</h3>
 
 <div id="main-container">
 	<h1 id="header-text">Administrer campingplads</h1>
 	<h3 id="current-date">@currentDate</h3>
 
+	<div id="buttons">
 	<RadzenToggleButton Text="Check-ind" @bind-Value=@checkInActive ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
-	<RadzenToggleButton />
+	<RadzenToggleButton Text="Check-ud" @bind-Value=@checkOutActive ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
+	</div>
+    <br />
 
-	@* Check-in button
-	Check-out button
+	<div id="booking-table">
+        <RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
+            <RadzenTableHeader>
+                <RadzenTableHeaderRow>
+                    <RadzenTableHeaderCell>
+                        Ressource
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                        Pladsnr.
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                        Kundenavn
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
 
-	if missing check-ins exist, show booking table
+                    </RadzenTableHeaderCell>
+                </RadzenTableHeaderRow>
+            </RadzenTableHeader>
+            <RadzenTableBody>
+                @for (var i = 0; i < 3; i++)
+                {
+                    var row = i;
+                    <RadzenTableRow>
+                        <RadzenTableCell>
+                            @($"Ressourcenavn")
+                        </RadzenTableCell>
+                        <RadzenTableCell>
+                            @($"Pladsnr.")
+                        </RadzenTableCell>
+                        <RadzenTableCell>
+                            @($"Kunde")
+                        </RadzenTableCell>
+                        <RadzenTableCell Style="text-align: end;">
+                            <RadzenButton Text="Check-in" ButtonStyle="ButtonStyle.Success"/>
+                        </RadzenTableCell>
+                    </RadzenTableRow>
+                }
+            </RadzenTableBody>
+        </RadzenTable>
+	</div>
+
+	@* if missing check-ins exist, show booking table
 	else show "Ingen manglende indtjekninger for i dag."*@
 </div>
 
@@ -19,4 +59,3 @@
 	DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
 	bool checkInActive = true;
 	bool checkOutActive = false;
-}
