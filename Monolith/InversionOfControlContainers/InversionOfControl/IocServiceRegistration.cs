@@ -1,4 +1,5 @@
 ﻿using Application.Factories;
+using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -6,6 +7,7 @@ using Application.Services.Command;
 using Application.Services.Query;
 using Common.ExternalConfig;
 using Domain.DomainInterfaces;
+using Infrastructure.Email;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,7 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IGuestIdQuery, GuestIdQuery>();
             services.AddScoped<IResourceAllQuery, ResourceAllQuery>();
             services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
+            services.AddScoped<ISendEmail, SendEmailMailKit>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();
