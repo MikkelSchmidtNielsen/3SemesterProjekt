@@ -1,6 +1,8 @@
-﻿using Common.ResultInterfaces;
+﻿using Common;
+using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,18 @@ namespace Application.Factories
 {
 	public class BookingFactory : IBookingFactory
 	{
-		public IResult<Booking> Create()
+		public IResult<Booking> Create(GuestInputDomainDto dto)
 		{
-			throw new NotImplementedException();
-		}
+            try
+            {
+                Booking booking = new Booking(dto.Guest.Id, dto.Resource.Id, dto.Guest.FirstName, dto.StartDate, dto.EndDate, dto.TotalPrice);
+                return Result<Booking>.Success(booking);
+            }
+            catch (Exception ex)
+            {
+                return Result<Booking>.Error(null, ex);
+            }
+        }
+    }
 	}
 }

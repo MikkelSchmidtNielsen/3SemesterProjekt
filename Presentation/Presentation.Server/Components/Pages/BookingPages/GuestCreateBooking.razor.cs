@@ -17,8 +17,8 @@ namespace Presentation.Server.Components.Pages.BookingPages
         {
             // Email
             // ResourceId
-            //StartDate = DateOnly.FromDateTime(DateTime.Now),
-            //EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+            StartDate = DateOnly.FromDateTime(DateTime.Now),
+            EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             // TotalPrice
         };
 
@@ -56,10 +56,9 @@ namespace Presentation.Server.Components.Pages.BookingPages
             {
                 return Result<GuestInputDto>.Error(dto, result.GetError().Exception!);
             }
-            var bookingResult = Result<GuestInputDto>.Success(dto);
+            Result<GuestInputDto> bookingResult = Result<GuestInputDto>.Success(dto);
 
-
-
+            // Reset the page
             _guestBookingModel = new GuestBookingModel
             {
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -68,9 +67,6 @@ namespace Presentation.Server.Components.Pages.BookingPages
 
             return bookingResult;
         }
-
-        
-
     }
     internal class GuestBookingModel
     {

@@ -1,6 +1,8 @@
 ﻿using Application.Factories;
 using Application.RepositoryInterfaces;
+using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
+using Application.Services.Command;
 using Application.Services.Query;
 using Domain.DomainInterfaces;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
@@ -20,6 +22,7 @@ namespace InversionOfControlContainers.InversionOfControl
 
             //Add services
             services.AddScoped<IGetAllResourcesService, GetAllResourcesService>();
+            services.AddScoped<IGuestCreateBookingService, GuestCreateBookingService>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();

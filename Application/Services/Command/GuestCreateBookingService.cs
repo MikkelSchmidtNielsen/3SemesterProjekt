@@ -3,6 +3,7 @@ using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Common;
 using Common.ResultInterfaces;
+using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
 using System;
@@ -18,15 +19,8 @@ namespace Application.Services.Command
         private readonly IGuestRepository _guestRepository;
         private readonly IResourceRepository _resourceRepository;
         private readonly IBookingRepository _bookingRepository;
-        private readonly IGuestCreateUserService _guestCreateUser;
+        private readonly IBookingFactory _bookingFactory;
 
-        public GuestCreateBookingService(IGuestRepository guestRepository, IResourceRepository resourceRepository, IBookingRepository bookingRepository, IGuestCreateUserService guestCreateUser)
-        {
-            _guestRepository = guestRepository;
-            _resourceRepository = resourceRepository;
-            _bookingRepository = bookingRepository;
-            _guestCreateUser = guestCreateUser;
-        }
 
         public async Task<IResult<GuestInputDomainDto>> HandleAsync(GuestInputDto inputDto)
         {
@@ -41,13 +35,12 @@ namespace Application.Services.Command
 
             // Check if the guest already has a user:
             IResult<Guest> guestUserRequest = await _guestRepository.GetGuestByEmailAsync(domainDto.Email);
-            // Skal man give metoden; GetGuestByEmailAsync GCBRCD eller domainDto med som parameter?
 
             if (guestUserRequest.IsSucces() == false)
             {
                 return Result<GuestInputDomainDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
             }
-            var guestResult = guestUserRequest.GetSuccess().OriginalType;
+            Guest guestResult = guestUserRequest.GetSuccess().OriginalType;
 
 
 
@@ -58,9 +51,22 @@ namespace Application.Services.Command
             {
                 return Result<GuestInputDomainDto>.Error(domainDto, resourceRequest.GetError().Exception!);
             }
-            var resourceResult = resourceRequest.GetSuccess().OriginalType;
+            Resource resourceResult = resourceRequest.GetSuccess().OriginalType;
 
 
+
+            // Create booking
+            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(domainDto);
+            if (guestUserRequest.IsSucces() == false)
+            {
+                return Result<GuestInputDomainDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
+            }
+            Booking bookingCreateResult = bookingCreateRequest.GetSuccess().OriginalType;
+
+
+
+            // Save the booking in DB:
+            IResult<Booking> bookingSaveRequest = await _bookingRepository.GuestCreateBookingAsync(bookingCreateResult);
 
 
             // Create the DTO which is to be returned to the UI
