@@ -100,6 +100,15 @@ namespace Persistence.Migrations
                     b.Property<decimal>("BasePrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Location")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -122,7 +131,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.Resource", "Resource")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -135,6 +144,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Models.Guest", b =>
                 {
                     b.Navigation("Booking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Resource", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

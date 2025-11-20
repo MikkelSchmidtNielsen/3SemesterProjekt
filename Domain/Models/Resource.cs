@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.ModelsDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,25 +13,43 @@ namespace Domain.Models
         public string Name { get; private set; }
         public string Type { get; private set; }
         public decimal BasePrice { get; private set; }
+        public int Location { get; private set; }
+        public string? Description { get; private set; }
+        public bool IsAvailable { get; private set; }
+        public List<Booking>? Bookings { get; }
 
-        private Resource() { }
-        public Resource(int id, string name, string type, decimal basePrice)
+        public Resource(string name, string type, decimal basePrice, int location, string? description)
         {
-            Id = id;
             Name = name;
             Type = type;
             BasePrice = basePrice;
+            Location = location;
+            Description = description;
+            IsAvailable = true;
 
             ValidateInformation();
+
+        }
+
+        public Resource(CreateResourceDto dto)
+        {
+            Name = dto.Name;
+            Type = dto.Type;
+            BasePrice = dto.BasePrice;
+            Location = dto.Location;
+            Description = dto.Description;
+            IsAvailable = true;
+
+            ValidateInformation();
+        }
+        private Resource()
+        {
+
         }
 
         public bool ValidateInformation()
         {
-            if (Id == 0)
-            {
-                throw new Exception("Resource ID is 0.");
-            }
-            else if (Name == null)
+            if (Name == null)
             {
                 throw new Exception("Resource name is null.");
             }
