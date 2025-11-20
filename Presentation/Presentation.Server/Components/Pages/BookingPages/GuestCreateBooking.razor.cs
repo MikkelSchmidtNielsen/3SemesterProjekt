@@ -13,6 +13,9 @@ namespace Presentation.Server.Components.Pages.BookingPages
     {
         IEnumerable<Resource> _listOfResources = Array.Empty<Resource>();
 
+        string _guestBookingMessage = "";
+
+        // 
         GuestBookingModel _guestBookingModel = new GuestBookingModel
         {
             // Email
@@ -46,7 +49,7 @@ namespace Presentation.Server.Components.Pages.BookingPages
 
 
         // Create the booking 
-        private async Task<Result<GuestInputDto>> GuestCreateBookingAsync(GuestBookingModel guestBookingModel)
+        private async Task GuestCreateBookingAsync(GuestBookingModel guestBookingModel)
         {
             GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
 
@@ -54,9 +57,18 @@ namespace Presentation.Server.Components.Pages.BookingPages
 
             if (result.IsSucces() == false)
             {
-                return Result<GuestInputDto>.Error(dto, result.GetError().Exception!);
+                Result<GuestInputDto>.Error(dto, result.GetError().Exception!);
+                return;
             }
-            Result<GuestInputDto> bookingResult = Result<GuestInputDto>.Success(dto);
+            GuestInputDomainDto domainData = result.GetSuccess().OriginalType;
+
+            // Message to guest:
+            _guestBookingMessage = @$"Hej {domainData.Guest.FirstName}
+                                     Velkommen tilbage!
+                                     Din booking er oprettet for: {domainData.Resource.Name}
+                                     Fra : {domainData.StartDate}
+                                     Til : {domainData.EndDate}
+                                     Pris: {domainData.TotalPrice}";
 
             // Reset the page
             _guestBookingModel = new GuestBookingModel
@@ -65,7 +77,6 @@ namespace Presentation.Server.Components.Pages.BookingPages
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             };
 
-            return bookingResult;
         }
     }
     internal class GuestBookingModel
@@ -75,5 +86,7 @@ namespace Presentation.Server.Components.Pages.BookingPages
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public decimal TotalPrice { get; set; }
+        public Guest? Guest { get; set; }
+        public Resource Resource { get; set; }
     }
 }

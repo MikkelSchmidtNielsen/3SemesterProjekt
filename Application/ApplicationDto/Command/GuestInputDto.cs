@@ -14,5 +14,7 @@ namespace Application.ApplicationDto.Command
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public decimal TotalPrice { get; set; }
+        public Guest? Guest { get; set; }
+        public Resource Resource { get; set; }
     }
 }

@@ -35,9 +35,6 @@
     @* StartDate *@
 
     <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-        <RadzenLabel Component="StartDateInput">
-            Start dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
-        </RadzenLabel>
         <RadzenDatePicker Name="StartDateInput" @bind-Value="_guestBookingModel.StartDate" DateFormat="dd/MM/yyyy"
                           Min="@DateTime.Now" Style="width:250px" />
         <ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
@@ -47,9 +44,6 @@
     @* EndDate *@
 
     <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-        <RadzenLabel Component="EndDateInput">
-            Slut dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
-        </RadzenLabel>
         <RadzenDatePicker Name="EndDateInput" @bind-Value="_guestBookingModel.EndDate" DateFormat="dd/MM/yyyy"
                           Min="@DateTime.Now" Style="width:250px" />
         <ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
@@ -59,4 +53,6 @@
     <RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
 
 </RadzenTemplateForm>
+
+<p>Message: @_guestBookingMessage</p>
 

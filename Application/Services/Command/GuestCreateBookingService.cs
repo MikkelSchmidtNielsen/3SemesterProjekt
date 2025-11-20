@@ -67,8 +67,11 @@ namespace Application.Services.Command
                 return Result<GuestInputDomainDto>.Error(domainDto, resourceRequest.GetError().Exception!);
             }
             Resource resourceResult = resourceRequest.GetSuccess().OriginalType;
-            // Apply the found resource to domainDto
+            // Apply the found resource & totalPrice to domainDto
             domainDto.Resource = resourceResult;
+            domainDto.TotalPrice = CalculateTotalPrice(domainDto, resourceResult);
+
+
 
             // Create booking
             IResult<Booking> bookingCreateRequest = _bookingFactory.Create(domainDto);
@@ -89,7 +92,7 @@ namespace Application.Services.Command
 
 
             // Create the DTO which is to be returned to the UI
-            var finalToBeReturnedDto = new GuestInputDomainDto
+            GuestInputDomainDto finalToBeReturnedDto = new GuestInputDomainDto
             {
                 Guest = guestResult,
                 Resource = resourceResult,
