@@ -1,0 +1,17 @@
+﻿@page "/admin/managecamp"
+<h3>CampingAdministration</h3>
+
+<div id="main-container">
+	<h1 id="header-text">Administrer campingplads</h1>
+	<h3 id="current-date">@currentDate</h3>
+
+	@* Check-in button
+	Check-out button
+
+	if missing check-ins exist, show booking table
+	else show "Ingen manglende indtjekninger for i dag."*@
+</div>
+
+@code {
+	DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+}

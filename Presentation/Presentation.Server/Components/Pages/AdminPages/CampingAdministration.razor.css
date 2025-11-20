@@ -1,0 +1,13 @@
+﻿#main-container {
+    background: #fff5f5FF;
+    margin-inline: auto;
+    max-width: fit-content;
+}
+
+#header-text {
+    padding: 24px 24px 0px 24px;
+}
+
+#current-date{
+    padding: 12px 12px 0px 12px;
+}
