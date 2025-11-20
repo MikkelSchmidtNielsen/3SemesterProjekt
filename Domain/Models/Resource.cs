@@ -13,9 +13,9 @@ namespace Domain.Models
         public string Name { get; private set; }
         public string Type { get; private set; }
         public decimal BasePrice { get; private set; }
-        public int Location { get; set; }
-        public string? Description { get; set; }
-        public bool IsAvailable { get; set; }
+        public int Location { get; private set; }
+        public string? Description { get; private set; }
+        public bool IsAvailable { get; private set; }
         public List<Booking>? Bookings { get; }
 
         public Resource(string name, string type, decimal basePrice, int location, string? description)
