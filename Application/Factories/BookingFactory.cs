@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Application.Factories
 {
-	public class BookingFactory : IBookingFactory
-	{
-		public IResult<Booking> Create(GuestInputDomainDto dto)
-		{
+    public class BookingFactory : IBookingFactory
+    {
+        public IResult<Booking> Create(GuestInputDomainDto dto)
+        {
             try
             {
                 Booking booking = new Booking(dto.Guest.Id, dto.Resource.Id, dto.Guest.FirstName, dto.StartDate, dto.EndDate, dto.TotalPrice);
@@ -26,5 +26,5 @@ namespace Application.Factories
             }
         }
     }
-	}
 }
+

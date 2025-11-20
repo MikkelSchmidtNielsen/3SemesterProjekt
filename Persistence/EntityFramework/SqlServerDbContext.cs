@@ -13,7 +13,7 @@ namespace Persistence.EntityFramework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=CampingDB;Integrated Security=SSPI;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Camping;Integrated Security=SSPI;TrustServerCertificate=true");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

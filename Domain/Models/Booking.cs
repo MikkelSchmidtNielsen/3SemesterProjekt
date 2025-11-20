@@ -9,8 +9,8 @@ namespace Domain.Models
     public class Booking
     {
         public int Id { get; init; }
-        public int GuestId { get; set; }
-        public int ResourceId { get; set; }
+        public int GuestId { get; private set; }
+        public int ResourceId { get; private set; }
         public string GuestName { get; private set; }
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
@@ -19,8 +19,9 @@ namespace Domain.Models
         // Entity Framework
         public Guest Guest { get; set; }
         public Resource Resource { get; set; }
+        private Booking() { }
 
-		public Booking(int guestId, int resourceId, string guestName, DateOnly startDate, DateOnly endDate, decimal totalPrice)
+        public Booking(int guestId, int resourceId, string guestName, DateOnly startDate, DateOnly endDate, decimal totalPrice)
 		{
 			GuestId = guestId;
 			ResourceId = resourceId;

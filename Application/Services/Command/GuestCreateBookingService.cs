@@ -21,6 +21,13 @@ namespace Application.Services.Command
         private readonly IBookingRepository _bookingRepository;
         private readonly IBookingFactory _bookingFactory;
 
+        public GuestCreateBookingService(IGuestRepository guestRepository, IResourceRepository resourceRepository, IBookingRepository bookingRepository, IBookingFactory bookingFactory)
+        {
+            _guestRepository = guestRepository;
+            _resourceRepository = resourceRepository;
+            _bookingRepository = bookingRepository;
+            _bookingFactory = bookingFactory;
+        }
 
         public async Task<IResult<GuestInputDomainDto>> HandleAsync(GuestInputDto inputDto)
         {
@@ -57,7 +64,7 @@ namespace Application.Services.Command
 
             // Create booking
             IResult<Booking> bookingCreateRequest = _bookingFactory.Create(domainDto);
-            if (guestUserRequest.IsSucces() == false)
+            if (bookingCreateRequest.IsSucces() == false)
             {
                 return Result<GuestInputDomainDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
             }
@@ -67,6 +74,10 @@ namespace Application.Services.Command
 
             // Save the booking in DB:
             IResult<Booking> bookingSaveRequest = await _bookingRepository.GuestCreateBookingAsync(bookingCreateResult);
+            if (!bookingSaveRequest.IsSucces())
+            {
+                return Result<GuestInputDomainDto>.Error(domainDto, bookingSaveRequest.GetError().Exception!);
+            }
 
 
             // Create the DTO which is to be returned to the UI
@@ -76,7 +87,7 @@ namespace Application.Services.Command
                 Resource = resourceResult,
                 StartDate = domainDto.StartDate,
                 EndDate = domainDto.EndDate,
-                TotalPrice = CalculateTotalPrice(domainDto, domainDto.Resource)
+                TotalPrice = CalculateTotalPrice(domainDto, resourceResult)
             };
 
             return Result<GuestInputDomainDto>.Success(finalToBeReturnedDto);

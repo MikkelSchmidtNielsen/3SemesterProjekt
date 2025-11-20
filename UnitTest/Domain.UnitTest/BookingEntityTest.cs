@@ -24,12 +24,11 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
-            Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
+            Booking booking = new Booking(guestId, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
 
             // Assert
-            Assert.Equal(guest.Id, booking.GuestId);
             Assert.Equal(resourceId, booking.ResourceId);
             Assert.Equal(guest.FirstName + guest.LastName, booking.GuestName);
             Assert.Equal(startDate, booking.StartDate);
@@ -48,7 +47,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
@@ -67,7 +66,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
@@ -86,7 +85,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
@@ -105,7 +104,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = -100;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
@@ -124,7 +123,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000.999m;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
 
             // Assert
@@ -143,7 +142,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000.99m;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
             Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
 
@@ -162,7 +161,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000.9m;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
             Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
 
@@ -181,7 +180,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000;
 
             // Act
-            Guest guest = new Guest(guestId, "Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
             Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
 
