@@ -1,7 +1,8 @@
-﻿@page "/GuestBooking"
+﻿@page "/GuestCreateBooking"
 @rendermode InteractiveServer
 @inject DialogService DialogService
 @inject IGetAllResourcesService _getAllResourcesService
+@inject IGuestCreateBookingService _guestCreateBookingService
 
 <RadzenDialog />
 
@@ -9,7 +10,7 @@
 
 <h3>Opret booking</h3>
 
-<RadzenTemplateForm TItem="GuestBooking" Data="@_guestBooking"></RadzenTemplateForm>
+<RadzenTemplateForm TItem="GuestBookingModel" Data="@_guestBookingModel"></RadzenTemplateForm>
 
 <RadzenTextBox Name=""></RadzenTextBox>
 

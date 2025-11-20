@@ -28,14 +28,14 @@ namespace Application.Services.Command
             _guestCreateUser = guestCreateUser;
         }
 
-        public async Task<IResult<GuestCreateBookingRequestResultDto>> GuestCreateBookingAsync(GuestCreateBookingRequestDto guestCreateBookingRequestCommandDto)
+        public async Task<IResult<GuestInputDomainDto>> HandleAsync(GuestInputDto inputDto)
         {
             // Create a new DTO to handle the possible different returns GuestCreateBookingRequestCommandDto (GCBRCD) request.
             // Also handles the issue with the GCBRCD residing in the Application layer, meaning;
             // in order for the factory, which resides in the Domain layer, to be able to use it, Domain would need to depend on Application... -
             // this is absolutely unacceptable! Thusly, GuestCreateBookingRequestResultDto (GCBRRD) is created solving this dependency-problem,
             // since GCBRRD resides in the Domain layer - beautiful!
-            GuestCreateBookingRequestResultDto domainDto = Mapper.Map<GuestCreateBookingRequestResultDto>(guestCreateBookingRequestCommandDto);
+            GuestInputDomainDto domainDto = Mapper.Map<GuestInputDomainDto>(inputDto);
 
 
 
@@ -45,18 +45,18 @@ namespace Application.Services.Command
 
             if (guestUserRequest.IsSucces() == false)
             {
-                return Result<GuestCreateBookingRequestResultDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
+                return Result<GuestInputDomainDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
             }
             var guestResult = guestUserRequest.GetSuccess().OriginalType;
 
 
 
             // Get the resource
-            IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(guestCreateBookingRequestCommandDto.ResourceId);
+            IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(inputDto.ResourceId);
 
             if (resourceRequest.IsSucces() == false)
             {
-                return Result<GuestCreateBookingRequestResultDto>.Error(domainDto, resourceRequest.GetError().Exception!);
+                return Result<GuestInputDomainDto>.Error(domainDto, resourceRequest.GetError().Exception!);
             }
             var resourceResult = resourceRequest.GetSuccess().OriginalType;
 
@@ -64,7 +64,7 @@ namespace Application.Services.Command
 
 
             // Create the DTO which is to be returned to the UI
-            var finalToBeReturnedDto = new GuestCreateBookingRequestResultDto
+            var finalToBeReturnedDto = new GuestInputDomainDto
             {
                 Guest = guestResult,
                 Resource = resourceResult,
@@ -73,10 +73,10 @@ namespace Application.Services.Command
                 TotalPrice = CalculateTotalPrice(domainDto, domainDto.Resource)
             };
 
-            return Result<GuestCreateBookingRequestResultDto>.Success(finalToBeReturnedDto);
+            return Result<GuestInputDomainDto>.Success(finalToBeReturnedDto);
         }
         // Calculate TotalPrice for resource
-        protected decimal CalculateTotalPrice(GuestCreateBookingRequestResultDto domainDto, Resource resource)
+        protected decimal CalculateTotalPrice(GuestInputDomainDto domainDto, Resource resource)
         {
             // Today + total days of staying
             int days = domainDto.EndDate.DayNumber - domainDto.StartDate.DayNumber + 1;
