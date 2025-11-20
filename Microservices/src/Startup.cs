@@ -74,14 +74,14 @@ namespace IO.Swagger
                     {
                         Version = "1.0.0",
                         Title = "User authentication API",
-                        Description = "User authentication API (ASP.NET Core 7.0)",
+                        Description = "User authentication API (ASP.NET Core 8.0)",
                         Contact = new OpenApiContact()
                         {
                            Name = "Swagger Codegen Contributors",
                            Url = new Uri("https://github.com/swagger-api/swagger-codegen"),
                            Email = ""
                         },
-                        TermsOfService = new Uri("")
+                        //TermsOfService = new Uri("")
                     });
                     c.CustomSchemaIds(type => type.FullName);
                     c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{_hostingEnv.ApplicationName}.xml");
