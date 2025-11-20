@@ -49,9 +49,15 @@ namespace Application.Services.Command
                 return Result<GuestInputDomainDto>.Error(domainDto, guestUserRequest.GetError().Exception!);
             }
             Guest guestResult = guestUserRequest.GetSuccess().OriginalType;
+            // Apply the found guest to the domainDto
+            domainDto.Guest = guestResult;
 
-            // If not, create the user
+
+
+            // If the guest does not have a user, create the user
             //IResult<Guest> guestCreateUserRequest = await _guestCreateUserService.GuestCreateUserAsync(); 
+
+
 
             // Get the resource
             IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(inputDto.ResourceId);
@@ -61,8 +67,8 @@ namespace Application.Services.Command
                 return Result<GuestInputDomainDto>.Error(domainDto, resourceRequest.GetError().Exception!);
             }
             Resource resourceResult = resourceRequest.GetSuccess().OriginalType;
-
-
+            // Apply the found resource to domainDto
+            domainDto.Resource = resourceResult;
 
             // Create booking
             IResult<Booking> bookingCreateRequest = _bookingFactory.Create(domainDto);
