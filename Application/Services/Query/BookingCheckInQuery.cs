@@ -1,5 +1,6 @@
 ﻿using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
+using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
 using System;
@@ -19,9 +20,18 @@ namespace Application.Services.Query
             _repository = repository;
         }
 
-        public Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckIns()
+        public async Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
+
+            if(result.IsSucces() && result.GetSuccess().OriginalType.Any())
+            {
+                return result;
+            }
+            else
+            {
+                return Result<IEnumerable<Booking>>.Error(null, new Exception("Der er ingen bookinger med manglende indtjekninger :)"));
+            }
         }
     }
 }
