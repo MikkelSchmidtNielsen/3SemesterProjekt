@@ -26,7 +26,8 @@ namespace Application.Services.Query
 
             if(result.IsSucces() && result.GetSuccess().OriginalType.Any())
             {
-                return result;
+
+                foreach
             }
             else
             {
