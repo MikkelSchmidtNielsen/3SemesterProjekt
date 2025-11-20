@@ -15,8 +15,14 @@ namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
             // Creates Microsofts IHttpClientFactory
             services.AddHttpClient();
 
-            // Register named clients
+			// Register named clients
+			services.AddHttpClient("Authentication", client =>
+			{
+				client.BaseAddress = new Uri(configuration["ApiBaseUrls:Authentication"]!);
+				client.Timeout = TimeSpan.FromSeconds(30);
+			});
 
-        }
+
+		}
     }
 }

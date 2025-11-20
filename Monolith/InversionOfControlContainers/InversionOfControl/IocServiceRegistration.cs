@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.EntityFramework;
 using Persistence.Repository;
+using Refit;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -45,6 +46,15 @@ namespace InversionOfControlContainers.InversionOfControl
         
 
             HttpClientModule.RegisterHttpClients(services, configuration);
-        }
+
+			services
+	            .AddRefitClient<IRecipeApi>()
+	            .ConfigureHttpClient((sp, client) =>
+	            {
+		            var factory = sp.GetRequiredService<IHttpClientFactory>();
+		            var http = factory.CreateClient("Authentication");
+		            client.BaseAddress = http.BaseAddress;
+	            });
+		}
     }
 }
