@@ -32,9 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application.UnitTest\" />
+    <Folder Include="Application.UnitTest\FactoryTest\" />
+    <Folder Include="Application.UnitTest\ServiceTest\" />
     <Folder Include="Common.UnitTest\" />
     <Folder Include="Infrastructure.UnitTest\" />
+    <Folder Include="Persistence.UnitTest\" />
     <Folder Include="Persistence.UnitTest\" />
   </ItemGroup>
 
