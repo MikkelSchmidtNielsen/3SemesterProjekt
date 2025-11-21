@@ -43,13 +43,13 @@
                     {
                         <RadzenTableRow>
                             <RadzenTableCell>
-                                @($"Ressourcenavn")
+                                @($"{booking.ResourceName}")
                             </RadzenTableCell>
                             <RadzenTableCell>
-                                @($"Pladsnr.")
+                                @($"{booking.ResourceLocation}")
                             </RadzenTableCell>
                             <RadzenTableCell>
-                                @($"Kunde")
+                                @($"{booking.GuestName}")
                             </RadzenTableCell>
                             <RadzenTableCell Style="text-align: end;">
                                 <RadzenButton Text="Check-in" ButtonStyle="ButtonStyle.Success" />

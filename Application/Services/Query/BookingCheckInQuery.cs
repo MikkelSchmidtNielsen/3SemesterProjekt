@@ -15,14 +15,10 @@ namespace Application.Services.Query
     public class BookingCheckInQuery : IBookingCheckInQuery
     {
         private readonly IBookingRepository _bookingRepository;
-        private readonly IResourceRepository _resourceRepository;
-        private readonly IGuestRepository _guestRepository;
 
-        public BookingCheckInQuery(IBookingRepository bookingRepository, IResourceRepository resourceRepository, IGuestRepository guestRepository)
+        public BookingCheckInQuery(IBookingRepository bookingRepository)
         {
             _bookingRepository = bookingRepository;
-            _resourceRepository = resourceRepository;
-            _guestRepository = guestRepository;
         }
 
         public async Task<IResult<List<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync()
@@ -34,14 +30,12 @@ namespace Application.Services.Query
             {
                 foreach(var booking in getMissingCheckIns.GetSuccess().OriginalType)
                 {
-                    IResult<Resource> resourceInfo = await _resourceRepository.GetResourceByIdAsync(booking.ResourceId);
-                    IResult<Guest> guestInfo = await _guestRepository.GetGuestByIdAsync(booking.GuestId);
                     BookingMissingCheckInQueryDto missingCheckInInfo = new BookingMissingCheckInQueryDto
                     {
                         BookingId = booking.Id,
-                        ResourceName = resourceInfo.GetSuccess().OriginalType.Name,
-                        ResourceLocation = resourceInfo.GetSuccess().OriginalType.Location,
-                        GuestName = $"{guestInfo.GetSuccess().OriginalType.FirstName} {guestInfo.GetSuccess().OriginalType.LastName}"
+                        ResourceName = booking.Resource.Name,
+                        ResourceLocation = booking.Resource.Location,
+                        GuestName = $"{booking.Guest.FirstName} {booking.Guest.LastName}"
                     };
                     missingCheckIns.Add(missingCheckInInfo);
                 }
