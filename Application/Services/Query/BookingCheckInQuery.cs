@@ -21,20 +21,25 @@ namespace Application.Services.Query
             _repository = repository;
         }
 
-        public async Task<IResult<IEnumerable<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync()
+        public async Task<IResult<List<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
-            //var result = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
+            IResult<IEnumerable<Booking>> getMissingCheckIns = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
 
-            //if (result.IsSucces() && result.GetSuccess().OriginalType.Any())
-            //{
+            if (getMissingCheckIns.IsSucces() && getMissingCheckIns.GetSuccess().OriginalType.Any())
+            {
+                List<BookingMissingCheckInQueryDto> missingCheckIns = new List<BookingMissingCheckInQueryDto>();
 
-            //    foreach
-            //}
-            //else
-            //{
-            //    return Result<IEnumerable<Booking>>.Error(null, new Exception("Der er ingen bookinger med manglende indtjekninger :)"));
-            //}
-            throw new NotImplementedException();
+                foreach(var booking in getMissingCheckIns.GetSuccess().OriginalType)
+                {
+                    BookingMissingCheckInQueryDto dto = Mapper.Map<BookingMissingCheckInQueryDto>(booking);
+                    missingCheckIns.Add(dto);
+                }
+                return 
+            }
+            else
+            {
+                return Result<IEnumerable<Booking>>.Error(null, new Exception("Der er ingen bookinger med manglende indtjekninger :)"));
+            }
         }
     }
 }
