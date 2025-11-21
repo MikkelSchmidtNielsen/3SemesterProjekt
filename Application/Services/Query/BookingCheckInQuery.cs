@@ -23,22 +23,23 @@ namespace Application.Services.Query
 
         public async Task<IResult<List<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
+            List<BookingMissingCheckInQueryDto> missingCheckIns = new List<BookingMissingCheckInQueryDto>();
             IResult<IEnumerable<Booking>> getMissingCheckIns = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
 
             if (getMissingCheckIns.IsSucces() && getMissingCheckIns.GetSuccess().OriginalType.Any())
             {
-                List<BookingMissingCheckInQueryDto> missingCheckIns = new List<BookingMissingCheckInQueryDto>();
-
                 foreach(var booking in getMissingCheckIns.GetSuccess().OriginalType)
                 {
                     BookingMissingCheckInQueryDto dto = Mapper.Map<BookingMissingCheckInQueryDto>(booking);
                     missingCheckIns.Add(dto);
                 }
-                return 
+
+                return Result<List<BookingMissingCheckInQueryDto>>.Success(missingCheckIns);
             }
+
             else
             {
-                return Result<IEnumerable<Booking>>.Error(null, new Exception("Der er ingen bookinger med manglende indtjekninger :)"));
+                return Result<List<BookingMissingCheckInQueryDto>>.Error(missingCheckIns, new Exception("Der er ingen manglende indtjekninger."));
             }
         }
     }
