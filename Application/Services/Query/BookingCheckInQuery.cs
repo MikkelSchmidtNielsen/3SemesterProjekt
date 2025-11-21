@@ -22,17 +22,18 @@ namespace Application.Services.Query
 
         public async Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
-            var result = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
+            //var result = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
 
-            if(result.IsSucces() && result.GetSuccess().OriginalType.Any())
-            {
+            //if(result.IsSucces() && result.GetSuccess().OriginalType.Any())
+            //{
 
-                foreach
-            }
-            else
-            {
-                return Result<IEnumerable<Booking>>.Error(null, new Exception("Der er ingen bookinger med manglende indtjekninger :)"));
-            }
+            //    foreach
+            //}
+            //else
+            //{
+            //    return Result<IEnumerable<Booking>>.Error(null, new Exception("Der er ingen bookinger med manglende indtjekninger :)"));
+            //}
+            throw new NotImplementedException();
         }
     }
 }
