@@ -15,7 +15,6 @@ namespace Presentation.Server.Components.Pages.BookingPages
 
         string _guestBookingMessage = "";
 
-        // 
         GuestBookingModel _guestBookingModel = new GuestBookingModel
         {
             // Email
@@ -24,7 +23,6 @@ namespace Presentation.Server.Components.Pages.BookingPages
             EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             // TotalPrice
         };
-
 
         // Load resources
         protected override async Task OnInitializedAsync()
@@ -47,28 +45,31 @@ namespace Presentation.Server.Components.Pages.BookingPages
             }
         }
 
-
         // Create the booking 
         private async Task GuestCreateBookingAsync(GuestBookingModel guestBookingModel)
         {
             // Mapping
             GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
 
-
-
-            // Confirmation popup
-            var selectedResource = _listOfResources.FirstOrDefault(r => r.Id == guestBookingModel.ResourceId);
+            // Confirmation popup before booking is created - "Er du sikker?"
+            Resource selectedResource = _listOfResources.FirstOrDefault(r => r.Id == guestBookingModel.ResourceId);
             dto.ResourceId = guestBookingModel.ResourceId;
 
+            // Add resource to dto
+            dto.Resource = selectedResource;
+
+            //// Calculate price
+            decimal totalPrice = CalculateTotalPrice(dto);
+
             var confirmed = await _dialogService.Confirm(
-                @$"Vil du oprette denne booking: 
-                   Email: {dto.Email},
-                   Ressource: {selectedResource?.Name}
-                   Start: {dto.StartDate}
-                   Slut : {dto.EndDate}  
-                   Pris : {dto.TotalPrice}",
-                 
-                  "Er du sikker?",
+                @$"<b>Vil du oprette denne booking?</b><br /><br />
+                    Email: {dto.Email}<br />
+                    Ressource: {selectedResource?.Name}<br />
+                    Start: {dto.StartDate:dd/MM/yyyy}<br />
+                    Slut: {dto.EndDate:dd/MM/yyyy}<br />
+                    <p>Pris: {totalPrice} kr.<p/>",
+
+                    "Er du sikker?",
 
                 new ConfirmOptions() { OkButtonText = "Ja", CancelButtonText = "Nej" }
             );
@@ -104,7 +105,15 @@ namespace Presentation.Server.Components.Pages.BookingPages
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             };
+        }
 
+        protected decimal CalculateTotalPrice(GuestInputDto dto)
+        {
+            // Today + total days of staying
+            int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
+            decimal totalPrice = 0;
+            totalPrice += dto.Resource.BasePrice * days;
+            return totalPrice;
         }
     }
     internal class GuestBookingModel
