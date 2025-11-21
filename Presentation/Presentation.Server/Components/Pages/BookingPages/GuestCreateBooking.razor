@@ -50,8 +50,47 @@
         <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
     </RadzenStack>
 
-    <RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
+    <RadzenButton Text="Opret booking" Click="ConfimationPopup" />
 
 </RadzenTemplateForm>
 
 <p>Message: @_guestBookingMessage</p>
+
+@code
+{
+    private async Task ConfimationPopup()
+    {
+        // Find selected resource
+        var selectedResource = _listOfResources.FirstOrDefault(r => r.Id == _guestBookingModel.ResourceId);
+        _guestBookingModel.Resource = selectedResource;
+
+        // Open confirmation dialog
+        var result = await _dialogService.OpenAsync("Oprettelse af ny booking", ds => @<RadzenStack Gap="1.5rem">
+
+            <h3>Er du sikker på at du vil oprette denne booking?</h3>
+
+            <p><b>Email:</b> @_guestBookingModel.Email</p>
+            <p><b>Ressource:</b> @_guestBookingModel.Resource.Name</p>
+            <p><b>Start:</b> @_guestBookingModel.StartDate</p>
+            <p><b>Slut:</b> @_guestBookingModel.EndDate</p>
+            <p><b>Total pris:</b> @CalculateTotalPrice(_guestBookingModel)</p>
+
+            <RadzenStack Orientation="Orientation.Horizontal"
+                         Gap="0.5rem"
+                         AlignItems="AlignItems.Center"
+                         JustifyContent="JustifyContent.SpaceBetween">
+
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ja"
+                                  Click="async () => { await GuestCreateBookingAsync(_guestBookingModel); ds.Close(true); }"
+                                  Style="width:80px;" />
+                    <RadzenButton Text="Nej"
+                                  Click="() => ds.Close(false)"
+                                  ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+
+            </RadzenStack>
+
+        </RadzenStack>);
+    }
+}

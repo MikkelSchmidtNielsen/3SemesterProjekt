@@ -1,11 +1,13 @@
 ﻿using Application.ApplicationDto.Command;
-using Application.ServiceInterfaces.Query;
 using Application.ApplicationDto.Command;
+using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
-using Radzen;
 using Domain.ModelsDto;
+using Microsoft.VisualBasic;
+using Radzen;
+using Radzen.Blazor;
 
 namespace Presentation.Server.Components.Pages.BookingPages
 {
@@ -51,13 +53,9 @@ namespace Presentation.Server.Components.Pages.BookingPages
             // Mapping
             GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
 
-            // Confirmation popup before booking is created - "Er du sikker?"
-            Resource selectedResource = _listOfResources.FirstOrDefault(r => r.Id == guestBookingModel.ResourceId);
-            dto.ResourceId = guestBookingModel.ResourceId;
+            
 
-            // Add resource to dto
-            dto.Resource = selectedResource;
-
+            /*
             //// Calculate price
             decimal totalPrice = CalculateTotalPrice(dto);
 
@@ -78,7 +76,7 @@ namespace Presentation.Server.Components.Pages.BookingPages
             {
                 return;
             }
-
+            */
 
 
             // Create the booking
@@ -107,12 +105,12 @@ namespace Presentation.Server.Components.Pages.BookingPages
             };
         }
 
-        protected decimal CalculateTotalPrice(GuestInputDto dto)
+        private decimal CalculateTotalPrice(GuestBookingModel guestBookingModel)
         {
             // Today + total days of staying
-            int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
+            int days = guestBookingModel.EndDate.DayNumber - guestBookingModel.StartDate.DayNumber + 1;
             decimal totalPrice = 0;
-            totalPrice += dto.Resource.BasePrice * days;
+            totalPrice += guestBookingModel.Resource.BasePrice * days;
             return totalPrice;
         }
     }
