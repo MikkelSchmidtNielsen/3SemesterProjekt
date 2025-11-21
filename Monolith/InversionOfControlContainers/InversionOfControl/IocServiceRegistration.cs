@@ -18,7 +18,7 @@ using Refit;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
-    public class IocServiceRegistration
+    public static class IocServiceRegistration
     {
         public static void RegisterService(IServiceCollection services, IConfiguration configuration)
         {
