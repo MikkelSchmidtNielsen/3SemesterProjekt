@@ -1,4 +1,5 @@
-﻿using Application.RepositoryInterfaces;
+﻿using Application.ApplicationDto.Query;
+using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
@@ -20,11 +21,11 @@ namespace Application.Services.Query
             _repository = repository;
         }
 
-        public async Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync()
+        public async Task<IResult<IEnumerable<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
             //var result = await _repository.GetActiveBookingsWithMissingCheckInsAsync();
 
-            //if(result.IsSucces() && result.GetSuccess().OriginalType.Any())
+            //if (result.IsSucces() && result.GetSuccess().OriginalType.Any())
             //{
 
             //    foreach

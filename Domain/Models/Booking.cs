@@ -8,6 +8,7 @@
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }
+        public bool isCheckedIn { get; set; }
 
         // Entity Framework
         public Guest Guest { get; }
@@ -22,6 +23,7 @@
 			StartDate = startDate;
 			EndDate = endDate;
 			TotalPrice = totalPrice;
+            isCheckedIn = false;
 
             ValidateBookingInformation();
 		}

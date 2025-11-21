@@ -1,4 +1,6 @@
 ﻿@page "/admin/managecamp"
+@using Application.ApplicationDto.Query
+@inject IBookingCheckInQuery _checkInQuery
 
 <div id="main-container">
 	<h1 id="header-text">Administrer campingplads</h1>
@@ -10,7 +12,20 @@
 	</div>
     <br />
 
-	<div id="booking-table">
+	
+
+	@* if missing check-ins exist, show booking table
+	else show "Ingen manglende indtjekninger for i dag."*@
+    
+    <div id="booking-table">
+
+    @if (!_missingCheckIns.Any())
+    {
+        <h2>Ingen manglende indtjekninger for i dag.</h2>
+    }
+
+    @if (_missingCheckIns.Any())
+    {
         <RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
             <RadzenTableHeader>
                 <RadzenTableHeaderRow>
@@ -49,14 +64,25 @@
                 }
             </RadzenTableBody>
         </RadzenTable>
-	</div>
-
-	@* if missing check-ins exist, show booking table
-	else show "Ingen manglende indtjekninger for i dag."*@
+    }
+    </div>
 </div>
 
 @code {
-	DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-	bool checkInActive = true;
-	bool checkOutActive = false;
+    DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+    bool checkInActive = true;
+    bool checkOutActive = false;
+
+    IEnumerable<BookingMissingCheckInQueryDto> _missingCheckIns = new List<BookingMissingCheckInQueryDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultOfMissingCheckIns = await _checkInQuery.GetActiveBookingsWithMissingCheckInsAsync();
+
+        if (resultOfMissingCheckIns.IsSucces())
+        {
+            _missingCheckIns = resultOfMissingCheckIns.GetSuccess().OriginalType;
+        }
+    }
+    
 }

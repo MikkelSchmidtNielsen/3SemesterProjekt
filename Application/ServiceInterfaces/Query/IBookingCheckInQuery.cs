@@ -1,16 +1,16 @@
-﻿using Common.ResultInterfaces;
+﻿using Application.ApplicationDto.Query;
+using Common.ResultInterfaces;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Models;
 
 namespace Application.ServiceInterfaces.Query
 {
     public interface IBookingCheckInQuery
     {
-        Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync();
-
+        Task<IResult<IEnumerable<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync();
     }
 }

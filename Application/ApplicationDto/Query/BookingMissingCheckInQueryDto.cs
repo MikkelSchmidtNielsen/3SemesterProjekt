@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ModelsDto
+namespace Application.ApplicationDto.Query
 {
-    public class BookingWithMissingCheckInDto
+    public class BookingMissingCheckInQueryDto
     {
         public int BookingId { get; set; }
         public int ResourceId { get; set; }
