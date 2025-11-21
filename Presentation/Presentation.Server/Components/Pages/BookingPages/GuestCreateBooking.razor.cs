@@ -43,7 +43,7 @@ namespace Presentation.Server.Components.Pages.BookingPages
 
                 string message = error.Exception!.Message;
 
-                await DialogService.Alert(message, "Error");
+                await _dialogService.Alert(message, "Error");
             }
         }
 
@@ -51,8 +51,36 @@ namespace Presentation.Server.Components.Pages.BookingPages
         // Create the booking 
         private async Task GuestCreateBookingAsync(GuestBookingModel guestBookingModel)
         {
+            // Mapping
             GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
 
+
+
+            // Confirmation popup
+            var selectedResource = _listOfResources.FirstOrDefault(r => r.Id == guestBookingModel.ResourceId);
+            dto.ResourceId = guestBookingModel.ResourceId;
+
+            var confirmed = await _dialogService.Confirm(
+                @$"Vil du oprette denne booking: 
+                   Email: {dto.Email},
+                   Ressource: {selectedResource?.Name}
+                   Start: {dto.StartDate}
+                   Slut : {dto.EndDate}  
+                   Pris : {dto.TotalPrice}",
+                 
+                  "Er du sikker?",
+
+                new ConfirmOptions() { OkButtonText = "Ja", CancelButtonText = "Nej" }
+            );
+
+            if (confirmed == false)
+            {
+                return;
+            }
+
+
+
+            // Create the booking
             IResult<GuestInputDomainDto> result = await _guestCreateBookingService.HandleAsync(dto);
 
             if (result.IsSucces() == false)
@@ -60,15 +88,15 @@ namespace Presentation.Server.Components.Pages.BookingPages
                 Result<GuestInputDto>.Error(dto, result.GetError().Exception!);
                 return;
             }
-            GuestInputDomainDto domainData = result.GetSuccess().OriginalType;
+            GuestInputDomainDto domainDto = result.GetSuccess().OriginalType;
 
             // Message to guest:
-            _guestBookingMessage = @$"Hej {domainData.Guest.FirstName}
+            _guestBookingMessage = @$"Hej {domainDto.Guest.FirstName}
                                      Velkommen tilbage!
-                                     Din booking er oprettet for: {domainData.Resource.Name}
-                                     Fra : {domainData.StartDate}
-                                     Til : {domainData.EndDate}
-                                     Pris: {domainData.TotalPrice}";
+                                     Din booking er oprettet for: {domainDto.Resource.Name}
+                                     Fra : {domainDto.StartDate}
+                                     Til : {domainDto.EndDate}
+                                     Pris: {domainDto.TotalPrice}";
 
             // Reset the page
             _guestBookingModel = new GuestBookingModel
