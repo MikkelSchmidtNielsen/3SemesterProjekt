@@ -11,11 +11,6 @@
 	<RadzenToggleButton Text="Check-ud" @bind-Value=@checkOutActive ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
 	</div>
     <br />
-
-	
-
-	@* if missing check-ins exist, show booking table
-	else show "Ingen manglende indtjekninger for i dag."*@
     
     <div id="booking-table">
 
@@ -44,24 +39,23 @@
                 </RadzenTableHeaderRow>
             </RadzenTableHeader>
             <RadzenTableBody>
-                @for (var i = 0; i < 3; i++)
-                {
-                    var row = i;
-                    <RadzenTableRow>
-                        <RadzenTableCell>
-                            @($"Ressourcenavn")
-                        </RadzenTableCell>
-                        <RadzenTableCell>
-                            @($"Pladsnr.")
-                        </RadzenTableCell>
-                        <RadzenTableCell>
-                            @($"Kunde")
-                        </RadzenTableCell>
-                        <RadzenTableCell Style="text-align: end;">
-                            <RadzenButton Text="Check-in" ButtonStyle="ButtonStyle.Success"/>
-                        </RadzenTableCell>
-                    </RadzenTableRow>
-                }
+                    @foreach (BookingMissingCheckInQueryDto booking in _missingCheckIns)
+                    {
+                        <RadzenTableRow>
+                            <RadzenTableCell>
+                                @($"Ressourcenavn")
+                            </RadzenTableCell>
+                            <RadzenTableCell>
+                                @($"Pladsnr.")
+                            </RadzenTableCell>
+                            <RadzenTableCell>
+                                @($"Kunde")
+                            </RadzenTableCell>
+                            <RadzenTableCell Style="text-align: end;">
+                                <RadzenButton Text="Check-in" ButtonStyle="ButtonStyle.Success" />
+                            </RadzenTableCell>
+                        </RadzenTableRow>
+                    }
             </RadzenTableBody>
         </RadzenTable>
     }
@@ -84,5 +78,4 @@
             _missingCheckIns = resultOfMissingCheckIns.GetSuccess().OriginalType;
         }
     }
-    
 }

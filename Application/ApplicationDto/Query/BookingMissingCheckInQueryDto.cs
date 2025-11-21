@@ -9,7 +9,8 @@ namespace Application.ApplicationDto.Query
     public class BookingMissingCheckInQueryDto
     {
         public int BookingId { get; set; }
-        public int ResourceId { get; set; }
-        public int GuestId { get; set; }
+        public string ResourceName { get; set; }
+        public int ResourceLocation { get; set; }
+        public string GuestName { get; set; }
     }
 }
