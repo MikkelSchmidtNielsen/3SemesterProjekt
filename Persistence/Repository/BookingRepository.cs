@@ -36,7 +36,12 @@ namespace Persistence.Repository
         {
             try
             {
-                IEnumerable<Booking> bookings = await _db.Bookings.Where(b => !b.isCheckedIn).Include(b => b.Guest).Include(b => b.Resource).ToListAsync();
+                IEnumerable<Booking> bookings = await _db.Bookings
+                    .Where(b => !b.isCheckedIn)
+                    .Where(b => b.StartDate <= DateOnly.FromDateTime(DateTime.Now))
+                    .Include(b => b.Guest)
+                    .Include(b => b.Resource)
+                    .ToListAsync();
 
                 return Result<IEnumerable<Booking>>.Success(bookings);
             }

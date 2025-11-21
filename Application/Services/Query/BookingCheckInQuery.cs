@@ -35,6 +35,7 @@ namespace Application.Services.Query
                         BookingId = booking.Id,
                         ResourceName = booking.Resource.Name,
                         ResourceLocation = booking.Resource.Location,
+                        BookingStartDate = booking.StartDate,
                         GuestName = $"{booking.Guest.FirstName} {booking.Guest.LastName}"
                     };
                     missingCheckIns.Add(missingCheckInInfo);

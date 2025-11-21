@@ -34,7 +34,10 @@
                         Kundenavn
                     </RadzenTableHeaderCell>
                     <RadzenTableHeaderCell>
-
+                            Startdato
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                        
                     </RadzenTableHeaderCell>
                 </RadzenTableHeaderRow>
             </RadzenTableHeader>
@@ -50,6 +53,9 @@
                             </RadzenTableCell>
                             <RadzenTableCell>
                                 @($"{booking.GuestName}")
+                            </RadzenTableCell>
+                            <RadzenTableCell>
+                                @($"{booking.BookingStartDate}")
                             </RadzenTableCell>
                             <RadzenTableCell Style="text-align: end;">
                                 <RadzenButton Text="Check-in" ButtonStyle="ButtonStyle.Success" />
