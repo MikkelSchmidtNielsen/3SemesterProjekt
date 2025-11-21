@@ -137,6 +137,7 @@ namespace UnitTest.Infrastructure.UnitTest
 		[Fact]
 		public async Task RegisterUserAsync_WhenHttpRequestException_ReturnsGeneralError()
 		{
+			// HttpRequestException is when network is down or Api cant be reached
 			// Arrange
 			var apiMock = new Mock<IUserAuthenticationApi>();
 			apiMock.Setup(x => x.RegisterUserAsync(It.IsAny<string>()))
