@@ -1,10 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.InternalApiCalls.UserAuthenticationApi;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Refit;
 
 namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 {
@@ -22,7 +19,20 @@ namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 				client.Timeout = TimeSpan.FromSeconds(30);
 			});
 
+			RegisterRefit(services);
+		}
 
+		private static void RegisterRefit(IServiceCollection services)
+		{
+			// Adds Refit Interface by getting it from IHttpClientFactory at runtime
+			services
+				.AddRefitClient<IUserAuthenticationApi>()
+				.ConfigureHttpClient((sp, client) =>
+				{
+					var factory = sp.GetRequiredService<IHttpClientFactory>();
+					var http = factory.CreateClient("Authentication");
+					client.BaseAddress = http.BaseAddress;
+				});
 		}
     }
 }

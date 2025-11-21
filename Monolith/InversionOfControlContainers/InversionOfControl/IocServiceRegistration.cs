@@ -8,6 +8,7 @@ using Application.Services.Query;
 using Common.ExternalConfig;
 using Domain.DomainInterfaces;
 using Infrastructure.Email;
+using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IResourceAllQuery, ResourceAllQuery>();
             services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
             services.AddScoped<ISendEmail, SendEmailMailKit>();
+            services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();
@@ -46,15 +48,6 @@ namespace InversionOfControlContainers.InversionOfControl
         
 
             HttpClientModule.RegisterHttpClients(services, configuration);
-
-			services
-	            .AddRefitClient<IRecipeApi>()
-	            .ConfigureHttpClient((sp, client) =>
-	            {
-		            var factory = sp.GetRequiredService<IHttpClientFactory>();
-		            var http = factory.CreateClient("Authentication");
-		            client.BaseAddress = http.BaseAddress;
-	            });
 		}
     }
 }
