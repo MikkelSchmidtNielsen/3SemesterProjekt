@@ -19,11 +19,11 @@ namespace Presentation.Server.Components.Pages.BookingPages
 
         GuestBookingModel _guestBookingModel = new GuestBookingModel
         {
-            // Email
-            // ResourceId
+            // Email needs no initialization.
+            // ResourceId needs no initialization.
             StartDate = DateOnly.FromDateTime(DateTime.Now),
             EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-            // TotalPrice
+            // TotalPrice needs no initialization.
         };
 
         // Load resources
@@ -53,32 +53,6 @@ namespace Presentation.Server.Components.Pages.BookingPages
             // Mapping
             GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
 
-            
-
-            /*
-            //// Calculate price
-            decimal totalPrice = CalculateTotalPrice(dto);
-
-            var confirmed = await _dialogService.Confirm(
-                @$"<b>Vil du oprette denne booking?</b><br /><br />
-                    Email: {dto.Email}<br />
-                    Ressource: {selectedResource?.Name}<br />
-                    Start: {dto.StartDate:dd/MM/yyyy}<br />
-                    Slut: {dto.EndDate:dd/MM/yyyy}<br />
-                    <p>Pris: {totalPrice} kr.<p/>",
-
-                    "Er du sikker?",
-
-                new ConfirmOptions() { OkButtonText = "Ja", CancelButtonText = "Nej" }
-            );
-
-            if (confirmed == false)
-            {
-                return;
-            }
-            */
-
-
             // Create the booking
             IResult<GuestInputDomainDto> result = await _guestCreateBookingService.HandleAsync(dto);
 
@@ -103,6 +77,9 @@ namespace Presentation.Server.Components.Pages.BookingPages
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             };
+
+            // Confirm that the booking was created
+            //await BookingConfirmationPopup();
         }
 
         private decimal CalculateTotalPrice(GuestBookingModel guestBookingModel)

@@ -3,6 +3,7 @@
 @inject DialogService _dialogService
 @inject IGetAllResourcesService _getAllResourcesService
 @inject IGuestCreateBookingService _guestCreateBookingService
+
 <RadzenDialog />
 
 <PageTitle>Booking</PageTitle>
@@ -50,7 +51,7 @@
         <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
     </RadzenStack>
 
-    <RadzenButton Text="Opret booking" Click="ConfimationPopup" />
+    <RadzenButton Text="Opret booking" Click="GuestEnteredCorrectInfoConfirmationPopup" ButtonType="ButtonType.Submit"/>
 
 </RadzenTemplateForm>
 
@@ -58,7 +59,8 @@
 
 @code
 {
-    private async Task ConfimationPopup()
+
+    private async Task GuestEnteredCorrectInfoConfirmationPopup()
     {
         // Find selected resource
         var selectedResource = _listOfResources.FirstOrDefault(r => r.Id == _guestBookingModel.ResourceId);
@@ -91,6 +93,18 @@
 
             </RadzenStack>
 
-        </RadzenStack>);
+        </RadzenStack>
+    );
+    }
+
+    private async Task BookingConfirmationPopup()
+    {
+        await _dialogService.OpenAsync("Booking oprettet", ds => @<div>
+            <h3>Din booking er oprettet!</h3>
+
+            <p>@_guestBookingMessage</p>
+
+            <RadzenButton Text="OK" Click="() => ds.Close()" Style="width:100px" />
+        </div>);
     }
 }
