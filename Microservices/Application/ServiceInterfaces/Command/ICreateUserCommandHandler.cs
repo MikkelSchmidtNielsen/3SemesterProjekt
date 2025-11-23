@@ -5,6 +5,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface ICreateUserCommandHandler
     {
-        public Task<IResult<CreateUserResponseDto>> Handle(string input);
+        public Task<IResult<CreateUserResponseDto>> Handle(string email);
     }
 }

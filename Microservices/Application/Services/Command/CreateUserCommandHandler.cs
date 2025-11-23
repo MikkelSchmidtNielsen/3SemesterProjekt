@@ -21,17 +21,17 @@ namespace Application.Services.Command
             _tokenHandler = tokenHandler;
         }
 
-        public async Task<IResult<CreateUserResponseDto>> Handle(string input)
+        public async Task<IResult<CreateUserResponseDto>> Handle(string email)
         {
             // Creates dto to handle different returns
             CreateUserResponseDto dto = new CreateUserResponseDto();
-            dto.Email = input;
+            dto.Email = email;
 
             // Find existing user
             // NOT IMPLEMENTET YET
 
             // Create user by factory
-            IResult<User> userResponse = await _factory.Create(dto);
+            IResult<User> userResponse = _factory.Create(dto);
 
             if (userResponse.IsSuccess() == false)
             {
@@ -59,10 +59,26 @@ namespace Application.Services.Command
             user = repoResponse.GetSuccess().OriginalType;
 
             // Create token
-            IResult<string> token = _tokenHandler.Handle(user);
+            IResult<string> tokenResponse = _tokenHandler.Handle(user);
 
-            // Return end result
-            return Result<CreateUserResponseDto>.Success(dto);
+            if (tokenResponse.IsSuccess() == false)
+            {
+                // Get exception
+                Exception exception = tokenResponse.GetError().Exception!;
+
+                return Result<CreateUserResponseDto>.Error(dto, exception);
+            }
+            else
+            {
+                // Get token
+                string token = tokenResponse.GetSuccess().OriginalType;
+
+                // Add token to dto
+                dto.Token = token;
+
+                // Return end result
+                return Result<CreateUserResponseDto>.Success(dto);
+            }
         }
     }
 }

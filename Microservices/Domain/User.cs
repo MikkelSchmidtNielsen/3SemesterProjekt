@@ -7,6 +7,8 @@ namespace Domain
         public int Id { get; init; }
         public string Email { get; private set; }
 
+        private User() { }
+
         public User(string email)
         {
             Email = email;

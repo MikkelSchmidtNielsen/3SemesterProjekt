@@ -8,7 +8,7 @@ namespace Application.Factories
 {
     public class UserFactory : IUserFactory
     {
-        public async Task<IResult<User>> Create(CreateUserResponseDto dto)
+        public IResult<User> Create(CreateUserResponseDto dto)
         {
             User user = new User(dto.Email);
 

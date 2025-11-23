@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Security.Claims;
-using OpenAPITest.Controllers;
+﻿using OpenAPITest.Controllers;
 using Application.ServiceInterfaces.Command;
 
 namespace Authentication.Services
@@ -18,7 +16,7 @@ namespace Authentication.Services
         {
             var result = await _handler.Handle(email);
 
-            return result.GetSuccess().OriginalType.Email;
+            return result.GetSuccess().OriginalType.Token;
         }
     }
 }

@@ -30,7 +30,8 @@ namespace Application.Services.Command
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // Create the JWT token with the claims, expiration time, and signing credentials
-            JwtSecurityToken token = new JwtSecurityToken(
+            JwtSecurityToken token = new JwtSecurityToken
+            (
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromHours(1)),
                 signingCredentials: credentials
