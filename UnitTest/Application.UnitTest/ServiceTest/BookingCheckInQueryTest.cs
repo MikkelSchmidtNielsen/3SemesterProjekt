@@ -23,16 +23,20 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         public async Task GetActiveBookingsWithMissingCheckInsAsync_ShouldPass_WhenReturningListOfBookings()
         {
             // Arrange
+
+            Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+
             Booking booking1 = new Booking(1, 1, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(4)), 3000);
             Booking booking2 = new Booking(2, 2, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(6)), 9000);
+            
+
             IEnumerable<Booking> bookingList = new List<Booking>() { booking1, booking2 };
 
-            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            repository.Setup(x => x.CreateBookingAsync(booking1)).ReturnsAsync(Result<Booking>.Success(booking1));
-            repository.Setup(x => x.CreateBookingAsync(booking2)).ReturnsAsync(Result<Booking>.Success(booking2));
-            repository.Setup(x => x.GetActiveBookingsWithMissingCheckInsAsync()).ReturnsAsync(Result<IEnumerable<Booking>>.Success(bookingList));
+            bookingRepo.Setup(x => x.CreateBookingAsync(booking1)).ReturnsAsync(Result<Booking>.Success(booking1));
+            bookingRepo.Setup(x => x.CreateBookingAsync(booking2)).ReturnsAsync(Result<Booking>.Success(booking2));
+            bookingRepo.Setup(x => x.GetActiveBookingsWithMissingCheckInsAsync()).ReturnsAsync(Result<IEnumerable<Booking>>.Success(bookingList));
 
-            IBookingCheckInQuery bookingCheckInQuery = new BookingCheckInQuery(repository.Object);
+            IBookingCheckInQuery bookingCheckInQuery = new BookingCheckInQuery(bookingRepo.Object);
 
             // Act
             var result = await bookingCheckInQuery.GetActiveBookingsWithMissingCheckInsAsync();
