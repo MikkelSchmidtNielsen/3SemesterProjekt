@@ -1,16 +1,10 @@
-﻿using Application.ApplicationDto;
-using Application.RepositoryInterfaces;
+﻿using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Common;
 using Common.ResultInterfaces;
 using Domain;
 using Domain.DomainInterfaces;
 using Domain.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Command
 {
@@ -36,6 +30,7 @@ namespace Application.Services.Command
             // Find existing user
             // NOT IMPLEMENTET YET
 
+            // Create user by factory
             IResult<User> userResponse = await _factory.Create(dto);
 
             if (userResponse.IsSuccess() == false)
@@ -46,7 +41,11 @@ namespace Application.Services.Command
                 return Result<CreateUserResponseDto>.Error(dto, exception);
             }
 
-            IResult<User> repoResponse = await _repository.CreateUserAsync(userResponse.GetSuccess().OriginalType);
+            // Get factory success
+            User user = userResponse.GetSuccess().OriginalType;
+
+            // Create user in DB
+            IResult<User> repoResponse = await _repository.CreateUserAsync(user);
 
             if (repoResponse.IsSuccess() == false)
             {
@@ -57,10 +56,12 @@ namespace Application.Services.Command
             }
 
             // Get repo success
-            User user = repoResponse.GetSuccess().OriginalType;
+            user = repoResponse.GetSuccess().OriginalType;
 
-            var token = await _tokenHandler.Handle(user.Email);
+            // Create token
+            IResult<string> token = _tokenHandler.Handle(user);
 
+            // Return end result
             return Result<CreateUserResponseDto>.Success(dto);
         }
     }

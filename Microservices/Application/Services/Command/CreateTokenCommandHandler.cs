@@ -1,6 +1,7 @@
 ﻿using Application.ServiceInterfaces.Command;
 using Common;
 using Common.ResultInterfaces;
+using Domain;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,28 +12,28 @@ namespace Application.Services.Command
     public class CreateTokenCommandHandler : ICreateTokenCommandHandler
     {
         private readonly string _secretKey;
-        private readonly TimeSpan _lifeTime;
 
-        public CreateTokenCommandHandler(string secretKey, TimeSpan lifeTime)
+        public CreateTokenCommandHandler(string secretKey)
         {
             _secretKey = secretKey;
-            _lifeTime = lifeTime;
         }
 
-        public async Task<IResult<string>> Handle(string email)
+        public IResult<string> Handle(User user)
         {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Email, email)
-            };
+            Claim[] claims =
+            [
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+            ];
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
+            // Create the JWT token with the claims, expiration time, and signing credentials
+            JwtSecurityToken token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.Add(_lifeTime),
-                signingCredentials: creds
+                expires: DateTime.UtcNow.Add(TimeSpan.FromHours(1)),
+                signingCredentials: credentials
             );
 
             return Result<string>.Success(new JwtSecurityTokenHandler().WriteToken(token));

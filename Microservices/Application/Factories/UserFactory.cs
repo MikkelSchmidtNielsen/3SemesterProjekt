@@ -3,11 +3,6 @@ using Common.ResultInterfaces;
 using Domain;
 using Domain.DomainInterfaces;
 using Domain.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Factories
 {

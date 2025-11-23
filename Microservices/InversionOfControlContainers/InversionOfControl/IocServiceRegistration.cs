@@ -20,8 +20,7 @@ namespace InversionOfControlContainers.InversionOfControl
             //Add services
             services.AddSingleton<ICreateTokenCommandHandler>(
                 new CreateTokenCommandHandler(
-                    secretKey: "g9V4p2QmL8sT0wZ3D1aH7nK5fR2bE6yJ",
-                    lifeTime: TimeSpan.FromHours(1)
+                    secretKey: "g9V4p2QmL8sT0wZ3D1aH7nK5fR2bE6yJ"
                 )
             );
 
