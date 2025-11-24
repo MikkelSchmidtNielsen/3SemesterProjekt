@@ -6,22 +6,25 @@
 
 <div id="main-container">
 	<h1 id="header-text">Administrer campingplads</h1>
-	<h3 id="current-date">@currentDate</h3>
+	<h3 id="middle-aligned-text">@currentDate</h3>
 
 	<div id="buttons">
 	<RadzenToggleButton Text="Check-ind" @bind-Value=@checkInActive Disabled=@checkInButtonDisabled Click=@checkInSelected ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Success" />
 	<RadzenToggleButton Text="Check-ud" @bind-Value=@checkOutActive Disabled=@checkOutButtonDisabled Click=@checkOutSelected ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Success" />
 	</div>
     <br />
+
+    <div id="middle-aligned-text">
     
     @if (checkInActive)
     {
-        <h2 style="text-align: center">Manglende indtjekninger</h2>
+        <h2>Manglende indtjekninger</h2>
     }
     @if (checkOutActive)
     {
-        <h2 style="text-align: center">Manglende udtjekninger</h2>
+        <h2>Manglende udtjekninger</h2>
     }
+    </div>
 
     <div id="booking-table">
 

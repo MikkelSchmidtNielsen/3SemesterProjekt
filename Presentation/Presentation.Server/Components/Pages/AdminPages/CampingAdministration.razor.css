@@ -9,7 +9,7 @@
     text-align: center;
 }
 
-#current-date{
+#middle-aligned-text{
     text-align: center;
 }
 
@@ -23,6 +23,3 @@
     margin: auto;
 }
 
-#selected-type{
-    text-align: center;
-}
