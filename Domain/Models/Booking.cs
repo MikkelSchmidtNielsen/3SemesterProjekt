@@ -9,6 +9,7 @@
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }
         public bool isCheckedIn { get; set; }
+        public bool isCheckedOut { get; set; }
 
         // Entity Framework
         public Guest Guest { get; private set; } // private set for unit test.
@@ -24,6 +25,7 @@
 			EndDate = endDate;
 			TotalPrice = totalPrice;
             isCheckedIn = false;
+            isCheckedOut = false;
 
             ValidateBookingInformation();
 		}
