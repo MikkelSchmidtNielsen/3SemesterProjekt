@@ -22,5 +22,13 @@ namespace Presentation.Server.Components.Pages.AdminPages
             }
             
         }
+        private void checkInSelected()
+        {
+            checkInActive = !checkInActive;
+        }
+        private void checkOutSelected()
+        {
+            checkOutActive = !checkOutActive;
+        }
     }
 }
