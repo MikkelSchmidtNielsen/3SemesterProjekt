@@ -2,17 +2,27 @@
 @using Application.ApplicationDto.Query
 @inject IBookingCheckInQuery _checkInQuery
 @inject IBookingCheckOutQuery _checkOutQuery
+@rendermode RenderMode.InteractiveServer
 
 <div id="main-container">
 	<h1 id="header-text">Administrer campingplads</h1>
 	<h3 id="current-date">@currentDate</h3>
 
 	<div id="buttons">
-	<RadzenToggleButton Text="Check-ind" @bind-Value=@checkInActive onclick="@checkInSelected" ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
-	<RadzenToggleButton Text="Check-ud" @bind-Value=@checkOutActive onclick="@checkOutSelected" ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
+	<RadzenToggleButton Text="Check-ind" @bind-Value=@checkInActive Disabled=@checkInButtonDisabled Click=@checkInSelected ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Success" />
+	<RadzenToggleButton Text="Check-ud" @bind-Value=@checkOutActive Disabled=@checkOutButtonDisabled Click=@checkOutSelected ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Success" />
 	</div>
     <br />
     
+    @if (checkInActive)
+    {
+        <h2 style="text-align: center">Manglende indtjekninger</h2>
+    }
+    @if (checkOutActive)
+    {
+        <h2 style="text-align: center">Manglende udtjekninger</h2>
+    }
+
     <div id="booking-table">
 
     @if (!_missingCheckIns.Any() && checkInActive)
@@ -39,9 +49,17 @@
                     <RadzenTableHeaderCell>
                         Kundenavn
                     </RadzenTableHeaderCell>
-                    <RadzenTableHeaderCell>
-                            Startdato
-                    </RadzenTableHeaderCell>
+                        @if (checkInActive)
+                        {
+                            <RadzenTableHeaderCell>
+                                Startdato
+                            </RadzenTableHeaderCell>
+                        }
+                        @if (checkOutActive){
+                            <RadzenTableHeaderCell>
+                                Slutdato
+                            </RadzenTableHeaderCell>
+                        }
                     <RadzenTableHeaderCell>
                         
                     </RadzenTableHeaderCell>
@@ -70,7 +88,7 @@
                                 </RadzenTableCell>
                             </RadzenTableRow>
                         }
-                    };
+                    }
 
                     @if (checkOutActive)
                     {
@@ -94,7 +112,7 @@
                                 </RadzenTableCell>
                             </RadzenTableRow>
                         }
-                    };
+                    }
             </RadzenTableBody>
         </RadzenTable>
     }

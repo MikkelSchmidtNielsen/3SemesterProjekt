@@ -22,3 +22,7 @@
     width: 80%;
     margin: auto;
 }
+
+#selected-type{
+    text-align: center;
+}

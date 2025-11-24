@@ -7,9 +7,28 @@ namespace Presentation.Server.Components.Pages.AdminPages
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
         bool checkInActive = true;
         bool checkOutActive = false;
+        bool checkInButtonDisabled = true;
+        bool checkOutButtonDisabled = false;
 
         IEnumerable<BookingMissingCheckInResponseDto> _missingCheckIns = new List<BookingMissingCheckInResponseDto>();
         IEnumerable<BookingMissingCheckOutResponseDto> _missingCheckOuts = new List<BookingMissingCheckOutResponseDto>();
+
+        private void checkInSelected()
+        {
+            checkInActive = true;
+            checkOutActive = false;
+            checkInButtonDisabled = true;
+            checkOutButtonDisabled = false;
+            StateHasChanged();
+        }
+        private void checkOutSelected()
+        {
+            checkOutActive = true;
+            checkInActive = false;
+            checkInButtonDisabled = false;
+            checkOutButtonDisabled = true;
+            StateHasChanged();
+        }
 
         protected override async Task OnInitializedAsync()
         {
@@ -20,15 +39,12 @@ namespace Presentation.Server.Components.Pages.AdminPages
             {
                 _missingCheckIns = resultOfMissingCheckIns.GetSuccess().OriginalType;
             }
+            if (resultOfMissingCheckOuts.IsSucces())
+            {
+                _missingCheckOuts = resultOfMissingCheckOuts.GetSuccess().OriginalType;
+            }
             
         }
-        private void checkInSelected()
-        {
-            checkInActive = !checkInActive;
-        }
-        private void checkOutSelected()
-        {
-            checkOutActive = !checkOutActive;
-        }
+        
     }
 }
