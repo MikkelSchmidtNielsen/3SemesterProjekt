@@ -16,8 +16,23 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
+		public async Task<IResult<string>> CheckIfEmailIsAvailable(string email)
+		{
+			try
+			{
+				Guest guest = await _db.Guests
+					.FirstAsync(guest => guest.Email == email);
+
+				return Result<string>.Success(guest.Email!);
+			}
+			catch (Exception ex)
+			{
+				return Result<string>.Error(email, ex);
+			}
+		}
+
 		// CREATE
-        public async Task<IResult<Guest>> CreateGuestAsync(Guest guest)
+		public async Task<IResult<Guest>> CreateGuestAsync(Guest guest)
         {
 			try
 			{
