@@ -66,7 +66,7 @@ namespace Application.Services.Command
             if (bookingCreateRequest.IsSucces() == false)
             {
                 BookingCreatedDto createdDto = Mapper.Map<BookingCreatedDto>(domainDto);
-                return Result<BookingCreatedDto>.Error(createdDto, guestUserRequest.GetError().Exception!);
+                return Result<BookingCreatedDto>.Error(createdDto, bookingCreateRequest.GetError().Exception!);
             }
             Booking bookingCreateResult = bookingCreateRequest.GetSuccess().OriginalType;
 

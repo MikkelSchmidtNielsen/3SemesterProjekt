@@ -13,7 +13,7 @@ namespace UnitTest.Domain.UnitTest
     public class BookingEntityTest
     {
         [Fact]
-        public void GuestBookingShouldCreateWhenGivenCorrectInformation()
+        public void GuestBooking_ShouldCreate_WhenGivenCorrectInformation()
         {
             // Arrange
             int guestId = 1;
@@ -36,7 +36,7 @@ namespace UnitTest.Domain.UnitTest
             Assert.Equal(totalPrice, booking.TotalPrice);
         }
         [Fact]
-        public void GuestBookingStartDateIsInThePast()
+        public void GuestBooking_ShouldFail_WhenStartDateIsInThePast()
         {
             // Arrange
             int guestId = 1;
@@ -55,7 +55,7 @@ namespace UnitTest.Domain.UnitTest
                 startDate, endDate, totalPrice));
         }
         [Fact]
-        public void GuestBookingStartDateIsGreatherThanEndDate()
+        public void GuestBooking_ShouldFail_WhenStartDateIsGreatherThanEndDate()
         {
             // Arrange
             int guestId = 1;
@@ -74,7 +74,7 @@ namespace UnitTest.Domain.UnitTest
                 startDate, endDate, totalPrice));
         }
         [Fact]
-        public void GuestBookingStartDateIsSameDayAsEnddate()
+        public void GuestBooking_ShouldFail_WhenStartDateAndEndDateAreTheSame()
         {
             // Arrange
             int guestId = 1;
@@ -93,7 +93,7 @@ namespace UnitTest.Domain.UnitTest
                 startDate, endDate, totalPrice));
         }
         [Fact]
-        public void GuestBookingTotalPriceIsNegative()
+        public void GuestBooking_ShouldFail_WhenTotalPriceIsNegative()
         {
             // Arrange
             int guestId = 1;
@@ -112,7 +112,7 @@ namespace UnitTest.Domain.UnitTest
                 startDate, endDate, totalPrice));
         }
         [Fact]
-        public void GuestBookingTotalPriceHasMoreThanTwoDecimals()
+        public void GuestBooking_ShouldFail_WhenTotalPriceHasMoreThanTwoDecimals()
         {
             // Arrange
             int guestId = 1;
@@ -131,7 +131,7 @@ namespace UnitTest.Domain.UnitTest
                 startDate, endDate, totalPrice));
         }
         [Fact]
-        public void GuestBookingTotalPriceHasExactlyTwoDecimals()
+        public void GuestBooking_ShouldPass_WhenTotalPriceHasTwoDecimals()
         {
             // Arrange
             int guestId = 1;
@@ -150,7 +150,7 @@ namespace UnitTest.Domain.UnitTest
             Assert.Equal(totalPrice, booking.TotalPrice);
         }
         [Fact]
-        public void GuestBookingTotalPriceHasOneDecimal()
+        public void GuestBooking_ShouldPass_WhenTotalPriceHasOneDecimal()
         {
             // Arrange
             int guestId = 1;
@@ -169,7 +169,7 @@ namespace UnitTest.Domain.UnitTest
             Assert.Equal(totalPrice, booking.TotalPrice);
         }
         [Fact]
-        public void GuestBookingTotalPriceHasZeroDecimals()
+        public void GuestBooking_ShouldPass_WhenTotalPriceHasZeroDecimals()
         {
             // Arrange
             int guestId = 1;

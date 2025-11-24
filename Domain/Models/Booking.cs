@@ -38,25 +38,25 @@ namespace Domain.Models
             // StartDate/EndDate
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
-                throw new Exception();
+                throw new Exception("StartDate is in the past.");
             }
             if (StartDate > EndDate)
             {
-                throw new Exception();
+                throw new Exception("StartDate is after EndDate.");
             }
             if (StartDate == EndDate)
             {
-                throw new Exception();
+                throw new Exception("StartDate and EndDate are on the same date.");
             }
 
             //TotalPrice
             if (TotalPrice < 0)
             {
-                throw new Exception();
+                throw new Exception("TotalPrice is less than zero.");
             }
             if (DecimalPlaces(TotalPrice) > 2)
             {
-                throw new Exception();
+                throw new Exception("There are more than 2 decimals.");
             }
         }
         /// <summary>

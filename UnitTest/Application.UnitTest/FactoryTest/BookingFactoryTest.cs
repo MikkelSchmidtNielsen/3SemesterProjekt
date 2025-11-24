@@ -13,7 +13,7 @@ namespace UnitTest.Application.UnitTest.FactoryTest
     public class BookingFactoryTest
     {
         [Fact]
-        public void BookingCreation_ShouldReturnSuccess_WhenGivenCorrectInfo()
+        public void BookingFactoryCreation_ShouldReturnSuccess_WhenGivenCorrectInfo()
         {
             // Arrange
             BookingFactory factory = new BookingFactory();

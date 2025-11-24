@@ -67,7 +67,7 @@
 		_guestBookingModel.Resource = selectedResource;
 
 		// Open confirmation dialog
-		var result = await _dialogService.OpenAsync("Oprettelse af ny booking", ds => @<RadzenStack Gap="1.5rem">
+		var result = await _dialogService.OpenAsync("Oprettelse af ny booking", ds =>@<RadzenStack Gap="1.5rem">
 
 	<h3>Er du sikker på at du vil oprette denne booking?</h3>
 
@@ -90,20 +90,21 @@
 						  Click="() => ds.Close(false)"
 						  ButtonStyle="ButtonStyle.Light" />
 		</RadzenStack>
-
 	</RadzenStack>
-
 </RadzenStack>
 
-    );
+	);
 	}
 
 	private async Task BookingConfirmationPopup(BookingCreatedDto bookingCreatedDto)
 	{
 		await _dialogService.OpenAsync("Booking oprettet", ds =>@<div>
-	<h3>Hej @bookingCreatedDto.Guest.FirstName</h3>
+	<h3>Hej @bookingCreatedDto.Guest.FirstName @bookingCreatedDto.Guest.LastName</h3>
+	<p>Land: @bookingCreatedDto.Guest.Country</p>
+	<p>Adresse: @bookingCreatedDto.Guest.Address</p>
 
-	<p>Velkommen tilbage!</p>
+	<h3>Velkommen tilbage!</h3>
+
 	<p>Din booking er oprettet for: @bookingCreatedDto.Resource.Name</p>
 	<p><b>Fra:</b>@bookingCreatedDto.StartDate</p>
 	<p><b>Til:</b>@bookingCreatedDto.EndDate</p>
@@ -121,5 +122,4 @@
 </div>
     );
 	}
-}
 }

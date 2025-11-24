@@ -43,7 +43,6 @@ namespace Persistence.Repository
             }
             catch (Exception ex)
             {
-                // Returns invalid list with exception
                 return Result<IEnumerable<Resource>>.Error(originalType: null!, exception: ex);
             }
         }
