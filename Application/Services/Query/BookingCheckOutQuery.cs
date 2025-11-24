@@ -23,12 +23,12 @@ namespace Application.Services.Query
 
         public async Task<IResult<List<BookingMissingCheckOutResponseDto>>> GetFinishedBookingsWithMissingCheckOutsAsync()
         {
-            List<BookingMissingCheckOutResponseDto> missedCheckOuts = new List<BookingMissingCheckOutResponseDto>();
+            List<BookingMissingCheckOutResponseDto> missedCheckOuts = new List<BookingMissingCheckOutResponseDto>(); // Creates list for missing check outs
             IResult<IEnumerable<Booking>> getResultFromRepo = await _repository.GetFinishedBookingsWithMissingCheckOutsAsync();
 
             if (getResultFromRepo.IsSucces() && getResultFromRepo.GetSuccess().OriginalType.Any())
             {
-                foreach (var booking in getResultFromRepo.GetSuccess().OriginalType)
+                foreach (var booking in getResultFromRepo.GetSuccess().OriginalType) // Iterates through the list and converts the booking into a dto.
                 {
                     BookingMissingCheckOutResponseDto missedCheckOutInfo = new BookingMissingCheckOutResponseDto
                     {

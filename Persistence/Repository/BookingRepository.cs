@@ -53,7 +53,7 @@ namespace Persistence.Repository
 
         public async Task<IResult<IEnumerable<Booking>>> GetFinishedBookingsWithMissingCheckOutsAsync()
         {
-            try
+            try // Tries to retrieve all missed check-outs from today and earlier and return them as a successful result.
             {
                 IEnumerable<Booking> bookings = await _db.Bookings
                     .Where(b => !b.isCheckedOut)
