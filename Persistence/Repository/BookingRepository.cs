@@ -50,5 +50,10 @@ namespace Persistence.Repository
                 return Result<IEnumerable<Booking>>.Error(null, ex);
             }
         }
+
+        public Task<IResult<IEnumerable<Booking>>> GetFinishedBookingsWithMissingCheckOutsAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
-    internal class BookingCheckInQueryTestClass : Booking
+    internal class BookingCheckInAndOutQueryTestClass : Booking
     {
-        public BookingCheckInQueryTestClass(Booking booking, Guest guest, Resource resource) : base(booking, guest, resource)
+        public BookingCheckInAndOutQueryTestClass(Booking booking, Guest guest, Resource resource) : base(booking, guest, resource)
         {
         }
     }

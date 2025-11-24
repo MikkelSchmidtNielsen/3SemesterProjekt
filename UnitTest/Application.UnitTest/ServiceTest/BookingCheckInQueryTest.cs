@@ -36,8 +36,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Resource resource1 = new Resource("Luksushytte", "Hytte", 400, 1, null);
             Resource resource2 = new Resource("Hyggeplads", "Plads", 200, 2, null);
 
-            var bookingForTest1 = BookingCheckInQueryTestHelper.CreateBookingWithResourceAndGuest(booking1, guest1, resource1);
-            var bookingForTest2 = BookingCheckInQueryTestHelper.CreateBookingWithResourceAndGuest(booking2 , guest2, resource2);
+            var bookingForTest1 = BookingCheckInAndOutQueryTestHelper.CreateBookingWithResourceAndGuest(booking1, guest1, resource1);
+            var bookingForTest2 = BookingCheckInAndOutQueryTestHelper.CreateBookingWithResourceAndGuest(booking2 , guest2, resource2);
 
             IEnumerable<Booking> bookingList = new List<Booking>() { bookingForTest1, bookingForTest2 };
 
