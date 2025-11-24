@@ -12,8 +12,11 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InfrastructureInterfaces\" />
-    <Folder Include="ServiceInterfaces\Command\" />
+	  <Folder Include="ApplicationDto\Query\" />
+	  <Folder Include="InfrastructureInterfaces\" />
+	  <Folder Include="ServiceInterfaces\Command\" />
+	  <Folder Include="ServiceInterfaces\Query\" />
+	  <Folder Include="Services\Query\" />
   </ItemGroup>
 
 </Project>
