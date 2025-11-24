@@ -18,15 +18,15 @@ namespace Application.Services.Command
     {
         private readonly IGuestRepository _guestRepository;
         private readonly IResourceRepository _resourceRepository;
-        private readonly IBookingRepository _bookingRepository;
         private readonly IBookingFactory _bookingFactory;
+        private readonly IBookingRepository _bookingRepository;
 
-        public GuestCreateBookingService(IGuestRepository guestRepository, IResourceRepository resourceRepository, IBookingRepository bookingRepository, IBookingFactory bookingFactory)
+        public GuestCreateBookingService(IGuestRepository guestRepository, IResourceRepository resourceRepository, IBookingFactory bookingFactory, IBookingRepository bookingRepository)
         {
             _guestRepository = guestRepository;
             _resourceRepository = resourceRepository;
-            _bookingRepository = bookingRepository;
             _bookingFactory = bookingFactory;
+            _bookingRepository = bookingRepository;
         }
 
         public async Task<IResult<BookingCreatedDto>> HandleAsync(GuestInputDto inputDto)

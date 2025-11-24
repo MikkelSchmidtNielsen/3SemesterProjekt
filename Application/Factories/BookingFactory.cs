@@ -13,6 +13,7 @@ namespace Application.Factories
 {
     public class BookingFactory : IBookingFactory
     {
+
         public IResult<Booking> Create(GuestInputDomainDto dto)
         {
             try

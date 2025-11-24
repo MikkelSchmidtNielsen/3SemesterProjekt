@@ -19,7 +19,6 @@ namespace UnitTest.Application.UnitTest.FactoryTest
             BookingFactory factory = new BookingFactory();
             GuestInputDomainDto dto = new GuestInputDomainDto
             {
-                Email = "test@test.dk",
                 Guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Denmark", "Danish", "Skovgade 12"),
                 Resource = new Resource(1, "Gaia", "Telt", 100),
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -33,9 +32,9 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 
             // Assert
             Assert.True(result.IsSucces());
-            Assert.Equal(dto.Email, success.OriginalType.Guest.Email);
-            Assert.Equal(dto.Guest, success.OriginalType.Guest);
-            Assert.Equal(dto.Resource, success.OriginalType.Resource);
+
+            Assert.Equal(dto.Resource.Id, success.OriginalType.ResourceId);
+            Assert.Equal(dto.Guest.FirstName, success.OriginalType.GuestName);
             Assert.Equal(dto.StartDate, success.OriginalType.StartDate);
             Assert.Equal(dto.EndDate, success.OriginalType.EndDate);
             Assert.Equal(dto.TotalPrice, success.OriginalType.TotalPrice);

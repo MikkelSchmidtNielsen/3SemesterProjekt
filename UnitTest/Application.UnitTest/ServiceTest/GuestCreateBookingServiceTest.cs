@@ -1,7 +1,18 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.Factories;
 using Application.RepositoryInterfaces;
+using Application.Services.Command;
+using Castle.Core.Resource;
+using Common;
+using Common.ResultInterfaces;
+using Domain.DomainInterfaces;
 using Domain.Models;
+using Domain.ModelsDto;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
+using Persistence.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +21,21 @@ using System.Threading.Tasks;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
-    
+
     public class GuestCreateBookingServiceTest
     {
         [Fact]
-        public async Task GuestBookingCreation_ShouldPass_WhenGivenCorrectInformation()
+        public async Task GuestBookingCreation_Passes_WhenAllServiceStepsSucceed1()
         {
             // Arrange
+            Mock<IGuestRepository> guestRepo = new Mock<IGuestRepository>();
+            Mock<IResourceRepository> resourceRepo = new Mock<IResourceRepository>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+
             GuestInputDto dto = new GuestInputDto
             {
                 Email = "test@test.dk",
@@ -24,16 +43,312 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 TotalPrice = 100,
-                Guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Denmark", "Danish", "Skovgade 12"),
-                Resource = new Resource(1, "Gaia", "Telt", 100),
+                Guest = guest,
+                Resource = resource,
+            };
+
+
+            Booking booking = new Booking(
+                1,
+                resource.Id,
+                "Allan",
+                DateOnly.FromDateTime(DateTime.Now),
+                DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                300);
+
+            // Mock Guest Repository
+            guestRepo
+                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .ReturnsAsync(Result<Guest>.Success(guest));
+
+            // Mock Resource Repository
+            resourceRepo
+                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .ReturnsAsync(Result<Resource>.Success(resource));
+
+            GuestInputDomainDto domainDto = Mapper.Map<GuestInputDomainDto>(dto);
+
+            // Mock Booking Factory
+            bookingFactory
+                .Setup(factory => factory.Create(It.IsAny<GuestInputDomainDto>()))
+                .Returns(Result<Booking>.Success(booking));
+
+            // Mock Booking Repository
+            bookingRepo
+                .Setup(repo => repo.GuestCreateBookingAsync(booking))
+                .ReturnsAsync(Result<Booking>.Success(booking));
+
+            GuestCreateBookingService sut = new GuestCreateBookingService
+                (
+                guestRepo.Object,
+                resourceRepo.Object,
+                bookingFactory.Object,
+                bookingRepo.Object
+                );
+
+            // ExpectedDto
+            BookingCreatedDto expectedDto = new BookingCreatedDto
+            {
+                Guest = domainDto.Guest,
+                Resource = domainDto.Resource,
+                StartDate = domainDto.StartDate,
+                EndDate = domainDto.EndDate,
+                TotalPrice = 300
             };
 
             // Act
-            Mock<IBookingRepository> repo = new Mock<IBookingRepository>();
-
+            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
 
             // Assert
+            Assert.True(result.IsSucces());
+
+            BookingCreatedDto success = result.GetSuccess().OriginalType;
+            Assert.Equal(expectedDto.Guest, success.Guest);
+            Assert.Equal(expectedDto.Resource, success.Resource);
+            Assert.Equal(expectedDto.StartDate, success.StartDate);
+            Assert.Equal(expectedDto.EndDate, success.EndDate);
+            Assert.Equal(expectedDto.TotalPrice, success.TotalPrice);
+
+
         }
 
+        [Fact]
+        public async Task GuestBookingCreation_Fails_WhenGuestDoesntExist2()
+        {
+            // Arrange
+            Mock<IGuestRepository> guestRepo = new Mock<IGuestRepository>();
+            Mock<IResourceRepository> resourceRepo = new Mock<IResourceRepository>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+
+            GuestInputDto dto = new GuestInputDto
+            {
+                Email = "test@test.dk",
+                ResourceId = 1,
+                StartDate = DateOnly.FromDateTime(DateTime.Now),
+                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                TotalPrice = 100,
+                Guest = guest,
+                Resource = resource,
+            };
+
+
+            Booking booking = new Booking(
+                1,
+                resource.Id,
+                "Allan",
+                DateOnly.FromDateTime(DateTime.Now),
+                DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                300);
+
+            Exception emailException = new Exception("Email findes ikke");
+
+            // Mock Guest Repository
+            guestRepo
+                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .ReturnsAsync(Result<Guest>.Error(null!, emailException));
+
+            GuestCreateBookingService sut = new GuestCreateBookingService
+                (
+                guestRepo.Object,
+                resourceRepo.Object,
+                bookingFactory.Object,
+                bookingRepo.Object
+                );
+
+            // Act
+            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+
+            // Assert
+            Assert.True(result.IsError());
+            IResultError<BookingCreatedDto> error = result.GetError();
+            Assert.Equal(emailException, error.Exception);
+
+            // Verify mock were called
+            guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
+
+            // Verify mocks weren't called
+            resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Never());
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<GuestInputDomainDto>()), Times.Never);
+            bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task GuestBookingCreation_Fails_WhenResourceFails3()
+        {
+            // Arrange
+            Mock<IGuestRepository> guestRepo = new Mock<IGuestRepository>();
+            Mock<IResourceRepository> resourceRepo = new Mock<IResourceRepository>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+
+            GuestInputDto dto = new GuestInputDto
+            {
+                Email = "test@test.dk",
+                ResourceId = 1,
+                StartDate = DateOnly.FromDateTime(DateTime.Now),
+                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                TotalPrice = 100,
+                Guest = guest,
+                Resource = resource,
+            };
+
+
+            Booking booking = new Booking(
+                1,
+                resource.Id,
+                "Allan",
+                DateOnly.FromDateTime(DateTime.Now),
+                DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                300);
+
+            // Mock Guest Repository
+            guestRepo
+                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .ReturnsAsync(Result<Guest>.Success(guest));
+
+            Exception resourceException = new Exception("Resourcen findes ikke");
+
+            // Mock Resource Repository
+            resourceRepo
+                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .ReturnsAsync(Result<Resource>.Error(null!, resourceException));
+
+            GuestCreateBookingService sut = new GuestCreateBookingService
+                (
+                guestRepo.Object,
+                resourceRepo.Object,
+                bookingFactory.Object,
+                bookingRepo.Object
+                );
+
+            // Act
+            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+
+            // Assert
+            Assert.True(result.IsError());
+            IResultError<BookingCreatedDto> error = result.GetError();
+            Assert.Equal(resourceException, error.Exception);
+
+            // Verify mock were called
+            guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
+            resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
+
+            // Verify mocks weren't called
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<GuestInputDomainDto>()), Times.Never);
+            bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task GuestBookingCreation_Fails_WhenBookingFactoryFails4()
+        {
+            // Arrange
+            Mock<IGuestRepository> guestRepo = new Mock<IGuestRepository>();
+            Mock<IResourceRepository> resourceRepo = new Mock<IResourceRepository>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+
+            GuestInputDto dto = new GuestInputDto
+            {
+                Email = "test@test.dk",
+                ResourceId = 1,
+                StartDate = DateOnly.FromDateTime(DateTime.Now),
+                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                TotalPrice = 100,
+                Guest = guest,
+                Resource = resource,
+            };
+
+
+            Booking booking = new Booking(
+                1,
+                resource.Id,
+                "Allan",
+                DateOnly.FromDateTime(DateTime.Now),
+                DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                300);
+
+            // Mock Guest Repository
+            guestRepo
+                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .ReturnsAsync(Result<Guest>.Success(guest));
+
+            // Mock Resource Repository
+            resourceRepo
+                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .ReturnsAsync(Result<Resource>.Success(resource));
+
+            GuestInputDomainDto domainDto = Mapper.Map<GuestInputDomainDto>(dto);
+
+            Exception bookingException = new Exception("Booking findes ikke");
+
+            // Mock Booking Factory
+            bookingFactory
+                .Setup(factory => factory.Create(It.IsAny<GuestInputDomainDto>()))
+                .Returns(Result<Booking>.Error(, bookingException));
+
+            GuestCreateBookingService sut = new GuestCreateBookingService
+                 (
+                 guestRepo.Object,
+                 resourceRepo.Object,
+                 bookingFactory.Object,
+                 bookingRepo.Object
+                 );
+
+            // Act
+            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+
+            // Assert
+            Assert.True(result.IsError());
+            IResultError<BookingCreatedDto> error = result.GetError();
+            Assert.Equal(bookingException, error.Exception);
+        }
+
+
+
+
+        [Fact]
+        public async Task GuestBookingCreation_Fails_WhenBookingDoesntSave5()
+        {
+            // Arrange
+            Mock<IGuestRepository> guestRepo = new Mock<IGuestRepository>();
+            Mock<IResourceRepository> resourceRepo = new Mock<IResourceRepository>();
+            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
+            Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+
+            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+
+            GuestInputDto dto = new GuestInputDto
+            {
+                Email = "test@test.dk",
+                ResourceId = 1,
+                StartDate = DateOnly.FromDateTime(DateTime.Now),
+                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                TotalPrice = 100,
+                Guest = guest,
+                Resource = resource,
+            };
+
+
+            Booking booking = new Booking(
+                1,
+                resource.Id,
+                "Allan",
+                DateOnly.FromDateTime(DateTime.Now),
+                DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
+                300);
+
+
+        }
     }
 }
