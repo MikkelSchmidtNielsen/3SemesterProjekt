@@ -23,12 +23,12 @@ namespace Application.Services.Query
 
         public async Task<IResult<List<BookingMissingCheckInResponseDto>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
-            List<BookingMissingCheckInResponseDto> missingCheckIns = new List<BookingMissingCheckInResponseDto>();
+            List<BookingMissingCheckInResponseDto> missingCheckIns = new List<BookingMissingCheckInResponseDto>(); // Prepares a list for missing check-ins.
             IResult<IEnumerable<Booking>> getMissingCheckIns = await _bookingRepository.GetActiveBookingsWithMissingCheckInsAsync();
 
             if (getMissingCheckIns.IsSucces() && getMissingCheckIns.GetSuccess().OriginalType.Any())
             {
-                foreach(var booking in getMissingCheckIns.GetSuccess().OriginalType)
+                foreach(var booking in getMissingCheckIns.GetSuccess().OriginalType) // Iterates through each booking and "converts" them into a dto.
                 {
                     BookingMissingCheckInResponseDto missingCheckInInfo = new BookingMissingCheckInResponseDto
                     {
