@@ -11,6 +11,6 @@ namespace Application.ServiceInterfaces.Query
 {
     public interface IBookingCheckInQuery
     {
-        Task<IResult<List<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync();
+        Task<IResult<List<BookingMissingCheckInResponseDto>>> GetActiveBookingsWithMissingCheckInsAsync();
     }
 }

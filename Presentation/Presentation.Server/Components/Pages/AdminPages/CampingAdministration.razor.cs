@@ -8,7 +8,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
         bool checkInActive = true;
         bool checkOutActive = false;
 
-        IEnumerable<BookingMissingCheckInQueryDto> _missingCheckIns = new List<BookingMissingCheckInQueryDto>();
+        IEnumerable<BookingMissingCheckInResponseDto> _missingCheckIns = new List<BookingMissingCheckInResponseDto>();
 
         protected override async Task OnInitializedAsync()
         {

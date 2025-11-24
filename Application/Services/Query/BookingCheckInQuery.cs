@@ -21,16 +21,16 @@ namespace Application.Services.Query
             _bookingRepository = bookingRepository;
         }
 
-        public async Task<IResult<List<BookingMissingCheckInQueryDto>>> GetActiveBookingsWithMissingCheckInsAsync()
+        public async Task<IResult<List<BookingMissingCheckInResponseDto>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
-            List<BookingMissingCheckInQueryDto> missingCheckIns = new List<BookingMissingCheckInQueryDto>();
+            List<BookingMissingCheckInResponseDto> missingCheckIns = new List<BookingMissingCheckInResponseDto>();
             IResult<IEnumerable<Booking>> getMissingCheckIns = await _bookingRepository.GetActiveBookingsWithMissingCheckInsAsync();
 
             if (getMissingCheckIns.IsSucces() && getMissingCheckIns.GetSuccess().OriginalType.Any())
             {
                 foreach(var booking in getMissingCheckIns.GetSuccess().OriginalType)
                 {
-                    BookingMissingCheckInQueryDto missingCheckInInfo = new BookingMissingCheckInQueryDto
+                    BookingMissingCheckInResponseDto missingCheckInInfo = new BookingMissingCheckInResponseDto
                     {
                         BookingId = booking.Id,
                         ResourceName = booking.Resource.Name,
@@ -41,12 +41,12 @@ namespace Application.Services.Query
                     missingCheckIns.Add(missingCheckInInfo);
                 }
 
-                return Result<List<BookingMissingCheckInQueryDto>>.Success(missingCheckIns);
+                return Result<List<BookingMissingCheckInResponseDto>>.Success(missingCheckIns);
             }
 
             else
             {
-                return Result<List<BookingMissingCheckInQueryDto>>.Error(missingCheckIns, new Exception("Der er ingen manglende indtjekninger."));
+                return Result<List<BookingMissingCheckInResponseDto>>.Error(missingCheckIns, new Exception("Der er ingen manglende indtjekninger."));
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto.Query
 {
-    public class BookingMissingCheckInQueryDto
+    public class BookingMissingCheckInResponseDto
     {
         public int BookingId { get; set; }
         public string ResourceName { get; set; }
