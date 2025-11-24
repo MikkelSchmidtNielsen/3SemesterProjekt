@@ -28,7 +28,7 @@
             ValidateBookingInformation();
 		}
 
-        public Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
+        protected Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
         {
             GuestId = booking.GuestId;
             ResourceId = booking.ResourceId;

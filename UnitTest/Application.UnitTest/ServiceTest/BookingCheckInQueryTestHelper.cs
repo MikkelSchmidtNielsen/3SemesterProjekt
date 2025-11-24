@@ -15,7 +15,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Resource resource
         )
         {
-            var createdBooking = new Booking(booking, guest, resource);
+            var createdBooking = new BookingCheckInQueryTestClass(booking, guest, resource);
 
             return createdBooking;
         }
