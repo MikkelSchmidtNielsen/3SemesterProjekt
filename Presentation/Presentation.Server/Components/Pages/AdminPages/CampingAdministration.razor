@@ -1,0 +1,69 @@
+﻿@page "/admin/manage-camp"
+@using Application.ApplicationDto.Query
+@inject IBookingCheckInQuery _checkInQuery
+
+<div id="main-container">
+	<h1 id="header-text">Administrer campingplads</h1>
+	<h3 id="current-date">@currentDate</h3>
+
+	<div id="buttons">
+	<RadzenToggleButton Text="Check-ind" @bind-Value=@checkInActive ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
+	<RadzenToggleButton Text="Check-ud" @bind-Value=@checkOutActive ButtonStyle="ButtonStyle.Light" ToggleButtonStyle="ButtonStyle.Primary" />
+	</div>
+    <br />
+    
+    <div id="booking-table">
+
+    @if (!_missingCheckIns.Any())
+    {
+        <h2>Ingen manglende indtjekninger for i dag.</h2>
+    }
+
+    @if (_missingCheckIns.Any())
+    {
+        <RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
+            <RadzenTableHeader>
+                <RadzenTableHeaderRow>
+                    <RadzenTableHeaderCell>
+                        Ressource
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                        Pladsnr.
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                        Kundenavn
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                            Startdato
+                    </RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>
+                        
+                    </RadzenTableHeaderCell>
+                </RadzenTableHeaderRow>
+            </RadzenTableHeader>
+            <RadzenTableBody>
+                    @foreach (BookingMissingCheckInResponseDto booking in _missingCheckIns)
+                    {
+                        <RadzenTableRow>
+                            <RadzenTableCell>
+                                @($"{booking.ResourceName}")
+                            </RadzenTableCell>
+                            <RadzenTableCell>
+                                @($"{booking.ResourceLocation}")
+                            </RadzenTableCell>
+                            <RadzenTableCell>
+                                @($"{booking.GuestName}")
+                            </RadzenTableCell>
+                            <RadzenTableCell>
+                                @($"{booking.BookingStartDate}")
+                            </RadzenTableCell>
+                            <RadzenTableCell Style="text-align: end;">
+                                <RadzenButton Text="Check-in" ButtonStyle="ButtonStyle.Success" />
+                            </RadzenTableCell>
+                        </RadzenTableRow>
+                    }
+            </RadzenTableBody>
+        </RadzenTable>
+    }
+    </div>
+</div>

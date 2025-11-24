@@ -8,10 +8,11 @@
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }
+        public bool isCheckedIn { get; set; }
 
         // Entity Framework
-        public Guest Guest { get; }
-        public Resource Resource { get; }
+        public Guest Guest { get; private set; } // private set for unit test.
+        public Resource Resource { get; private set; } // private set for unit test.
 
         private Booking() { }
 
@@ -22,9 +23,21 @@
 			StartDate = startDate;
 			EndDate = endDate;
 			TotalPrice = totalPrice;
+            isCheckedIn = false;
 
             ValidateBookingInformation();
 		}
+
+        protected Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
+        {
+            GuestId = booking.GuestId;
+            ResourceId = booking.ResourceId;
+            StartDate = booking.StartDate;
+            EndDate = booking.EndDate;
+            TotalPrice = booking.TotalPrice;
+            Guest = guest;
+            Resource = resource;
+        }
 
 		private void ValidateBookingInformation()
         {
