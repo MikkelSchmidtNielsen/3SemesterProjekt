@@ -3,6 +3,7 @@
 @inject DialogService _dialogService
 @inject IGetAllResourcesService _getAllResourcesService
 @inject IGuestCreateBookingService _guestCreateBookingService
+@using Application.ApplicationDto.Command
 
 <RadzenDialog />
 
@@ -10,101 +11,115 @@
 
 <h3>Opret booking</h3>
 
-<RadzenTemplateForm TItem="GuestBookingModel" Data=@_guestBookingModel Submit="@GuestCreateBookingAsync">
+<RadzenTemplateForm TItem="GuestBookingModel" Data=@_guestBookingModel Submit="@GuestEnteredCorrectInfoConfirmationPopup">
 
-    @* Email *@
+	@* Email *@
 
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-        <RadzenLabel Component="Email"> Email </RadzenLabel>
-        <RadzenTextBox Name="Email" @bind-Value=@_guestBookingModel.Email Style="width: 100%; max-width: 400px;" />
-    </RadzenStack>
+	<RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+		<RadzenLabel Component="Email"> Email </RadzenLabel>
+		<RadzenTextBox Name="Email" @bind-Value=@_guestBookingModel.Email Style="width: 100%; max-width: 400px;" />
+	</RadzenStack>
 
-    @* Resources *@
+	@* Resources *@
 
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-        <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
-        @if (_listOfResources != null && _listOfResources.Any())
-        {
-            <RadzenDropDown TValue="int" @bind-Value="_guestBookingModel.ResourceId" Data="_listOfResources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
-        }
-        else
-        {
-            <RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" />
-        }
-    </RadzenStack>
+	<RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+		<RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
+		@if (_listOfResources != null && _listOfResources.Any())
+		{
+			<RadzenDropDown TValue="int" @bind-Value="_guestBookingModel.ResourceId" Data="_listOfResources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+		}
+		else
+		{
+			<RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" />
+		}
+	</RadzenStack>
 
-    @* StartDate *@
+	@* StartDate *@
 
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-        <RadzenDatePicker Name="StartDateInput" @bind-Value="_guestBookingModel.StartDate" DateFormat="dd/MM/yyyy"
-                          Min="@DateTime.Now" Style="width:250px" />
-        <ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
-        <RadzenRequiredValidator Component="StartDateInput" Text="Start dato skal sættes" />
-    </RadzenStack>
+	<RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+		<RadzenDatePicker Name="StartDateInput" @bind-Value="_guestBookingModel.StartDate" DateFormat="dd/MM/yyyy"
+						  Min="@DateTime.Now" Style="width:250px" />
+		<ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
+		<RadzenRequiredValidator Component="StartDateInput" Text="Start dato skal sættes" />
+	</RadzenStack>
 
-    @* EndDate *@
+	@* EndDate *@
 
-    <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-        <RadzenDatePicker Name="EndDateInput" @bind-Value="_guestBookingModel.EndDate" DateFormat="dd/MM/yyyy"
-                          Min="@DateTime.Now" Style="width:250px" />
-        <ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
-        <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
-    </RadzenStack>
+	<RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+		<RadzenDatePicker Name="EndDateInput" @bind-Value="_guestBookingModel.EndDate" DateFormat="dd/MM/yyyy"
+						  Min="@DateTime.Now" Style="width:250px" />
+		<ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
+		<RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
+	</RadzenStack>
 
-    <RadzenButton Text="Opret booking" Click="GuestEnteredCorrectInfoConfirmationPopup" ButtonType="ButtonType.Submit"/>
+	<RadzenButton Text="Opret booking" ButtonType="ButtonType.Submit" />
 
 </RadzenTemplateForm>
 
-@* <p>Message: @_guestBookingMessage</p> *@
+<p>Message: @_guestBookingMessage</p>
 
 @code
 {
+	private async Task GuestEnteredCorrectInfoConfirmationPopup()
+	{
+		// Find selected resource
+		var selectedResource = _listOfResources.First(r => r.Id == _guestBookingModel.ResourceId);
+		_guestBookingModel.Resource = selectedResource;
 
-    private async Task GuestEnteredCorrectInfoConfirmationPopup()
-    {
-        // Find selected resource
-        var selectedResource = _listOfResources.FirstOrDefault(r => r.Id == _guestBookingModel.ResourceId);
-        _guestBookingModel.Resource = selectedResource;
+		// Open confirmation dialog
+		var result = await _dialogService.OpenAsync("Oprettelse af ny booking", ds => @<RadzenStack Gap="1.5rem">
 
-        // Open confirmation dialog
-        var result = await _dialogService.OpenAsync("Oprettelse af ny booking", ds => @<RadzenStack Gap="1.5rem">
+	<h3>Er du sikker på at du vil oprette denne booking?</h3>
 
-            <h3>Er du sikker på at du vil oprette denne booking?</h3>
+	<p><b>Email:</b> @_guestBookingModel.Email</p>
+	<p><b>Ressource:</b> @_guestBookingModel.Resource.Name</p>
+	<p><b>Start:</b> @_guestBookingModel.StartDate</p>
+	<p><b>Slut:</b> @_guestBookingModel.EndDate</p>
+	<p><b>Total pris:</b> @CalculateTotalPrice(_guestBookingModel)</p>
 
-            <p><b>Email:</b> @_guestBookingModel.Email</p>
-            <p><b>Ressource:</b> @_guestBookingModel.Resource.Name</p>
-            <p><b>Start:</b> @_guestBookingModel.StartDate</p>
-            <p><b>Slut:</b> @_guestBookingModel.EndDate</p>
-            <p><b>Total pris:</b> @CalculateTotalPrice(_guestBookingModel)</p>
+	<RadzenStack Orientation="Orientation.Horizontal"
+				 Gap="0.5rem"
+				 AlignItems="AlignItems.Center"
+				 JustifyContent="JustifyContent.SpaceBetween">
 
-            <RadzenStack Orientation="Orientation.Horizontal"
-                         Gap="0.5rem"
-                         AlignItems="AlignItems.Center"
-                         JustifyContent="JustifyContent.SpaceBetween">
+		<RadzenStack Orientation="Orientation.Horizontal">
+			<RadzenButton Text="Ja"
+						  Click="async () => { await GuestCreateBookingAsync(_guestBookingModel); ds.Close(true); }"
+						  Style="width:80px;" />
+			<RadzenButton Text="Nej"
+						  Click="() => ds.Close(false)"
+						  ButtonStyle="ButtonStyle.Light" />
+		</RadzenStack>
 
-                <RadzenStack Orientation="Orientation.Horizontal">
-                    <RadzenButton Text="Ja"
-                                  Click="async () => { await GuestCreateBookingAsync(_guestBookingModel); ds.Close(true); }"
-                                  Style="width:80px;" />
-                    <RadzenButton Text="Nej"
-                                  Click="() => ds.Close(false)"
-                                  ButtonStyle="ButtonStyle.Light" />
-                </RadzenStack>
+	</RadzenStack>
 
-            </RadzenStack>
+</RadzenStack>
 
-        </RadzenStack>
     );
-    }
+	}
 
-    private async Task BookingConfirmationPopup()
-    {
-        await _dialogService.OpenAsync("Booking oprettet", ds => @<div>
-            <h3>Din booking er oprettet!</h3>
+	private async Task BookingConfirmationPopup(BookingCreatedDto bookingCreatedDto)
+	{
+		await _dialogService.OpenAsync("Booking oprettet", ds =>@<div>
+	<h3>Hej @bookingCreatedDto.Guest.FirstName</h3>
 
-            <p>@_guestBookingMessage</p>
+	<p>Velkommen tilbage!</p>
+	<p>Din booking er oprettet for: @bookingCreatedDto.Resource.Name</p>
+	<p><b>Fra:</b>@bookingCreatedDto.StartDate</p>
+	<p><b>Til:</b>@bookingCreatedDto.EndDate</p>
+	<p><b>Pris:</b>@bookingCreatedDto.TotalPrice</p>
 
-            <RadzenButton Text="OK" Click="() => ds.Close()" Style="width:100px" />
-        </div>);
-    }
+	<RadzenButton Text="OK" Click="() => ds.Close()" Style="width:100px" />
+</div>
+    );
+	}
+
+	private async Task BookingErrorPopup(string exMessage)
+	{
+		await _dialogService.OpenAsync("Booking fejl", ds =>@<div>
+	<h3>@exMessage</h3>
+</div>
+    );
+	}
+}
 }

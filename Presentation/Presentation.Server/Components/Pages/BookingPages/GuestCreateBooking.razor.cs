@@ -53,24 +53,17 @@ namespace Presentation.Server.Components.Pages.BookingPages
             GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
 
             // Create the booking
-            IResult<GuestInputDomainDto> result = await _guestCreateBookingService.HandleAsync(dto);
+            IResult<BookingCreatedDto> result = await _guestCreateBookingService.HandleAsync(dto);
 
             if (result.IsSucces() == false)
             {
-                _guestBookingMessage = result.GetError().Exception!.Message;
-                return;
+                await BookingErrorPopup(result.GetError().Exception!.Message);
             }
             else
             {
-                GuestInputDomainDto domainDto = result.GetSuccess().OriginalType;
+                BookingCreatedDto bookingCreatedDto = result.GetSuccess().OriginalType;
 
-                // Message to guest:
-                _guestBookingMessage = @$"Hej {domainDto.Guest.FirstName}
-                                     Velkommen tilbage!
-                                     Din booking er oprettet for: {domainDto.Resource.Name}
-                                     Fra : {domainDto.StartDate}
-                                     Til : {domainDto.EndDate}
-                                     Pris: {domainDto.TotalPrice}";
+                await BookingConfirmationPopup(bookingCreatedDto);
             }
             // Reset the page
             _guestBookingModel = new GuestBookingModel
@@ -78,14 +71,8 @@ namespace Presentation.Server.Components.Pages.BookingPages
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             };
-
-            bool? response = await _dialogService.Alert(_guestBookingMessage, "Resultat!");
-            //bool? response = await _dialogService.Alert(_guestBookingMessage, "Resultat!");
-
-            // Confirm that the booking was created
-            //await BookingConfirmationPopup();
         }
-
+        
         private decimal CalculateTotalPrice(GuestBookingModel guestBookingModel)
         {
             // Today + total days of staying

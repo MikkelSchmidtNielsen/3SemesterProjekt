@@ -12,6 +12,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface IGuestCreateBookingService
     {
-        Task<IResult<GuestInputDomainDto>> HandleAsync(GuestInputDto dto);
+        Task<IResult<BookingCreatedDto>> HandleAsync(GuestInputDto dto);
     }
 }

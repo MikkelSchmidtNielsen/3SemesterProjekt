@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Application.Factories;
+using Common.ResultInterfaces;
+using Domain.Models;
+using Domain.ModelsDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,11 +15,30 @@ namespace UnitTest.Application.UnitTest.FactoryTest
         [Fact]
         public void BookingCreation_ShouldReturnSuccess_WhenGivenCorrectInfo()
         {
-        // Arrange
+            // Arrange
+            BookingFactory factory = new BookingFactory();
+            GuestInputDomainDto dto = new GuestInputDomainDto
+            {
+                Email = "test@test.dk",
+                Guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Denmark", "Danish", "Skovgade 12"),
+                Resource = new Resource(1, "Gaia", "Telt", 100),
+                StartDate = DateOnly.FromDateTime(DateTime.Now),
+                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                TotalPrice = 100
+            };
 
-        // Act
+            // Act
+            IResult<Booking> result = factory.Create(dto);
+            IResultSuccess<Booking> success = result.GetSuccess();
 
-        // Assert
+            // Assert
+            Assert.True(result.IsSucces());
+            Assert.Equal(dto.Email, success.OriginalType.Guest.Email);
+            Assert.Equal(dto.Guest, success.OriginalType.Guest);
+            Assert.Equal(dto.Resource, success.OriginalType.Resource);
+            Assert.Equal(dto.StartDate, success.OriginalType.StartDate);
+            Assert.Equal(dto.EndDate, success.OriginalType.EndDate);
+            Assert.Equal(dto.TotalPrice, success.OriginalType.TotalPrice);
         }
     }
 }
