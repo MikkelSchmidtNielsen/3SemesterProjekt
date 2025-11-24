@@ -14,7 +14,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
         protected override async Task OnInitializedAsync()
         {
             var resultOfMissingCheckIns = await _checkInQuery.GetActiveBookingsWithMissingCheckInsAsync();
-            var resultOfMissingCheckOuts = await _checkOutQuery
+            var resultOfMissingCheckOuts = await _checkOutQuery.GetFinishedBookingsWithMissingCheckOutsAsync();
 
             if (resultOfMissingCheckIns.IsSucces())
             {

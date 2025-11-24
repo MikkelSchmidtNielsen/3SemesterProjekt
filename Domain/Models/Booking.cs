@@ -30,18 +30,28 @@
             ValidateBookingInformation();
 		}
 
-        protected Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
+        //protected Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
+        //{
+        //    GuestId = booking.GuestId;
+        //    ResourceId = booking.ResourceId;
+        //    StartDate = booking.StartDate;
+        //    EndDate = booking.EndDate;
+        //    TotalPrice = booking.TotalPrice;
+        //    Guest = guest;
+        //    Resource = resource;
+        //}
+        protected Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource) // Constructor for unit test.
         {
-            GuestId = booking.GuestId;
-            ResourceId = booking.ResourceId;
-            StartDate = booking.StartDate;
-            EndDate = booking.EndDate;
-            TotalPrice = booking.TotalPrice;
+            GuestId = guestId;
+            ResourceId = resourceId;
+            StartDate = startDate;
+            EndDate = endDate;
+            TotalPrice = totalPrice;
             Guest = guest;
             Resource = resource;
         }
 
-		private void ValidateBookingInformation()
+        private void ValidateBookingInformation()
         {
             // Start date is future
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))
