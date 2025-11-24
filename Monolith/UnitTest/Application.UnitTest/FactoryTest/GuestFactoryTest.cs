@@ -1,14 +1,16 @@
 ﻿using Application.Factories;
+using Application.RepositoryInterfaces;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
+using Moq;
 
 namespace UnitTest.Application.UnitTest.FactoryTest
 {
     public class GuestFactoryTest
     {
         [Fact]
-        public void FactoryCreation_ShouldReturnSuccess_WhenGivenCorrectGuest()
+        public void FactoryCreation_ShouldReturnSuccess_WhenGivenCorrectGuestAndEmailDoesntExist()
         {
             // Arrange
             GuestFactory factory = new GuestFactory();

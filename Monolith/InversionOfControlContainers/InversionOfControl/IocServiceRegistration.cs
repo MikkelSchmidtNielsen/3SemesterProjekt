@@ -35,6 +35,7 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
             services.AddScoped<ISendEmail, SendEmailMailKit>();
             services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
+            services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();

@@ -20,10 +20,18 @@ namespace Persistence.Repository
 		{
 			try
 			{
-				Guest guest = await _db.Guests
-					.FirstAsync(guest => guest.Email == email);
+				Guest? guest = await _db.Guests
+					.FirstOrDefaultAsync(guest => guest.Email == email);
 
-				return Result<string>.Success(guest.Email!);
+				if (guest == null)
+				{
+					return Result<string>.Success(email);
+				}
+				else
+				{
+					Exception ex = new Exception("Email already exist");
+					return Result<string>.Conflict(email, guest.Email!, ex);
+				}
 			}
 			catch (Exception ex)
 			{

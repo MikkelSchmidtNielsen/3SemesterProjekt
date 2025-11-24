@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.RepositoryInterfaces;
 using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
@@ -14,6 +15,13 @@ namespace Application.Factories
 {
 	public class GuestFactory : IGuestFactory
 	{
+		private readonly IGuestRepository _guestRepository;
+
+		public GuestFactory(IGuestRepository guestRepository)
+		{
+			_guestRepository = guestRepository;
+		}
+
 		public IResult<Guest> Create(CreatedGuestDto dto)
 		{
 			Guest guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);

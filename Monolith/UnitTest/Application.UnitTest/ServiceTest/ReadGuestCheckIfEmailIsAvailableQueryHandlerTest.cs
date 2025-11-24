@@ -17,7 +17,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 	public class ReadGuestCheckIfEmailIsAvailableQueryHandlerTest
 	{
 		[Fact]
-		public async Task CheckIfEmailIsAvailable_ShouldReturnSuccess_WhenEmailExistInDatabase()
+		public async Task CheckIfEmailIsAvailable_ShouldReturnSuccess_WhenEmailIsAvailable()
 		{
 			// Arrange
 			string userEmail = "noreply@foxtrox.dk";
@@ -42,5 +42,36 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 			Assert.True(result.IsSucces());
 			Assert.Equal(userEmail, result.GetSuccess().OriginalType.Email);
 		}
+
+		[Fact]
+		public async Task CheckIfEmailIsAvailable_ShouldReturnError_WhenEmailAlreadyExistInDatabase()
+		{
+			// Arrange
+			string userEmail = "noreply@foxtrox.dk";
+			Exception expectedError = new Exception("Email already exist");
+			var readGuestCheckIfEmailExistQueryDto = Impression.Of<ReadGuestCheckIfEmailIsAvailableQueryDto>()
+															.With("Email", userEmail)
+															.WithDefaults()
+															.Create();
+
+			Mock<IGuestRepository> mockGuestRepo = new Mock<IGuestRepository>();
+			mockGuestRepo.
+				Setup(repo => repo.CheckIfEmailIsAvailable(It.IsAny<string>())).
+				ReturnsAsync(Result<string>.Conflict(userEmail, userEmail, expectedError));
+
+			ReadGuestCheckIfEmailIsAvailableQueryHandler sut = new ReadGuestCheckIfEmailIsAvailableQueryHandler
+				(guestRepository: mockGuestRepo.Object);
+
+			// Act
+			IResult<ReadGuestCheckIfEmailIsAvailableResponseDto> result = await sut.HandleAsync(readGuestCheckIfEmailExistQueryDto);
+
+
+			// Assert
+			Assert.True(result.IsError());
+			Assert.Equal(expectedError.GetType(), result.GetError().Exception!.GetType());
+			Assert.Equal(expectedError.Message, result.GetError().Exception!.Message);
+		}
+
+
 	}
 }
