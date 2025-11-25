@@ -16,11 +16,11 @@
 	@* Email *@
 
 	<RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-		<RadzenLabel Component="EmailRequired"> Email
-        <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
+		<RadzenLabel Component="EmailMessage"> Email
+        <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="Har du været her før?" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
         </RadzenLabel>
-		<RadzenTextBox Name="EmailRequired" @bind-Value=@_guestBookingModel.Email Style="width: 100%; max-width: 400px;" />
-        <RadzenRequiredValidator Component="EmailRequired" Text="En gyldig email er påkrævet" />
+		<RadzenTextBox Name="EmailMessage" @bind-Value=@_guestBookingModel.Email Style="width: 100%; max-width: 400px;" />
+        <RadzenRequiredValidator Component="EmailMessage" Text="En gyldig email er påkrævet" />
 	</RadzenStack>
 
 	@* Resources *@
