@@ -8,7 +8,8 @@
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }
-        public bool isCheckedIn { get; set; }
+        public bool isCheckedIn { get; private set; }
+        public bool isCheckedOut { get; private set; }
 
         // Entity Framework
         public Guest Guest { get; private set; } // private set for unit test.
@@ -24,22 +25,22 @@
 			EndDate = endDate;
 			TotalPrice = totalPrice;
             isCheckedIn = false;
+            isCheckedOut = false;
 
             ValidateBookingInformation();
 		}
-
-        protected Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
+        protected Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource) // Constructor for unit test.
         {
-            GuestId = booking.GuestId;
-            ResourceId = booking.ResourceId;
-            StartDate = booking.StartDate;
-            EndDate = booking.EndDate;
-            TotalPrice = booking.TotalPrice;
+            GuestId = guestId;
+            ResourceId = resourceId;
+            StartDate = startDate;
+            EndDate = endDate;
+            TotalPrice = totalPrice;
             Guest = guest;
             Resource = resource;
         }
 
-		private void ValidateBookingInformation()
+        private void ValidateBookingInformation()
         {
             // Start date is future
             if (StartDate < DateOnly.FromDateTime(DateTime.Now))

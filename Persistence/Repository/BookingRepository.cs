@@ -65,6 +65,25 @@ namespace Persistence.Repository
             {
                 return Result<IEnumerable<Booking>>.Error(null, ex);
             }
-        }  
+        }
+
+        public async Task<IResult<IEnumerable<Booking>>> GetFinishedBookingsWithMissingCheckOutsAsync()
+        {
+            try // Tries to retrieve all missed check-outs from today and earlier and return them as a successful result.
+            {
+                IEnumerable<Booking> bookings = await _db.Bookings
+                    .Where(b => !b.isCheckedOut)
+                    .Where(b => b.EndDate <= DateOnly.FromDateTime(DateTime.Now))
+                    .Include(b => b.Guest)
+                    .Include(b => b.Resource)
+                    .ToListAsync();
+
+                return Result<IEnumerable<Booking>>.Success(bookings);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Booking>>.Error(null, ex);
+            }
+        }
     }
 }
