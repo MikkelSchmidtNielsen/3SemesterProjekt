@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Models;
 
 namespace UnitTest.Domain.UnitTest
 {
@@ -25,7 +25,7 @@ namespace UnitTest.Domain.UnitTest
         public void UserCreation_ShouldThrowException_WhenGivenEmailInWrongFormat(string email)
         {
             // Arrange, Act & Assert
-            Assert.Throws<Exception>(() => new User(email));
+            Assert.Throws<ArgumentException>(() => new User(email));
         }
     }
 }

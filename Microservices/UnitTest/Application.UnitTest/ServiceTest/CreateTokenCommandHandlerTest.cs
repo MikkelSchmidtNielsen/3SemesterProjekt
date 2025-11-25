@@ -1,11 +1,10 @@
 ﻿using Application.Services.Command;
 using Common.ResultInterfaces;
-using Domain;
+using Domain.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using UnitTest.UnitTestHelpingTools;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
@@ -15,13 +14,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         public void Handle_ReturnsJwt_WithCorrectClaims()
         {
             // Arrange
+            string email = "test@system.dk";
             string secretKey = "g9V4p2QmL8sT0wZ3D1aH7nK5fR2bE6yJ";
             CreateTokenCommandHandler sut = new CreateTokenCommandHandler(secretKey);
 
-            User user = Impression.Of<User>()
-                .With("Email", "test@system.dk")
-                .WithDefaults()
-                .Create();
+            User user = new User(email);
 
             // Act
             IResult<string> result = sut.Handle(user);

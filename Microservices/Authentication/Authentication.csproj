@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>343b48d0-105d-4ed5-aa9b-ac6cff89273c</UserSecretsId>
@@ -18,8 +18,12 @@
 	  <ProjectReference Include="..\InversionOfControlContainers\InversionOfControlContainers.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Services\" />
+	</ItemGroup>
+
 	<Target Name="NSwag" BeforeTargets="Build">
-		<Exec Command="nswag run OpenApiScript/OpenApiScript.nswag" />
+		<Exec Command="nswag run OpenApiScript/open-api-script.nswag" />
 	</Target>
 
 </Project>

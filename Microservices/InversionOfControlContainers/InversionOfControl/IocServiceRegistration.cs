@@ -1,8 +1,7 @@
-﻿using Application.Factories;
-using Application.RepositoryInterfaces;
+﻿using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.Services.Command;
-using Domain.DomainInterfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
@@ -15,22 +14,23 @@ namespace InversionOfControlContainers.InversionOfControl
         public static void RegisterService(IServiceCollection services, IConfiguration configuration)
         {
             //Add DbContext
-            services.AddDbContext<SqlServerDbContext>();
+            string connString = configuration.GetConnectionString("DefaultConnection") ?? 
+                throw new InvalidOperationException("ConnectionStrings:DefaultConnection is not configured");
+
+            services.AddDbContext<MySqlServerDbContext>(options =>
+            {
+                options.UseMySql(connString, ServerVersion.AutoDetect(connString));
+            });
 
             //Add services
-            services.AddSingleton<ICreateTokenCommandHandler>(
-                new CreateTokenCommandHandler(
-                    secretKey: "g9V4p2QmL8sT0wZ3D1aH7nK5fR2bE6yJ"
-                )
-            );
+            string secretKey = configuration["Jwt:SecretKey"] ?? throw new InvalidOperationException("Jwt:SecretKey is not configured.");
+
+            services.AddScoped<ICreateTokenCommandHandler>(_ => new CreateTokenCommandHandler(secretKey));
 
             services.AddScoped<ICreateUserCommandHandler, CreateUserCommandHandler>();
 
             //Add repositories
             services.AddScoped<IUserRepository, UserRepository>();
-
-            //Add factories
-            services.AddScoped<IUserFactory, UserFactory>();
         }
     }
 }

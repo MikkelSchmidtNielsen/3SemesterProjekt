@@ -1,15 +1,15 @@
-﻿using Domain;
-using Common;
+﻿using Common;
 using Common.ResultInterfaces;
 using Application.RepositoryInterfaces;
+using Domain.Models;
 
 namespace Persistence.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly SqlServerDbContext _db;
+        private readonly MySqlServerDbContext _db;
 
-        public UserRepository(SqlServerDbContext db)
+        public UserRepository(MySqlServerDbContext db)
         {
             _db = db;
         }

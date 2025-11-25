@@ -1,5 +1,5 @@
 ﻿using Common.ResultInterfaces;
-using Domain;
+using Domain.Models;
 
 namespace Application.RepositoryInterfaces
 {
