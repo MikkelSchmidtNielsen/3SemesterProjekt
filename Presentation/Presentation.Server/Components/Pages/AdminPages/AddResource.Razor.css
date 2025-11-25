@@ -1,0 +1,20 @@
+﻿#main-container {
+    background: #fff5f5FF;
+    margin-inline: auto;
+    max-width: fit-content;
+}
+
+#header-text {
+    padding: 24px 24px 0px 24px;
+}
+
+#resource-details-container {
+    margin-inline: auto;
+    max-width: fit-content;
+}
+
+#add-button {
+    padding-right: 20%;
+    padding-bottom: 20px;
+    padding-left: 70%;
+}

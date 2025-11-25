@@ -10,7 +10,10 @@ namespace Application.RepositoryInterfaces
 {
 	public interface IResourceRepository
 	{
-        Task<IResult<Resource>> GetResourceByIdAsync(int id);
-        Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
-    }
+		public Task<IResult<Resource>> GetResourceByResourceNameAsync(string resourceName);
+		public Task<IResult<Resource>> GetResourceByLocationAsync(int resourceLocation);
+		public Task<IResult<Resource>> AddResourceToDBAsync(Resource resource);
+		Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
+		Task<IResult<Resource>> GetResourceByIdAsync(int id);
+	}
 }

@@ -13,7 +13,7 @@ namespace Persistence.EntityFramework.EfModelConfigurations
 
             // Relations
             builder.HasOne(booking => booking.Resource)
-                   .WithMany(resource => resource.Bookings)
+                   .WithMany(resource => resource.Bookings)                       
                    .HasForeignKey(booking => booking.ResourceId)
                    .OnDelete(DeleteBehavior.Restrict);
         }

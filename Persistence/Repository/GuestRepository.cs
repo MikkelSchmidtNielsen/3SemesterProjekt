@@ -4,11 +4,6 @@ using Common.ResultInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
@@ -20,6 +15,40 @@ namespace Persistence.Repository
 		{
 			_db = db;
 		}
+
+		// CREATE
+        public async Task<IResult<Guest>> CreateGuestAsync(Guest guest)
+        {
+			try
+			{
+				await _db.Guests.AddAsync(guest);
+				await _db.SaveChangesAsync();
+
+				return Result<Guest>.Success(guest);
+			}
+			catch (Exception ex)
+			{
+				return Result<Guest>.Error(guest, ex);
+			}
+		}
+
+		// READ
+        public async Task<IResult<Guest>> GetGuestByIdAsync(int id)
+        {
+			try
+			{
+				Guest guest = await _db.Guests
+					.FirstAsync(x => x.Id == id);
+
+				return Result<Guest>.Success(guest);
+			}
+			catch (Exception ex)
+			{
+				// Returns invalid guest with exception
+				return Result<Guest>.Error(originalType: null!, exception: ex);
+			}
+		}
+	}
 
         public async Task<IResult<Guest>> GetGuestByEmailAsync(string email)
         {

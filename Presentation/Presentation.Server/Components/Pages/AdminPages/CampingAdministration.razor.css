@@ -1,0 +1,24 @@
+﻿#main-container {
+    background: #fff5f5FF;
+    margin-inline: auto;
+    max-width: fit-content;
+}
+
+#header-text {
+    padding: 24px 24px 0px 24px;
+    text-align: center;
+}
+
+#current-date{
+    text-align: center;
+}
+
+#buttons{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#booking-table{
+    width: 80%;
+    margin: auto;
+}

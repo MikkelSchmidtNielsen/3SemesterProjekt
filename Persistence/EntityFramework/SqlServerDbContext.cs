@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence.EntityFramework.EfModelConfigurations;
+using Common.ExternalConfig;
 
 namespace Persistence.EntityFramework
 {
