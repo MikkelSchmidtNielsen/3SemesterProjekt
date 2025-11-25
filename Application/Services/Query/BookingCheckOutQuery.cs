@@ -23,12 +23,12 @@ namespace Application.Services.Query
 
         public async Task<IResult<List<BookingMissingCheckOutResponseDto>>> GetFinishedBookingsWithMissingCheckOutsAsync()
         {
-            List<BookingMissingCheckOutResponseDto> missedCheckOuts = new List<BookingMissingCheckOutResponseDto>(); // Creates list for missing check outs
-            IResult<IEnumerable<Booking>> getResultFromRepo = await _repository.GetFinishedBookingsWithMissingCheckOutsAsync();
+            List<BookingMissingCheckOutResponseDto> missedCheckOuts = new List<BookingMissingCheckOutResponseDto>(); // Creates a list for missing check outs.
+            IResult<IEnumerable<Booking>> getResultFromRepo = await _repository.GetFinishedBookingsWithMissingCheckOutsAsync(); // Retrieves bookings with missed checkouts
 
-            if (getResultFromRepo.IsSucces() && getResultFromRepo.GetSuccess().OriginalType.Any())
+            if (getResultFromRepo.IsSucces() && getResultFromRepo.GetSuccess().OriginalType.Any()) // Runs if there are any missing checkouts
             {
-                foreach (var booking in getResultFromRepo.GetSuccess().OriginalType) // Iterates through the list and converts the booking into a dto.
+                foreach (var booking in getResultFromRepo.GetSuccess().OriginalType) // Iterates through the list from the repo and converts the booking into a dto.
                 {
                     BookingMissingCheckOutResponseDto missedCheckOutInfo = new BookingMissingCheckOutResponseDto
                     {
@@ -38,13 +38,13 @@ namespace Application.Services.Query
                         BookingEndDate = booking.EndDate,
                         GuestName = $"{booking.Guest.FirstName} {booking.Guest.LastName}"
                     };
-                    missedCheckOuts.Add(missedCheckOutInfo);
+                    missedCheckOuts.Add(missedCheckOutInfo); // Gets added to the list that the method will return.
                 }
-                return Result<List<BookingMissingCheckOutResponseDto>>.Success(missedCheckOuts);
+                return Result<List<BookingMissingCheckOutResponseDto>>.Success(missedCheckOuts); // Returns list with missing checkouts.
             }
             else
             {
-                return Result<List<BookingMissingCheckOutResponseDto>>.Error(missedCheckOuts, new Exception("Der er ingen manglende udtjekninger."));
+                return Result<List<BookingMissingCheckOutResponseDto>>.Error(missedCheckOuts, new Exception("Der er ingen manglende udtjekninger.")); // Returns an empty list if there are no missing checkouts.
             }
         }
     }
