@@ -63,7 +63,7 @@
                 throw new ArgumentException("Den totale pris kan ikke være negativ");
             }
             // Number of decimals
-            if (DecimalPlaces(TotalPrice) > 2)
+            if (GetNumberOfDecimals(TotalPrice) > 2)
             {
                 throw new ArgumentException("Der er mere end 2 decimaler i tallet");
             }
@@ -73,12 +73,27 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private int DecimalPlaces(decimal value)
+        private int GetNumberOfDecimals(decimal input)
         {
-            value = Math.Abs(value);
-            int[] bits = decimal.GetBits(value);
-            byte scale = (byte)((bits[3] >> 16) & 0x7F);
-            return scale;
+            // Vi starter med at konvertere decimalen til en string: "converted"
+            string converted = input.ToString();
+
+            // Check for at tallet skal indeholde decimaler
+            if (converted.Contains(","))
+            {
+                // .Split() bruges til at dele "converted" ved komma-tallet, resultaterne gemmes i et string[]: "splitString"
+                // Altså har vi nu et string[] med to indhold på to positioner:
+                // 1. position ([0]): Alt før komma-tallet.
+                // 2. position ([1]): Alt efter komma-tallet.
+                string[] splitString = converted.Split(',');
+
+                // .Lenght bruges til at tælle hvor mange chars der findes på "splitString"'s 2. position ([1]),
+                // hvilket giver antallet af decimaler som gemmes som en int: "count".
+                int count = splitString[1].Length;
+
+                return count;
+            }
+            else return 0;
         }
     }
 }
