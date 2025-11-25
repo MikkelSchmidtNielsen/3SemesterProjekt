@@ -37,6 +37,9 @@ namespace Authentication
 
             var app = builder.Build();
 
+            // Ensures that db and tables are created
+            IocServiceRegistration.EnsureDatabaseCreated(app.Services);
+
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -1,12 +1,15 @@
 services:
-  customers-service:
+  authentication-service:
     build:
       context: .
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=server=authdb;port=3306;database=authdb;user=root;password=root
+      - ConnectionStrings__DefaultConnection=server=mysql-db;port=3306;database=authdb;user=root;password=root
+    ports:
+      - "8080:8080"
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
 
   mysql-db:
     image: mysql:8.0
@@ -14,11 +17,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: authdb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - .:/docker-entrypoint-initdb.d
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 3s
 
 volumes:
   mysql_data:

@@ -19,7 +19,7 @@ namespace InversionOfControlContainers.InversionOfControl
 
             services.AddDbContext<MySqlServerDbContext>(options =>
             {
-                options.UseMySql(connString, ServerVersion.AutoDetect(connString));
+                options.UseMySql(connString, new MySqlServerVersion(new Version(8, 0, 43)));
             });
 
             //Add services
@@ -31,6 +31,17 @@ namespace InversionOfControlContainers.InversionOfControl
 
             //Add repositories
             services.AddScoped<IUserRepository, UserRepository>();
+        }
+
+        public static void EnsureDatabaseCreated(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MySqlServerDbContext>();
+
+                // Creates the database and tables
+                context.Database.EnsureCreated();
+            }
         }
     }
 }
