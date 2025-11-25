@@ -1,7 +1,19 @@
 ﻿@using Infrastructure.InternalApiCalls.UserAuthenticationApi
 @inject IUserAuthenticationApi _api
+@rendermode InteractiveServer
+@page "/test"
+
 <h3>Test</h3>
 
-@code {
+<RadzenButton Click="test"></RadzenButton>
 
+<p>Message: </p>
+
+@code {
+    string _response = "";
+
+    private async Task test()
+    {
+        _response = await _api.RegisterUserAsync("mikkelschmidt@msn.com");
+    }
 }
