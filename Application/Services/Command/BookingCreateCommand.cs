@@ -54,7 +54,7 @@ namespace Application.Services.Command
             }
 
             // Create booking
-            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(Mapper.Map<BookingCreateFactoryDto>(dto));
+            IResult<Booking> bookingCreateRequest = _bookingFactory.AdminCreate(Mapper.Map<BookingCreateFactoryDto>(dto));
 
             if (bookingCreateRequest.IsError())
             {
@@ -62,7 +62,7 @@ namespace Application.Services.Command
             }
 
             // Creates booking in db
-            IResult<Booking> repoCreateBookingRequest = await _repository.CreateBookingAsync(bookingCreateRequest.GetSuccess().OriginalType);
+            IResult<Booking> repoCreateBookingRequest = await _repository.AdminCreateBookingAsync(bookingCreateRequest.GetSuccess().OriginalType);
 
             if (repoCreateBookingRequest.IsSucces())
             {

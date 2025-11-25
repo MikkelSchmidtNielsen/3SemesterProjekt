@@ -26,13 +26,8 @@ namespace Domain.Models
             Location = location;
             Description = description;
             IsAvailable = true;
-            Id = resourceId;
-            Name = resourceName;
-            Type = resourceType;
-            BasePrice = resourceBasePrice;
 
             ValidateInformation();
-
         }
 
         public Resource(CreateResourceDto dto)
@@ -53,7 +48,6 @@ namespace Domain.Models
 
         public bool ValidateInformation()
         {
-            if (Name == null)
             if (Id == 0)
             {
                 throw new Exception("Resource ID is 0.");
@@ -62,12 +56,12 @@ namespace Domain.Models
             {
                 throw new Exception("Resource name is null.");
             }
-            else if(Type == null)
+            else if (Type == null)
             {
                 throw new Exception("Resource type is null.");
             }
             else
-        {
+            {
                 return true;
             }
         }

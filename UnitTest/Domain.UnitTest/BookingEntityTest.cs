@@ -13,7 +13,7 @@ namespace UnitTest.Domain.UnitTest
     public class BookingEntityTest
     {
         [Fact]
-        public void BookingCreation_ShouldPass_WhenGivenCorrectInformation()
+        public void AdminBookingCreation_ShouldPass_WhenGivenCorrectInformation()
         {
             // Arrange
             int guestId = 1;
@@ -34,7 +34,7 @@ namespace UnitTest.Domain.UnitTest
         }
 
         [Fact]
-        public void BookingCreation_ShouldFail_WhenGivenStartDateTimeInThePast()
+        public void AdminBookingCreation_ShouldFail_WhenGivenStartDateTimeInThePast()
         {
             // Arrange
             int guestId = 1;
@@ -49,7 +49,7 @@ namespace UnitTest.Domain.UnitTest
         }
 
         [Fact]
-        public void BookingCreation_ShouldFail_WhenGivenStartDateIsEqualToEndDate()
+        public void AdminBookingCreation_ShouldFail_WhenGivenStartDateIsEqualToEndDate()
         {
             // Arrange
             int guestId = 1;
@@ -64,7 +64,7 @@ namespace UnitTest.Domain.UnitTest
         }
 
         [Fact]
-        public void BookingCreation_ShouldFail_WhenGivenStartDateIsBeforeEndDate()
+        public void AdminBookingCreation_ShouldFail_WhenGivenStartDateIsBeforeEndDate()
         {
             // Arrange
             int guestId = 1;
@@ -79,7 +79,7 @@ namespace UnitTest.Domain.UnitTest
         }
 
         [Fact]
-        public void BookingCreation_ShouldFail_WhenGivenTotalPriceIsLessThanZero()
+        public void AdminBookingCreation_ShouldFail_WhenGivenTotalPriceIsLessThanZero()
         {
             // Arrange
             int guestId = 1;
@@ -92,8 +92,7 @@ namespace UnitTest.Domain.UnitTest
             Assert.Throws<ArgumentException>(
                 () => new Booking(guestId, ressourceId, startDate, endDate, totalPrice));
         }
-    }
-}
+
         [Fact]
         public void GuestBooking_ShouldCreate_WhenGivenCorrectInformation()
         {
@@ -107,8 +106,8 @@ namespace UnitTest.Domain.UnitTest
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
-            Booking booking = new Booking(guestId, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
+            Booking booking = new Booking(guestId, resource.Id, startDate, endDate, totalPrice);
 
             // Assert
             Assert.Equal(resourceId, booking.ResourceId);
@@ -121,112 +120,89 @@ namespace UnitTest.Domain.UnitTest
         public void GuestBooking_ShouldFail_WhenStartDateIsInThePast()
         {
             // Arrange
-            int guestId = 1;
-            int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             decimal totalPrice = 1000;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
-                startDate, endDate, totalPrice));
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenStartDateIsGreatherThanEndDate()
         {
             // Arrange
-            int guestId = 1;
-            int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(3));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             decimal totalPrice = 1000;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
-                startDate, endDate, totalPrice));
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenStartDateAndEndDateAreTheSame()
         {
             // Arrange
-            int guestId = 1;
-            int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             decimal totalPrice = 1000;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
-                startDate, endDate, totalPrice));
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenTotalPriceIsNegative()
         {
             // Arrange
-            int guestId = 1;
-            int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             decimal totalPrice = -100;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
-                startDate, endDate, totalPrice));
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenTotalPriceHasMoreThanTwoDecimals()
         {
             // Arrange
-            int guestId = 1;
-            int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             decimal totalPrice = 1000.999m;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName,
-                startDate, endDate, totalPrice));
+            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldPass_WhenTotalPriceHasTwoDecimals()
         {
             // Arrange
-            int guestId = 1;
-            int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             decimal totalPrice = 1000.99m;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
-            Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
+            Booking booking = new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice);
 
             // Assert
             Assert.Equal(totalPrice, booking.TotalPrice);
@@ -237,15 +213,14 @@ namespace UnitTest.Domain.UnitTest
             // Arrange
             int guestId = 1;
             int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             decimal totalPrice = 1000.9m;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
-            Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
+            Booking booking = new Booking(guestId, resourceId, startDate, endDate, totalPrice);
 
             // Assert
             Assert.Equal(totalPrice, booking.TotalPrice);
@@ -256,15 +231,14 @@ namespace UnitTest.Domain.UnitTest
             // Arrange
             int guestId = 1;
             int resourceId = 1;
-
             DateOnly startDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7));
             decimal totalPrice = 1000;
 
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
-            Resource resource = new Resource(resourceId, "Paradis", "Hytte", 500);
-            Booking booking = new Booking(guest.Id, resource.Id, guest.FirstName + guest.LastName, startDate, endDate, totalPrice);
+            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
+            Booking booking = new Booking(guestId, resourceId, startDate, endDate, totalPrice);
 
             // Assert
             Assert.Equal(totalPrice, booking.TotalPrice);

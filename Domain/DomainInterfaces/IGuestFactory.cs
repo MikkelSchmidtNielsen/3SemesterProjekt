@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.ServiceInterfaces.Query
+namespace Domain.DomainInterfaces
 {
-    public interface IGetAllResourcesService
+    public interface IGuestFactory
     {
-        Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
+        IResult<Guest> Create(CreatedGuestDto dto);
     }
 }

@@ -62,7 +62,7 @@ namespace Application.Services.Command
             domainDto.TotalPrice = CalculateTotalPrice(domainDto, resourceResult);
 
             // Create booking
-            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(domainDto);
+            IResult<Booking> bookingCreateRequest = _bookingFactory.GuestCreate(domainDto);
             if (bookingCreateRequest.IsSucces() == false)
             {
                 BookingCreatedDto createdDto = Mapper.Map<BookingCreatedDto>(domainDto);

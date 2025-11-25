@@ -17,7 +17,7 @@ namespace Persistence.Repository
         }
 
 		// CREATE
-        public async Task<IResult<Booking>> CreateBookingAsync(Booking booking)
+        public async Task<IResult<Booking>> AdminCreateBookingAsync(Booking booking)
         {
 			try
 			{
@@ -32,6 +32,22 @@ namespace Persistence.Repository
 			}
 		}
 
+        public async Task<IResult<Booking>> GuestCreateBookingAsync(Booking booking)
+        {
+            try
+            {
+                await _db.Bookings.AddAsync(booking);
+                await _db.SaveChangesAsync();
+
+                return Result<Booking>.Success(booking);
+            }
+            catch (Exception ex)
+            {
+                return Result<Booking>.Error(booking, ex);
+            }
+        }
+
+        // READ
         public async Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
             try // Tries to retrieve all missed check-ins from today and earlier and return them as a successful result.
@@ -49,21 +65,6 @@ namespace Persistence.Repository
             {
                 return Result<IEnumerable<Booking>>.Error(null, ex);
             }
-        }
-
-        public async Task<IResult<Booking>> GuestCreateBookingAsync(Booking booking)
-        {
-            try
-            {
-                await _db.Bookings.AddAsync(booking);
-                await _db.SaveChangesAsync();
-
-                return Result<Booking>.Success(booking);
-            }
-            catch (Exception ex)
-            {
-                return Result<Booking>.Error(booking, ex);
-            }
-        }
+        }  
     }
 }

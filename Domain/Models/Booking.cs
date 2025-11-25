@@ -17,11 +17,10 @@
 
         private Booking() { }
 
-        public Booking(int guestId, int resourceId, string guestName, DateOnly startDate, DateOnly endDate, decimal totalPrice)
+        public Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice)
 		{
 			GuestId = guestId;
 			ResourceId = resourceId;
-			GuestName = guestName;
 			StartDate = startDate;
 			EndDate = endDate;
 			TotalPrice = totalPrice;
@@ -48,45 +47,25 @@
             {
                 throw new ArgumentException("Start datoen kan ikke være i fortiden");
             }
-            // StartDate/EndDate
-            if (StartDate < DateOnly.FromDateTime(DateTime.Now))
-            {
-                throw new Exception("StartDate is in the past.");
-            }
-            if (StartDate > EndDate)
-            {
-                throw new Exception("StartDate is after EndDate.");
-            }
-            if (StartDate == EndDate)
-            {
-                throw new Exception("StartDate and EndDate are on the same date.");
-            }
-
             // Start date is before end date
             if (StartDate > EndDate)
             {
                 throw new ArgumentException("Slut datoen kan ikke være før start datoen");
             }
-
             // Start and end date is different
             if (StartDate == EndDate)
             {
                 throw new ArgumentException("Start dato og slut dato må ikke være på samme dag");
             }
-
             // Total price is positive
             if (TotalPrice < 0)
             {
                 throw new ArgumentException("Den totale pris kan ikke være negativ");
             }
-            //TotalPrice
-            if (TotalPrice < 0)
-            {
-                throw new Exception("TotalPrice is less than zero.");
-            }
+            // Number of decimals
             if (DecimalPlaces(TotalPrice) > 2)
             {
-                throw new Exception("There are more than 2 decimals.");
+                throw new ArgumentException("Der er mere end 2 decimaler i tallet");
             }
         }
         /// <summary>

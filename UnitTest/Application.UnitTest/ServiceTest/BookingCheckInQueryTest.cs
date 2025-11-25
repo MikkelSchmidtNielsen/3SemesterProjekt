@@ -41,8 +41,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             IEnumerable<Booking> bookingList = new List<Booking>() { bookingForTest1, bookingForTest2 };
 
-            bookingRepo.Setup(x => x.CreateBookingAsync(bookingForTest1)).ReturnsAsync(Result<Booking>.Success(bookingForTest1));
-            bookingRepo.Setup(x => x.CreateBookingAsync(bookingForTest2)).ReturnsAsync(Result<Booking>.Success(bookingForTest2));
+            bookingRepo.Setup(x => x.AdminCreateBookingAsync(bookingForTest1)).ReturnsAsync(Result<Booking>.Success(bookingForTest1));
+            bookingRepo.Setup(x => x.AdminCreateBookingAsync(bookingForTest2)).ReturnsAsync(Result<Booking>.Success(bookingForTest2));
             bookingRepo.Setup(x => x.GetActiveBookingsWithMissingCheckInsAsync()).ReturnsAsync(Result<IEnumerable<Booking>>.Success(bookingList));
 
             IBookingCheckInQuery bookingCheckInQuery = new BookingCheckInQuery(bookingRepo.Object);

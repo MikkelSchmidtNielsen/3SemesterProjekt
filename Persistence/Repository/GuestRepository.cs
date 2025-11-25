@@ -48,7 +48,6 @@ namespace Persistence.Repository
 				return Result<Guest>.Error(originalType: null!, exception: ex);
 			}
 		}
-	}
 
         public async Task<IResult<Guest>> GetGuestByEmailAsync(string email)
         {

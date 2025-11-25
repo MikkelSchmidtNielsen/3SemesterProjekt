@@ -11,17 +11,12 @@
 		<ProjectReference Include="..\Domain\Domain.csproj" />
 	</ItemGroup>
 
-  <ItemGroup>
-	  <Folder Include="InfrastructureInterfaces\" />
-	  <Folder Include="ServiceInterfaces\Command\" />
-	  <Folder Include="ServiceInterfaces\Query\" />
-	  <Folder Include="Services\Query\" />
-  </ItemGroup>
-    <Folder Include="ApplicationDto\Query\" />
-    <Folder Include="InfrastructureInterfaces\" />
-  </ItemGroup>
 	<ItemGroup>
 		<Folder Include="InfrastructureInterfaces\" />
+		<Folder Include="ServiceInterfaces\Command\" />
+		<Folder Include="ServiceInterfaces\Query\" />
+		<Folder Include="Services\Query\" />
+		<Folder Include="ApplicationDto\Query\" />
 	</ItemGroup>
 
 </Project>

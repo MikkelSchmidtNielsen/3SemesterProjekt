@@ -6,7 +6,7 @@ namespace Domain.DomainInterfaces
 {
 	public interface IBookingFactory
 	{
-		IResult<Booking> Create(BookingCreateFactoryDto dto);
-		IResult<Booking> Create(GuestInputDomainDto dto);
+		IResult<Booking> AdminCreate(BookingCreateFactoryDto dto);
+		IResult<Booking> GuestCreate(GuestInputDomainDto dto);
 	}
 }

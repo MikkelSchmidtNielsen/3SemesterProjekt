@@ -33,8 +33,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
 
+            int guestId = 1;
+            int resourceId = 1;
             Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
-            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
             GuestInputDto dto = new GuestInputDto
             {
@@ -47,11 +49,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 Resource = resource,
             };
 
-
             Booking booking = new Booking(
-                1,
-                resource.Id,
-                "Allan",
+                guestId,
+                resourceId,
                 DateOnly.FromDateTime(DateTime.Now),
                 DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
                 300);
@@ -70,7 +70,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.Create(It.IsAny<GuestInputDomainDto>()))
+                .Setup(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             // Mock Booking Repository
@@ -119,8 +119,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
 
+            int guestId = 1;
+            int resourceId = 1;
             Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
-            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
             GuestInputDto dto = new GuestInputDto
             {
@@ -133,11 +135,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 Resource = resource,
             };
 
-
             Booking booking = new Booking(
-                1,
-                resource.Id,
-                "Allan",
+                guestId,
+                resourceId,
                 DateOnly.FromDateTime(DateTime.Now),
                 DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
                 300);
@@ -170,7 +170,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Verify mocks weren't called
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Never());
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<GuestInputDomainDto>()), Times.Never);
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Never);
             bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
@@ -183,8 +183,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
 
+            int guestId = 1;
+            int resourceId = 1;
             Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
-            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
             GuestInputDto dto = new GuestInputDto
             {
@@ -199,9 +201,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 
             Booking booking = new Booking(
-                1,
-                resource.Id,
-                "Allan",
+                guestId,
+                resourceId,
                 DateOnly.FromDateTime(DateTime.Now),
                 DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
                 300);
@@ -239,7 +240,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
 
             // Verify mocks weren't called
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<GuestInputDomainDto>()), Times.Never);
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Never);
             bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
@@ -252,8 +253,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
 
+            int guestId = 1;
+            int resourceId = 1;
             Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
-            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
             GuestInputDto dto = new GuestInputDto
             {
@@ -267,9 +270,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             };
 
             Booking booking = new Booking(
-                1,
-                resource.Id,
-                "Allan",
+                guestId,
+                resourceId,
                 DateOnly.FromDateTime(DateTime.Now),
                 DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
                 300);
@@ -288,7 +290,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.Create(It.IsAny<GuestInputDomainDto>()))
+                .Setup(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()))
                 .Returns(Result<Booking>.Error(booking, bookingException));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -310,7 +312,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             // Verify mock were called
             guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<GuestInputDomainDto>()), Times.Once());
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Once());
             
             // Verify mocks weren't called
 
@@ -326,8 +328,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
 
+            int guestId = 1;
+            int resourceId = 1;
             Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
-            Resource resource = new Resource(1, "Paradis", "Hytte", 150);
+            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
             GuestInputDto dto = new GuestInputDto
             {
@@ -342,9 +346,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 
             Booking booking = new Booking(
-                1,
-                resource.Id,
-                "Allan",
+                guestId,
+                resourceId,
                 DateOnly.FromDateTime(DateTime.Now),
                 DateOnly.FromDateTime(DateTime.Now.AddDays(2)),
                 300);
@@ -361,7 +364,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.Create(It.IsAny<GuestInputDomainDto>()))
+                .Setup(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             Exception bookingRepoException = new Exception("Fejl");
@@ -390,7 +393,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             // Verify mock were called
             guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<GuestInputDomainDto>()), Times.Once());
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Once());
             bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Once());
         }
     }

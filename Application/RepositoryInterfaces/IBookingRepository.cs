@@ -6,7 +6,8 @@ namespace Application.RepositoryInterfaces
 {
     public interface IBookingRepository
     {
-        Task<IResult<Booking>> CreateBookingAsync(Booking booking);
+        Task<IResult<Booking>> AdminCreateBookingAsync(Booking booking);
+        Task<IResult<Booking>> GuestCreateBookingAsync(Booking booking);
         Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync();
     }
 }
