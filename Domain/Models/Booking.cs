@@ -5,7 +5,6 @@
         public int Id { get; init; }
         public int GuestId { get; private set; }
         public int ResourceId { get; private set; }
-        public string GuestName { get; private set; }
         public DateOnly StartDate { get; private set; }
         public DateOnly EndDate { get; private set; }
         public decimal TotalPrice { get; private set; }

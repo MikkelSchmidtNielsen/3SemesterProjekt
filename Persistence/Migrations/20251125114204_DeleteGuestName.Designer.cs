@@ -12,8 +12,8 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251121113021_CampingDB")]
-    partial class CampingDB
+    [Migration("20251125114204_DeleteGuestName")]
+    partial class DeleteGuestName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

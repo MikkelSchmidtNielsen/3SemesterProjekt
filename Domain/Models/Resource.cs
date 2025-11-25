@@ -48,11 +48,7 @@ namespace Domain.Models
 
         public bool ValidateInformation()
         {
-            if (Id == 0)
-            {
-                throw new Exception("Resource ID is 0.");
-            }
-            else if (Name == null)
+            if (Name == null)
             {
                 throw new Exception("Resource name is null.");
             }

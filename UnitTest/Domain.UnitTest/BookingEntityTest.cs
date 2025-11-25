@@ -107,11 +107,10 @@ namespace UnitTest.Domain.UnitTest
             // Act
             Guest guest = new Guest("Allan", "Allansen", 12345678, "aa@aa.dk", "Danmark", "Dansk", "Allanvej 11");
             Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
-            Booking booking = new Booking(guestId, resource.Id, startDate, endDate, totalPrice);
+            Booking booking = new Booking(guestId, resourceId, startDate, endDate, totalPrice);
 
             // Assert
             Assert.Equal(resourceId, booking.ResourceId);
-            Assert.Equal(guest.FirstName + guest.LastName, booking.GuestName);
             Assert.Equal(startDate, booking.StartDate);
             Assert.Equal(endDate, booking.EndDate);
             Assert.Equal(totalPrice, booking.TotalPrice);
@@ -129,7 +128,7 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
+            Assert.Throws<ArgumentException>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenStartDateIsGreatherThanEndDate()
@@ -144,7 +143,7 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
+            Assert.Throws<ArgumentException>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenStartDateAndEndDateAreTheSame()
@@ -159,7 +158,7 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
+            Assert.Throws<ArgumentException>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenTotalPriceIsNegative()
@@ -174,7 +173,7 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
+            Assert.Throws<ArgumentException>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldFail_WhenTotalPriceHasMoreThanTwoDecimals()
@@ -189,7 +188,7 @@ namespace UnitTest.Domain.UnitTest
             Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
 
             // Assert
-            Assert.Throws<Exception>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
+            Assert.Throws<ArgumentException>(() => new Booking(guest.Id, resource.Id, startDate, endDate, totalPrice));
         }
         [Fact]
         public void GuestBooking_ShouldPass_WhenTotalPriceHasTwoDecimals()

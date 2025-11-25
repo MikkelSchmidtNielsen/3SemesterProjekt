@@ -12,8 +12,8 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251119135015_Camping")]
-    partial class Camping
+    [Migration("20251125111256_GuestCreateBookingMerge")]
+    partial class GuestCreateBookingMerge
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,10 @@ namespace Persistence.Migrations
                     b.Property<int>("GuestId")
                         .HasColumnType("int");
 
+                    b.Property<string>("GuestName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
@@ -47,6 +51,9 @@ namespace Persistence.Migrations
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("isCheckedIn")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

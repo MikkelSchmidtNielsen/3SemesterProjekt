@@ -63,7 +63,6 @@ namespace UnitTest.Application.UnitTest.FactoryTest
             // Assert
             Assert.True(result.IsSucces());
             Assert.Equal(dto.Resource.Id, success.OriginalType.ResourceId);
-            Assert.Equal(dto.Guest.FirstName, success.OriginalType.GuestName);
             Assert.Equal(dto.StartDate, success.OriginalType.StartDate);
             Assert.Equal(dto.EndDate, success.OriginalType.EndDate);
             Assert.Equal(dto.TotalPrice, success.OriginalType.TotalPrice);
