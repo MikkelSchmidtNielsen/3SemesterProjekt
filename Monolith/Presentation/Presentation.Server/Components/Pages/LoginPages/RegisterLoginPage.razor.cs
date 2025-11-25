@@ -1,6 +1,8 @@
 ﻿
+using Application.ApplicationDto.Command;
 using Application.ApplicationDto.Query;
 using Azure;
+using Common;
 using Common.ResultInterfaces;
 using Radzen;
 
@@ -43,11 +45,24 @@ namespace Presentation.Server.Components.Pages.LoginPages
 
 		private async Task OnModelSubmitAsync(RegisterModel registerModel)
 		{
+			string number = new string(registerModel.PhoneNumber!.Where(char.IsDigit).ToArray());
 
+			int numberAsInt = Convert.ToInt32(number);
 
+            var dto = Mapper.Map<GuestCreateRequestDto>(registerModel);
+            dto.Email = _email;
+			dto.PhoneNumber = numberAsInt;
 
-			// TODO
-		}
+            var result = await _command.CreateGuestAsync(dto);
+
+            if (result.IsSucces() is false)
+            {
+                SendNotification(NotificationSeverity.Error, "Fejl", "Konto med den email eksitere allerede");
+                return;
+            }
+
+            SendNotification(NotificationSeverity.Success, "Succes", "Konto er nu oprettet");
+        }
 
 		private string? _email;
 		private bool isEmailDisabled = false;

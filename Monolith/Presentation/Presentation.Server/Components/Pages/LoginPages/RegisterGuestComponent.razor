@@ -6,7 +6,7 @@
 
         @* FirstName Input *@
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-            <RadzenFormField Text="Indtast Fornavn" Style="width: auto; max-width: 300px;">
+            <RadzenFormField Text="Indtast fornavn" Style="width: auto; max-width: 300px;">
                 <RadzenTextBox Name="FirstNameRequiredInput" @bind-Value=@RegisterModelComponent.FirstName />
                 <RadzenRequiredValidator Component="FirstNameRequiredInput" Text="Fornavn skal tilføjes"/>
             </RadzenFormField>
@@ -14,7 +14,7 @@
 
         @* LastName Input *@
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-            <RadzenFormField Text="Indtast Efternavn" Style="width: auto; max-width: 300px;">
+            <RadzenFormField Text="Indtast efternavn" Style="width: auto; max-width: 300px;">
                 <RadzenTextBox Name="LastNameRequiredInput" @bind-Value=@RegisterModelComponent.LastName />
                 <RadzenRequiredValidator Component="LastNameRequiredInput" Text="Eternavn skal tilføjes" />
             </RadzenFormField>
@@ -22,15 +22,15 @@
 
         @* PhoneNumber Input *@
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-            <RadzenFormField Text="Indtast Telefon nummber" Style="width: auto; max-width: 300px;">
+            <RadzenFormField Text="Indtast telefonnummer" Style="width: auto; max-width: 300px;">
                 <RadzenMask Name="PhoneNumberRequiredInput" Mask="** ** ** **" CharacterPattern="[0-9]" @bind-Value=@RegisterModelComponent.PhoneNumber> </RadzenMask>
-                <RadzenRequiredValidator Component="PhoneNumberRequiredInput" Text="Telefon nummer skal tilføjes" />
+                <RadzenRequiredValidator Component="PhoneNumberRequiredInput" Text="Telefonnummer skal tilføjes" />
             </RadzenFormField>
         </RadzenStack>
 
         @* Country Input *@
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-            <RadzenFormField Text="Indtast Land" Style="width: auto; max-width: 300px;">
+            <RadzenFormField Text="Indtast land" Style="width: auto; max-width: 300px;">
                 <RadzenTextBox Name="CountryRequiredInput" @bind-Value=@RegisterModelComponent.Country Style="width: 100%; max-width: 400px;" />
                 <RadzenRequiredValidator Component="CountryRequiredInput" Text="Land skal tilføjes" />
             </RadzenFormField>
@@ -38,7 +38,7 @@
 
         @* Language Input *@
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-            <RadzenFormField Text="Indtast Sprog" Style="width: auto; max-width: 300px;">
+            <RadzenFormField Text="Indtast sprog" Style="width: auto; max-width: 300px;">
                 <RadzenTextBox Name="LanguageRequiredInput" @bind-Value=@RegisterModelComponent.Language Style="width: 100%; max-width: 400px;" />
                 <RadzenRequiredValidator Component="LanguageRequiredInput" Text="Sprog skal tilføjes" />
             </RadzenFormField>
@@ -46,7 +46,7 @@
 
         @* Address Input *@
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-            <RadzenFormField Text="Indtast Adresse" Style="width: auto; max-width: 300px;">
+            <RadzenFormField Text="Indtast adresse" Style="width: auto; max-width: 300px;">
                 <RadzenTextBox Name="AdressRequiredInput" @bind-Value=@RegisterModelComponent.Address Style="width: 100%; max-width: 400px;" />
                 <RadzenRequiredValidator Component="AdressRequiredInput" Text="Address skal tilføjes" />
             </RadzenFormField>
