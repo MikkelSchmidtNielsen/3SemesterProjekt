@@ -29,17 +29,6 @@
 
             ValidateBookingInformation();
 		}
-
-        //protected Booking(Booking booking, Guest guest, Resource resource) // Constructor for unit test.
-        //{
-        //    GuestId = booking.GuestId;
-        //    ResourceId = booking.ResourceId;
-        //    StartDate = booking.StartDate;
-        //    EndDate = booking.EndDate;
-        //    TotalPrice = booking.TotalPrice;
-        //    Guest = guest;
-        //    Resource = resource;
-        //}
         protected Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource) // Constructor for unit test.
         {
             GuestId = guestId;
