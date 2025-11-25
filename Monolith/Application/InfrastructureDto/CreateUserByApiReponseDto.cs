@@ -11,6 +11,6 @@ namespace Application.InfrastructureDto
 		/// <summary>
 		/// JSON Web Token (JWT) til brug ved login/autorisation
 		/// </summary>
-		public string JwtToken { get; set; } = string.Empty;
+		public string JwtToken { get; set; }
 	}
 }

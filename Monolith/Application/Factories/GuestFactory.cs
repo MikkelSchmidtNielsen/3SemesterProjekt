@@ -22,10 +22,16 @@ namespace Application.Factories
 			_guestRepository = guestRepository;
 		}
 
-		public IResult<Guest> Create(CreatedGuestDto dto)
+		public async Task<IResult<Guest>> CreateAsync(CreatedGuestDto dto)
 		{
-			Guest guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);
+			var repoResult = await _guestRepository.CheckIfEmailIsAvailable(dto.Email!);
 
+			if (repoResult.IsSucces() is false)
+			{
+				return Result<Guest>.Error(null, new Exception("Email already exist"));
+			}
+
+			Guest guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);
 			return Result<Guest>.Success(guest);
 		}
 	}
