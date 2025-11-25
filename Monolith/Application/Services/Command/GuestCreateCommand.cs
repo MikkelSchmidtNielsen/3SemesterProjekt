@@ -57,7 +57,9 @@ namespace Application.Services.Command
             if (apiResult.IsSucces() is false)
             {
                 _uow.Rollback();
-                return result;
+
+                var apiException = apiResult.GetError().Exception;
+                return Result<Guest>.Error(guest, apiException!);
             }
 
             _uow.Commit();
