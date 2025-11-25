@@ -3,8 +3,11 @@ using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
+using Microsoft.VisualBasic;
 using Org.BouncyCastle.Asn1.Cmp;
 using Radzen;
+using Radzen.Blazor;
+using System.Globalization;
 
 namespace Presentation.Server.Components.Pages.AdminPages
 {
@@ -120,6 +123,10 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 Guest = new GuestCreateRequestDto()
             };
+
+            _tempResource = null;
+            _tempTotalPrice = 0;
+            await ShowDialog();
         }
 
     }

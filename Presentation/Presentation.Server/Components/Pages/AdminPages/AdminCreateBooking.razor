@@ -73,7 +73,7 @@
             </RadzenStack>
         </RadzenTemplateForm>
 
-        <p>Message: @_bookingResult</p>
+@*         <p>Message: @_bookingResult</p> *@
     </div>
     <div id="preview-content">
         <h3 class="text-center padding-10px">Ordreoversigt</h3>
@@ -97,3 +97,20 @@
 
     </div>
 </div>
+
+@code{
+    private async Task ShowDialog()
+	{
+		var result = await DialogService.OpenAsync("Oprettelse af booking", ds =>
+		@<RadzenStack Gap="1.5rem">
+            <h3>@_bookingResult</h3>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ok" Click="() => ds.Close(true)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+	    );
+    }
+}
