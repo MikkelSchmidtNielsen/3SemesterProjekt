@@ -13,15 +13,15 @@ namespace Persistence
 {
 	public class UnitOfWork : IUnitOfWork
 	{
-		protected readonly DbContext _dbContext;
+		protected readonly SqlServerDbContext _dbContext;
 		protected IDbContextTransaction? _transaction;
 
-		public UnitOfWork(DbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+        public UnitOfWork(SqlServerDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
-		public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.Serializable)
+        public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.Serializable)
 		{
 			if (_dbContext.Database.CurrentTransaction != null)
 			{

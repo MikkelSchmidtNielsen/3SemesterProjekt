@@ -12,6 +12,7 @@ using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence;
 using Persistence.EntityFramework;
 using Persistence.Repository;
 using Refit;
@@ -46,7 +47,9 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IBookingFactory, BookingFactory>();
             services.AddScoped<IResourceFactory, ResourceFactory>();
             services.AddScoped<IGuestFactory, GuestFactory>();
-        
+
+            //Add UnitOfWork
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             HttpClientModule.RegisterHttpClients(services, configuration);
 		}
