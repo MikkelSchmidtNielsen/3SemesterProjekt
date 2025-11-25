@@ -16,8 +16,31 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
+		public async Task<IResult<string>> CheckIfEmailIsAvailable(string email)
+		{
+			try
+			{
+				Guest? guest = await _db.Guests
+					.FirstOrDefaultAsync(guest => guest.Email == email);
+
+				if (guest == null)
+				{
+					return Result<string>.Success(email);
+				}
+				else
+				{
+					Exception ex = new Exception("Email already exist");
+					return Result<string>.Conflict(email, guest.Email!, ex);
+				}
+			}
+			catch (Exception ex)
+			{
+				return Result<string>.Error(email, ex);
+			}
+		}
+
 		// CREATE
-        public async Task<IResult<Guest>> CreateGuestAsync(Guest guest)
+		public async Task<IResult<Guest>> CreateGuestAsync(Guest guest)
         {
 			try
 			{

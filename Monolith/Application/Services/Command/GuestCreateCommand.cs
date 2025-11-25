@@ -1,4 +1,6 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.InfrastructureDto;
+using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Common;
@@ -13,26 +15,54 @@ namespace Application.Services.Command
     {
         IGuestFactory _guestFactory;
         IGuestRepository _repo;
+        IUnitOfWork _uow;
+        IUserAuthenticationApiService _userAuthenticationApiService;
 
-        public GuestCreateCommand(IGuestFactory guestFactory, IGuestRepository repo)
+		public GuestCreateCommand(IGuestFactory guestFactory, IGuestRepository repo, IUnitOfWork uow, IUserAuthenticationApiService userAuthenticationApiService)
         {
             _guestFactory = guestFactory;
             _repo = repo;
+            _uow = uow;
+            _userAuthenticationApiService = userAuthenticationApiService;
         }
 
         public async Task<IResult<Guest>> CreateGuestAsync(GuestCreateRequestDto guestCreateDto)
         {
+            // Check via Factory
             CreatedGuestDto dto = Mapper.Map<CreatedGuestDto>(guestCreateDto);
 
-            IResult<Guest> result = _guestFactory.Create(dto);
+            IResult<Guest> result = await _guestFactory.CreateAsync(dto);
 
-            if (result.IsSucces())
+            if(result.IsSucces() is false)
             {
-                Guest guest = result.GetSuccess().OriginalType;
-
-                result = await _repo.CreateGuestAsync(guest);
+                return result;
             }
 
+            // Creates in Database, but starts transaction, so we can rollback if Api call fails
+            _uow.BeginTransaction();
+
+			Guest guest = result.GetSuccess().OriginalType;
+
+			result = await _repo.CreateGuestAsync(guest);
+
+			if (result.IsSucces() is false)
+			{
+                _uow.Rollback();
+                return result;
+			}
+
+            // Notify our Api with new User
+            IResult<CreateUserByApiReponseDto> apiResult = await _userAuthenticationApiService.RegisterUserAsync(guestCreateDto.Email!);
+
+            if (apiResult.IsSucces() is false)
+            {
+                _uow.Rollback();
+
+                var apiException = apiResult.GetError().Exception;
+                return Result<Guest>.Error(guest, apiException!);
+            }
+
+            _uow.Commit();
             return result;
         }
     }
