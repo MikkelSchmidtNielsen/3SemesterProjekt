@@ -29,15 +29,13 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
 
-            Booking booking1 = new Booking(1, 1, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(4)), 3000);
-            Booking booking2 = new Booking(2, 2, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(6)), 9000);
             Guest guest1 = new Guest("Jens", "Jensen", null, null, null, null, null);
             Guest guest2 = new Guest("Birger", null, null, null, null, null, null);
             Resource resource1 = new Resource("Luksushytte", "Hytte", 400, 1, null);
             Resource resource2 = new Resource("Hyggeplads", "Plads", 200, 2, null);
 
-            var bookingForTest1 = BookingCheckInQueryTestHelper.CreateBookingWithResourceAndGuest(booking1, guest1, resource1);
-            var bookingForTest2 = BookingCheckInQueryTestHelper.CreateBookingWithResourceAndGuest(booking2 , guest2, resource2);
+            var bookingForTest1 = BookingCheckInAndOutQueryTestHelper.CreateBookingWithResourceAndGuest(1, 1, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(4)), 3000, guest1, resource1);
+            var bookingForTest2 = BookingCheckInAndOutQueryTestHelper.CreateBookingWithResourceAndGuest(2, 2, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now.AddDays(6)), 9000, guest2, resource2);
 
             IEnumerable<Booking> bookingList = new List<Booking>() { bookingForTest1, bookingForTest2 };
 
