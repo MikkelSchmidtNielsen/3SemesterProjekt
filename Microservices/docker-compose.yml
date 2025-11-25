@@ -1,10 +1,10 @@
 services:
   customers-service:
     build:
-      context: ./Authentication
+      context: .
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=server=auth-db;port=3306;database=auth-db;user=root;password=root
+      - ConnectionStrings__DefaultConnection=server=authdb;port=3306;database=authdb;user=root;password=root
     depends_on:
       - mysql-db
 
@@ -13,12 +13,12 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: auth-db
+      MYSQL_DATABASE: authdb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d
+      - .:/docker-entrypoint-initdb.d
 
 volumes:
   mysql_data:
