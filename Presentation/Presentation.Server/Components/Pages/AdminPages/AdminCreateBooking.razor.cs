@@ -3,6 +3,7 @@ using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
+using Org.BouncyCastle.Asn1.Cmp;
 using Radzen;
 
 namespace Presentation.Server.Components.Pages.AdminPages
@@ -43,6 +44,12 @@ namespace Presentation.Server.Components.Pages.AdminPages
             }
 		}
 
+        private void UpdateBookingPreview(int resourceId, DateOnly startDate, DateOnly endDate)
+        {
+            GetResourceNameById(resourceId);
+            CalculateTempPrice(resourceId, startDate, endDate);
+        }
+
         private void GetResourceNameById(int resourceId)
         {
             foreach (Resource resource in _resources)
@@ -50,6 +57,19 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 if (resource.Id == resourceId)
                 {
                     _tempResource = resource.Name;
+                    break;
+                }
+            }
+        }
+        private void CalculateTempPrice(int resourceId, DateOnly startDate, DateOnly endDate)
+        {
+            int days = endDate.DayNumber - startDate.DayNumber + 1;
+
+            foreach (Resource resource in _resources)
+            {
+                if (resource.Id == resourceId)
+                {
+                    _tempTotalPrice = resource.BasePrice * days;
                     break;
                 }
             }
@@ -101,6 +121,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 Guest = new GuestCreateRequestDto()
             };
         }
+
     }
 
     internal class BookingModel

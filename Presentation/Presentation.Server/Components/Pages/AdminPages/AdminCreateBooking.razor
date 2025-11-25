@@ -41,7 +41,7 @@
                     <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
                     @if (_resources != null && _resources.Any())
                     {
-                        <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Change="() => GetResourceNameById(_bookingModel.ResourceId)" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+                        <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
                     }
                     else
                     {
@@ -53,7 +53,7 @@
                     <RadzenLabel Component="StartDateInput">
                         Start dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
                     </RadzenLabel>
-                    <RadzenDatePicker Name="StartDateInput" @bind-Value="_bookingModel.StartDate" DateFormat="dd/MM/yyyy"
+                    <RadzenDatePicker Name="StartDateInput" @bind-Value="_bookingModel.StartDate" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" DateFormat="dd/MM/yyyy"
                                       Min="@DateTime.Now" Style="width:250px" />
                     <ValidationMessage For="@(() => _bookingModel.StartDate)" />
                     <RadzenRequiredValidator Component="StartDateInput" Text="Start dato skal sættes" />
@@ -63,7 +63,7 @@
                     <RadzenLabel Component="EndDateInput">
                         Slut dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
                     </RadzenLabel>
-                    <RadzenDatePicker Name="EndDateInput" @bind-Value="_bookingModel.EndDate" DateFormat="dd/MM/yyyy"
+                    <RadzenDatePicker Name="EndDateInput" @bind-Value="_bookingModel.EndDate" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" DateFormat="dd/MM/yyyy"
                                       Min="@DateTime.Now" Style="width:250px" />
                     <ValidationMessage For="@(() => _bookingModel.StartDate)" />
                     <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
@@ -90,6 +90,7 @@
             <p><b>Mail: </b>@_bookingModel.Guest.Email</p>
 
             <hr />
+
             <p><b>Subtotal:</b></p>
             <h4>@_tempTotalPrice</h4>
         </div>
