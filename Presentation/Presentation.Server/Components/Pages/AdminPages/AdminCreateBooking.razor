@@ -41,7 +41,7 @@
                     <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
                     @if (_resources != null && _resources.Any())
                     {
-                        <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+                        <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Change="() => GetResourceNameById(_bookingModel.ResourceId)" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
                     }
                     else
                     {
@@ -80,7 +80,7 @@
 
         <div id="booking-preview">
 
-            <b><p>@_bookingModel.ResourceId</p></b>
+            <b><p>@_tempResource</p></b>
             <p><b>Ankomst: </b>@_bookingModel.StartDate</p>
             <p><b>Afrejse: </b>@_bookingModel.EndDate</p>
 
