@@ -9,6 +9,9 @@ namespace Presentation.Server.Components.Pages.AdminPages
 {
     public partial class AdminCreateBooking
     {
+        private decimal _tempTotalPrice;
+        private string? _tempResource;
+
         string _bookingResult = "";
 
         IEnumerable<Resource> _resources = Array.Empty<Resource>();
@@ -39,6 +42,18 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 await DialogService.Alert(message, "Error");
             }
 		}
+
+        private void GetResourceNameById(int resourceId)
+        {
+            foreach (Resource resource in _resources)
+            {
+                if (resource.Id == resourceId)
+                {
+                    _tempResource = resource.Name;
+                    break;
+                }
+            }
+        }
 
         private async Task CreateBookingAsync(BookingModel model)
         {
