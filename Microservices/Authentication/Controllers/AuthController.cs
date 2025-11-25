@@ -29,7 +29,7 @@ namespace OpenAPITest.Controllers
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public interface IUserControllerController
+    public interface IAuthController
     {
 
 
@@ -42,11 +42,11 @@ namespace OpenAPITest.Controllers
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
 
-    public partial class UserControllerController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public partial class AuthController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
-        private IUserControllerController _implementation;
+        private IAuthController _implementation;
 
-        public UserControllerController(IUserControllerController implementation)
+        public AuthController(IAuthController implementation)
         {
             _implementation = implementation;
         }

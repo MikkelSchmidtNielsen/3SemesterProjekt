@@ -1,4 +1,4 @@
-using Authentication.Services;
+using Authentication.Controllers;
 using InversionOfControlContainers.InversionOfControl;
 using Microsoft.IdentityModel.Tokens;
 using OpenAPITest.Controllers;
@@ -13,8 +13,10 @@ namespace Authentication
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddScoped<IUserControllerController, TokenService>();
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
+
+            // NSwag-generated interface implementation
+            builder.Services.AddScoped<IAuthController, AuthControllerImplementation>();
 
             builder.Services.AddControllers();
 
@@ -24,13 +26,9 @@ namespace Authentication
                     var config = builder.Configuration.GetSection("Jwt");
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = "https://yourissuer.com",
-                        ValidAudience = "Audience",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key")),
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
                         ClockSkew = TimeSpan.Zero
                     };
                 });
@@ -39,12 +37,8 @@ namespace Authentication
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-
-            //app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

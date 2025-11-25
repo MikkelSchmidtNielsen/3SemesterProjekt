@@ -1,48 +1,42 @@
-﻿using Application.RepositoryInterfaces;
+﻿using Application.ApplicationDto;
+using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Common;
 using Common.ResultInterfaces;
-using Domain;
-using Domain.DomainInterfaces;
-using Domain.ModelsDto;
+using Domain.Models;
 
 namespace Application.Services.Command
 {
     public class CreateUserCommandHandler : ICreateUserCommandHandler
     {
         private readonly IUserRepository _repository;
-        private readonly IUserFactory _factory;
         private readonly ICreateTokenCommandHandler _tokenHandler;
 
-        public CreateUserCommandHandler(IUserRepository repository, IUserFactory factory, ICreateTokenCommandHandler tokenHandler)
+        public CreateUserCommandHandler(IUserRepository repository, ICreateTokenCommandHandler tokenHandler)
         {
             _repository = repository;
-            _factory = factory;
             _tokenHandler = tokenHandler;
         }
 
-        public async Task<IResult<CreateUserResponseDto>> Handle(string email)
+        public async Task<IResult<CreateUserResponseDto>> Handle(string command)
         {
             // Creates dto to handle different returns
             CreateUserResponseDto dto = new CreateUserResponseDto();
-            dto.Email = email;
+            dto.Email = command;
 
             // Find existing user
             // NOT IMPLEMENTET YET
 
-            // Create user by factory
-            IResult<User> userResponse = _factory.Create(dto);
+            User user;
 
-            if (userResponse.IsSuccess() == false)
+            try
             {
-                // Get exception
-                Exception exception = userResponse.GetError().Exception!;
-
-                return Result<CreateUserResponseDto>.Error(dto, exception);
+                user = new User(dto.Email);
             }
-
-            // Get factory success
-            User user = userResponse.GetSuccess().OriginalType;
+            catch (Exception ex)
+            {
+                return Result<CreateUserResponseDto>.Error(dto, ex);
+            }
 
             // Create user in DB
             IResult<User> repoResponse = await _repository.CreateUserAsync(user);
@@ -52,7 +46,9 @@ namespace Application.Services.Command
                 // Get exception
                 Exception exception = repoResponse.GetError().Exception!;
 
-                return Result<CreateUserResponseDto>.Error(dto, exception);
+                CreateUserResponseDto createdUser = Mapper.Map<CreateUserResponseDto>(dto);
+
+                return Result<CreateUserResponseDto>.Error(createdUser, exception);
             }
 
             // Get repo success
@@ -66,7 +62,9 @@ namespace Application.Services.Command
                 // Get exception
                 Exception exception = tokenResponse.GetError().Exception!;
 
-                return Result<CreateUserResponseDto>.Error(dto, exception);
+                CreateUserResponseDto createdUser = Mapper.Map<CreateUserResponseDto>(dto);
+
+                return Result<CreateUserResponseDto>.Error(createdUser, exception);
             }
             else
             {
@@ -76,8 +74,10 @@ namespace Application.Services.Command
                 // Add token to dto
                 dto.Token = token;
 
+                CreateUserResponseDto createdUser = Mapper.Map<CreateUserResponseDto>(dto);
+
                 // Return end result
-                return Result<CreateUserResponseDto>.Success(dto);
+                return Result<CreateUserResponseDto>.Success(createdUser);
             }
         }
     }

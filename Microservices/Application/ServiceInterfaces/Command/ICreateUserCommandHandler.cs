@@ -1,5 +1,5 @@
-﻿using Common.ResultInterfaces;
-using Domain.ModelsDto;
+﻿using Application.ApplicationDto;
+using Common.ResultInterfaces;
 
 namespace Application.ServiceInterfaces.Command
 {

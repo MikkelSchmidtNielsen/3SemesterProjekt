@@ -1,4 +1,4 @@
-﻿namespace Domain.ModelsDto
+﻿namespace Application.ApplicationDto
 {
     public class CreateUserResponseDto
     {
