@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Common.ResultInterfaces;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace Application.InfrastructureInterfaces
 {
 	public interface ISendEmail
 	{
-		public enum EmailSubject { OrderConfirmation }
-		public IResult<SendEmailCommandDto> SendEmail(SendEmailCommandDto dto);
+		public IResult<ISendEmailSpecification> SendEmail(ISendEmailSpecification emailSpecification);
 	}
 }

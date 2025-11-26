@@ -1,5 +1,6 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureInterfaces;
+using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -72,7 +73,9 @@ namespace Application.Services.Command
                     Guest emailGuest = guestCreateRequest.GetSuccess().OriginalType;
                     Resource emailResource = resourceQueryRequest.GetSuccess().OriginalType;
 
-                    var emailResult = SendEmail(emailBooking, emailGuest, emailResource);
+					SendOrderConfirmationEmail emailSpecification = new SendOrderConfirmationEmail(emailBooking, emailGuest, emailResource);
+
+					var emailResult = _sendEmail.SendEmail(emailSpecification);
 
 					if (!emailResult.IsSucces())
 					{
@@ -106,20 +109,6 @@ namespace Application.Services.Command
 
             return guestResult;
         }
-        private IResult<SendEmailCommandDto> SendEmail(Booking booking, Guest guest, Resource resource)
-        {
-			SendEmailCommandDto emailDto = new SendEmailCommandDto()
-			{
-				Subject = ISendEmail.EmailSubject.OrderConfirmation,
-				Booking = booking,
-				Guest = guest,
-				Resource = resource
-			};
-
-			var emailResult = _sendEmail.SendEmail(emailDto);
-
-            return emailResult;
-		}
 
         /// <summary>
         /// Calculates and adds price to dto
