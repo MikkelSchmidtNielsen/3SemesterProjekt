@@ -1,4 +1,6 @@
-﻿namespace Domain.Models
+﻿using System.Globalization;
+
+namespace Domain.Models
 {
     public class Booking
     {
@@ -76,16 +78,16 @@
         private int GetNumberOfDecimals(decimal input)
         {
             // Vi starter med at konvertere decimalen til en string: "converted" ja
-            string converted = input.ToString();
+            string converted = input.ToString(CultureInfo.InvariantCulture);
 
             // Check for at tallet skal indeholde decimaler
-            if (converted.Contains(","))
+            if (converted.Contains("."))
             {
                 // .Split() bruges til at dele "converted" ved komma-tallet, resultaterne gemmes i et string[]: "splitString"
                 // Altså har vi nu et string[] med to indhold på to positioner:
                 // 1. position ([0]): Alt før komma-tallet.
                 // 2. position ([1]): Alt efter komma-tallet.
-                string[] splitString = converted.Split(',');
+                string[] splitString = converted.Split('.');
 
                 // .Lenght bruges til at tælle hvor mange chars der findes på "splitString"'s 2. position ([1]),
                 // hvilket giver antallet af decimaler som gemmes som en int: "count".
