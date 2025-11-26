@@ -63,7 +63,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Resource Repository
             resourceRepo
-                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .Setup(repo => repo.GetResourceByIdAsync(dto.Resource.Id))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
             CreateBookingByGuestFactoryDto domainDto = Mapper.Map<CreateBookingByGuestFactoryDto>(dto);
@@ -216,7 +216,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Resource Repository
             resourceRepo
-                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .Setup(repo => repo.GetResourceByIdAsync(dto.Resource.Id))
                 .ReturnsAsync(Result<Resource>.Error(null!, resourceException));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -283,7 +283,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Resource Repository
             resourceRepo
-                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .Setup(repo => repo.GetResourceByIdAsync(dto.Resource.Id))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
             Exception bookingException = new Exception("Fejl");
@@ -359,7 +359,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Resource Repository
             resourceRepo
-                .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
+                .Setup(repo => repo.GetResourceByIdAsync(dto.Resource.Id))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
             // Mock Booking Factory
