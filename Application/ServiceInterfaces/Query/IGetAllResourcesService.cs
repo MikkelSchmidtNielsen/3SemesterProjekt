@@ -11,6 +11,6 @@ namespace Application.ServiceInterfaces.Query
 {
     public interface IGetAllResourcesService
     {
-        Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync();
+        Task<IResult<IEnumerable<Resource>>> HandleAsync();
     }
 }

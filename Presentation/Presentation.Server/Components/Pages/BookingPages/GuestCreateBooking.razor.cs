@@ -28,7 +28,7 @@ namespace Presentation.Server.Components.Pages.BookingPages
         // Load resources
         protected override async Task OnInitializedAsync()
         {
-            IResult<IEnumerable<Resource>> result = await _getAllResourcesService.GetAllResourcesAsync();
+            IResult<IEnumerable<Resource>> result = await _getAllResourcesService.HandleAsync();
 
             if (result.IsSucces())
             {
@@ -50,20 +50,20 @@ namespace Presentation.Server.Components.Pages.BookingPages
         private async Task GuestCreateBookingAsync(GuestBookingModel guestBookingModel)
         {
             // Mapping
-            GuestInputDto dto = Mapper.Map<GuestInputDto>(guestBookingModel);
+            CreateBookingByGuestCommandDto dto = Mapper.Map<CreateBookingByGuestCommandDto>(guestBookingModel);
 
             // Create the booking
-            IResult<BookingCreatedDto> result = await _guestCreateBookingService.HandleAsync(dto);
+            IResult<CreateBookingByGuestResponseDto> result = await _guestCreateBookingService.HandleAsync(dto);
 
             if (result.IsSucces() == false)
             {
-                await BookingErrorPopup(result.GetError().Exception!.Message);
+                await BookingErrorPopupAsync(result.GetError().Exception!.Message);
             }
             else
             {
-                BookingCreatedDto bookingCreatedDto = result.GetSuccess().OriginalType;
+                CreateBookingByGuestResponseDto bookingCreatedDto = result.GetSuccess().OriginalType;
 
-                await BookingConfirmationPopup(bookingCreatedDto);
+                await BookingConfirmationPopupAsync(bookingCreatedDto);
             }
             // Reset the page
             _guestBookingModel = new GuestBookingModel
@@ -85,11 +85,9 @@ namespace Presentation.Server.Components.Pages.BookingPages
     internal class GuestBookingModel
     {
         public string Email { get; set; }
-        public int ResourceId { get; set; }
+        public int? ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
-        public decimal TotalPrice { get; set; }
-        public Guest? Guest { get; set; }
         public Resource Resource { get; set; }
     }
 }

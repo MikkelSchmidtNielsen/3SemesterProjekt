@@ -70,7 +70,8 @@ namespace Persistence.Repository
 			}
 			catch (Exception ex)
 			{
-				return Result<Resource>.Error(originalType: null!, exception: ex);
+                // Returns invalid resource with exception
+                return Result<Resource>.Error(originalType: null!, exception: ex);
 			}
 		}
 

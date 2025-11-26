@@ -1,4 +1,4 @@
-﻿@page "/GuestCreateBooking"
+﻿@page "/guest/guest-create-booking"
 @rendermode InteractiveServer
 @inject DialogService _dialogService
 @inject IGetAllResourcesService _getAllResourcesService
@@ -11,7 +11,7 @@
 
 <h3>Opret booking</h3>
 
-<RadzenTemplateForm TItem="GuestBookingModel" Data=@_guestBookingModel Submit="@GuestEnteredCorrectInfoConfirmationPopup">
+<RadzenTemplateForm TItem="GuestBookingModel" Data=@_guestBookingModel Submit="@GuestEnteredCorrectInfoConfirmationPopupAsync">
 
 	@* Email *@
 
@@ -29,12 +29,13 @@
 		<RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
 		@if (_listOfResources != null && _listOfResources.Any())
 		{
-			<RadzenDropDown TValue="int" @bind-Value="_guestBookingModel.ResourceId" Data="_listOfResources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+			<RadzenDropDown TValue="int?" @bind-Value="_guestBookingModel.ResourceId" Data="_listOfResources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
 		}
 		else
 		{
-			<RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" />
+            <RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" Name="DropDownClear" />
 		}
+        <RadzenRequiredValidator Component="DropDownClear" Text="Vælg en ressource" />
 	</RadzenStack>
 
 	@* StartDate *@
@@ -52,7 +53,7 @@
 		<RadzenDatePicker Name="EndDateInput" @bind-Value="_guestBookingModel.EndDate" DateFormat="dd/MM/yyyy"
 						  Min="@DateTime.Now" Style="width:250px" />
 		<ValidationMessage For="@(() => _guestBookingModel.StartDate)" />
-		<RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
+		<RadzenRequiredValidator Component="EndDateInput" Text="Slut dato skal sættes" />
 	</RadzenStack>
 
 	<RadzenButton Text="Opret booking" ButtonType="ButtonType.Submit" />
@@ -63,7 +64,7 @@
 
 @code
 {
-    private async Task GuestEnteredCorrectInfoConfirmationPopup()
+    private async Task GuestEnteredCorrectInfoConfirmationPopupAsync()
     {
         // Find selected resource
         var selectedResource = _listOfResources.First(r => r.Id == _guestBookingModel.ResourceId);
@@ -101,7 +102,7 @@
         );
     }
 
-    private async Task BookingConfirmationPopup(BookingCreatedDto bookingCreatedDto)
+    private async Task BookingConfirmationPopupAsync(CreateBookingByGuestResponseDto bookingCreatedDto)
     {
         await _dialogService.OpenAsync(
             "Booking oprettet",
@@ -126,12 +127,12 @@
         );
     }
 
-    private async Task BookingErrorPopup(string exMessage)
+    private async Task BookingErrorPopupAsync(string exMessage)
     {
         await _dialogService.OpenAsync(
             "Booking fejl",
             ds => @<div>
-                <h3>@exMessage</h3>
+                <h3>"Vi kunne desværre ikke finde din email i databasen"</h3>
             </div>
         );
     }

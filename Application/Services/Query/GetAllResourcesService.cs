@@ -19,7 +19,7 @@ namespace Application.Services.Query
             _repo = repo;
         }
 
-        public Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync()
+        public Task<IResult<IEnumerable<Resource>>> HandleAsync()
         {
             return _repo.GetAllResourcesAsync();
         }

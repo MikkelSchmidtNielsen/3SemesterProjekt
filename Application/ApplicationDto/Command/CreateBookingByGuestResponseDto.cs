@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto.Command
 {
-    public class GuestInputDto
+    public class CreateBookingByGuestResponseDto
     {
-        public string Email { get; set; }
-        public int ResourceId { get; set; }
+        public Guest Guest { get; set; }
+        public Resource Resource { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public decimal TotalPrice { get; set; }
-        public Guest? Guest { get; set; }
-        public Resource Resource { get; set; }
     }
 }

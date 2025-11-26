@@ -46,7 +46,7 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 		{
             // Arrange
             BookingFactory factory = new BookingFactory();
-            GuestInputDomainDto dto = new GuestInputDomainDto
+            CreateBookingByGuestFactoryDto dto = new CreateBookingByGuestFactoryDto
 			{
                 Email = "test@test.dk",
 				Guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Denmark", "Danish", "Skovgade 12"),

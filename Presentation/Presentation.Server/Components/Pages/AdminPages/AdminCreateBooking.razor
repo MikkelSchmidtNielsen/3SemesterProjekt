@@ -39,12 +39,13 @@
             <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
             @if (_resources != null && _resources.Any())
             {
-                <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+                <RadzenDropDown TValue="int?" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
             }
             else
             {
                 <RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" />
             }
+            <RadzenRequiredValidator Component="DropDownClear" Text="Vælg en ressource" />
         </RadzenStack>
 
         <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">

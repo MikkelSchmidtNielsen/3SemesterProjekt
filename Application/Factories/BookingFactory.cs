@@ -14,7 +14,7 @@ namespace Application.Factories
     public class BookingFactory : IBookingFactory
     {
 
-        public IResult<Booking> GuestCreate(GuestInputDomainDto dto)
+        public IResult<Booking> GuestCreate(CreateBookingByGuestFactoryDto dto)
         {
             try
             {

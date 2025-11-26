@@ -17,7 +17,7 @@ namespace Domain.Models
         public Guest Guest { get; private set; } // private set for unit test.
         public Resource Resource { get; private set; } // private set for unit test.
 
-        private Booking() { }
+        protected Booking() { }
 
         public Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice)
 		{
@@ -41,6 +41,7 @@ namespace Domain.Models
             Guest = guest;
             Resource = resource;
         }
+
 
         private void ValidateBookingInformation()
         {
@@ -71,14 +72,14 @@ namespace Domain.Models
             }
         }
         /// <summary>
-        /// Hjælpemetode: Returnerer antallet af decimaler et tal har.
+        /// Returns a number's amount of decimals
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private int GetNumberOfDecimals(decimal input)
+        protected static int GetNumberOfDecimals(decimal TotalPrice)
         {
             // Vi starter med at konvertere decimalen til en string: "converted" ja
-            string converted = input.ToString(CultureInfo.InvariantCulture);
+            string converted = TotalPrice.ToString(CultureInfo.InvariantCulture);
 
             // Check for at tallet skal indeholde decimaler
             if (converted.Contains("."))

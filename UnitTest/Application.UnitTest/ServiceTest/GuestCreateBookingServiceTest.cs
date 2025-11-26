@@ -35,10 +35,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             int guestId = 1;
             int resourceId = 1;
-            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Guest guest = new Guest(firstName: "Allan", lastName:"Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
             Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
-            GuestInputDto dto = new GuestInputDto
+            CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
                 Email = "test@test.dk",
                 ResourceId = 1,
@@ -66,11 +66,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 .Setup(repo => repo.GetResourceByIdAsync(dto.ResourceId))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
-            GuestInputDomainDto domainDto = Mapper.Map<GuestInputDomainDto>(dto);
+            CreateBookingByGuestFactoryDto domainDto = Mapper.Map<CreateBookingByGuestFactoryDto>(dto);
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()))
+                .Setup(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             // Mock Booking Repository
@@ -87,7 +87,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 );
 
             // ExpectedDto
-            BookingCreatedDto expectedDto = new BookingCreatedDto
+            CreateBookingByGuestResponseDto expectedDto = new CreateBookingByGuestResponseDto
             {
                 Guest = domainDto.Guest,
                 Resource = domainDto.Resource,
@@ -97,12 +97,12 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             };
 
             // Act
-            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+            IResult<CreateBookingByGuestResponseDto> result = await sut.HandleAsync(dto);
 
             // Assert
             Assert.True(result.IsSucces());
 
-            BookingCreatedDto success = result.GetSuccess().OriginalType;
+            CreateBookingByGuestResponseDto success = result.GetSuccess().OriginalType;
             Assert.Equal(expectedDto.Guest, success.Guest);
             Assert.Equal(expectedDto.Resource, success.Resource);
             Assert.Equal(expectedDto.StartDate, success.StartDate);
@@ -121,10 +121,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             int guestId = 1;
             int resourceId = 1;
-            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
             Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
-            GuestInputDto dto = new GuestInputDto
+            CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
                 Email = "test@test.dk",
                 ResourceId = 1,
@@ -158,11 +158,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 );
 
             // Act
-            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+            IResult<CreateBookingByGuestResponseDto> result = await sut.HandleAsync(dto);
 
             // Assert
             Assert.True(result.IsError());
-            IResultError<BookingCreatedDto> error = result.GetError();
+            IResultError<CreateBookingByGuestResponseDto> error = result.GetError();
             Assert.Equal(emailException, error.Exception);
 
             // Verify mock were called
@@ -170,7 +170,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Verify mocks weren't called
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Never());
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Never);
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Never);
             bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
@@ -185,10 +185,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             int guestId = 1;
             int resourceId = 1;
-            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
             Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
-            GuestInputDto dto = new GuestInputDto
+            CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
                 Email = "test@test.dk",
                 ResourceId = 1,
@@ -228,11 +228,11 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 );
 
             // Act
-            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+            IResult<CreateBookingByGuestResponseDto> result = await sut.HandleAsync(dto);
 
             // Assert
             Assert.True(result.IsError());
-            IResultError<BookingCreatedDto> error = result.GetError();
+            IResultError<CreateBookingByGuestResponseDto> error = result.GetError();
             Assert.Equal(resourceException, error.Exception);
 
             // Verify mock were called
@@ -240,7 +240,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
 
             // Verify mocks weren't called
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Never);
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Never);
             bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
@@ -255,10 +255,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             int guestId = 1;
             int resourceId = 1;
-            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
             Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
-            GuestInputDto dto = new GuestInputDto
+            CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
                 Email = "test@test.dk",
                 ResourceId = 1,
@@ -290,7 +290,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()))
+                .Setup(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()))
                 .Returns(Result<Booking>.Error(booking, bookingException));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -302,17 +302,17 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                  );
 
             // Act
-            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+            IResult<CreateBookingByGuestResponseDto> result = await sut.HandleAsync(dto);
 
             // Assert
             Assert.True(result.IsError());
-            IResultError<BookingCreatedDto> error = result.GetError();
+            IResultError<CreateBookingByGuestResponseDto> error = result.GetError();
             Assert.Equal(bookingException, error.Exception);
 
             // Verify mock were called
             guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Once());
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Once());
             
             // Verify mocks weren't called
 
@@ -330,10 +330,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             int guestId = 1;
             int resourceId = 1;
-            Guest guest = new Guest("Allan", "Allansen", 12345678, "test@test.dk", "Danmark", "Danish", "Allanvej 11");
+            Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
             Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
 
-            GuestInputDto dto = new GuestInputDto
+            CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
                 Email = "test@test.dk",
                 ResourceId = 1,
@@ -364,7 +364,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()))
+                .Setup(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             Exception bookingRepoException = new Exception("Fejl");
@@ -383,17 +383,17 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                  );
 
             // Act
-            IResult<BookingCreatedDto> result = await sut.HandleAsync(dto);
+            IResult<CreateBookingByGuestResponseDto> result = await sut.HandleAsync(dto);
 
             // Arrange
             Assert.True(result.IsError());
-            IResultError<BookingCreatedDto> error = result.GetError();
+            IResultError<CreateBookingByGuestResponseDto> error = result.GetError();
             Assert.Equal(bookingRepoException, error.Exception);
 
             // Verify mock were called
             guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<GuestInputDomainDto>()), Times.Once());
+            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Once());
             bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Once());
         }
     }
