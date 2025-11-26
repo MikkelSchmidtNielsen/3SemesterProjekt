@@ -59,7 +59,9 @@ namespace Persistence.Repository
             }
             catch (Exception ex)
             {
-                return Result<Guest>.Error(originalType: null!, exception: ex);
+                var custom = new InvalidOperationException("Vi kunne ikke finde dig i databasen", ex);
+
+                return Result<Guest>.Error(originalType: null!, custom);
             }
         }
     }

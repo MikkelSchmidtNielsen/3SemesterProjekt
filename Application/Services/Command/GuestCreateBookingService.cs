@@ -48,7 +48,7 @@ namespace Application.Services.Command
             domainDto.Guest = guestResult;
 
             // Get the resource
-            IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(inputDto.ResourceId);
+            IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(domainDto.Resource.Id);
 
             if (resourceRequest.IsSucces() == false)
             {

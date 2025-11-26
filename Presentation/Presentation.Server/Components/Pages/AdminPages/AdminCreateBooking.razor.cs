@@ -133,7 +133,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
     internal class BookingModel
     {
-        public int? ResourceId { get; set; }
+        public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public GuestCreateRequestDto Guest { get; set; }

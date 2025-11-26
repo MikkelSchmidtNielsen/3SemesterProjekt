@@ -132,7 +132,7 @@
         await _dialogService.OpenAsync(
             "Booking fejl",
             ds => @<div>
-                <h3>"Vi kunne desværre ikke finde din email i databasen"</h3>
+                <h3>@exMessage</h3>
             </div>
         );
     }
