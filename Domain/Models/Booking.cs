@@ -75,7 +75,7 @@
         /// <returns></returns>
         private int GetNumberOfDecimals(decimal input)
         {
-            // Vi starter med at konvertere decimalen til en string: "converted"
+            // Vi starter med at konvertere decimalen til en string: "converted" ja
             string converted = input.ToString();
 
             // Check for at tallet skal indeholde decimaler
