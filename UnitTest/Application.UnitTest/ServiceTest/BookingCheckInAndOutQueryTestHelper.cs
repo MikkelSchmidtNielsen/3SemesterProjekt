@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
-    internal static class BookingCheckInQueryTestHelper
+    internal static class BookingCheckInAndOutQueryTestHelper
     {
         public static Booking CreateBookingWithResourceAndGuest(
-            Booking booking,
-            Guest guest,
-            Resource resource
+            int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource
         )
         {
-            var createdBooking = new BookingCheckInQueryTestClass(booking, guest, resource);
+            var createdBooking = new BookingCheckInAndOutQueryTestClass(guestId, resourceId, startDate, endDate, totalPrice, guest, resource);
 
             return createdBooking;
         }
