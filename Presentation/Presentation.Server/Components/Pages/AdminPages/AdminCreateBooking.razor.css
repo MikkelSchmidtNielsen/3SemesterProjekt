@@ -1,10 +1,10 @@
-﻿#main-content {
+﻿#main-content{
     display: grid;
     grid-template-columns: auto 30%;
     grid-gap: 15px;
 }
 
-#resource-content {
+#booking-content {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -23,16 +23,10 @@
     height: fit-content;
 }
 
-#add-button {
-    padding-right: 20%;
-    padding-bottom: 20px;
-    padding-left: 70%;
-}
-
-#resource-preview {
+#booking-preview {
     padding: 20px;
 }
 
-.padding-10px {
+.padding-10px{
     padding: 10px;
 }
