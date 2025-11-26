@@ -3,12 +3,19 @@ using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
+using Microsoft.VisualBasic;
+using Org.BouncyCastle.Asn1.Cmp;
 using Radzen;
+using Radzen.Blazor;
+using System.Globalization;
 
 namespace Presentation.Server.Components.Pages.AdminPages
 {
     public partial class AdminCreateBooking
     {
+        private decimal _tempTotalPrice;
+        private string? _tempResource;
+
         string _bookingResult = "";
 
         IEnumerable<Resource> _resources = Array.Empty<Resource>();
@@ -39,6 +46,37 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 await DialogService.Alert(message, "Error");
             }
 		}
+
+        private void UpdateBookingPreview(int resourceId, DateOnly startDate, DateOnly endDate)
+        {
+            GetResourceNameById(resourceId);
+            CalculateTempPrice(resourceId, startDate, endDate);
+        }
+
+        private void GetResourceNameById(int resourceId)
+        {
+            foreach (Resource resource in _resources)
+            {
+                if (resource.Id == resourceId)
+                {
+                    _tempResource = resource.Name;
+                    break;
+                }
+            }
+        }
+        private void CalculateTempPrice(int resourceId, DateOnly startDate, DateOnly endDate)
+        {
+            int days = endDate.DayNumber - startDate.DayNumber + 1;
+
+            foreach (Resource resource in _resources)
+            {
+                if (resource.Id == resourceId)
+                {
+                    _tempTotalPrice = resource.BasePrice * days;
+                    break;
+                }
+            }
+        }
 
         private async Task CreateBookingAsync(BookingModel model)
         {
@@ -85,7 +123,12 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 Guest = new GuestCreateRequestDto()
             };
+
+            _tempResource = null;
+            _tempTotalPrice = 0;
+            await ShowDialog();
         }
+
     }
 
     internal class BookingModel
