@@ -1,4 +1,4 @@
-﻿@page "/admin/addresource"
+﻿@page "/admin/add-resource"
 @inject DialogService DialogService
 @inject ICreateResourceService _createResourceService
 @rendermode InteractiveServer
@@ -6,30 +6,76 @@
 
 <RadzenDialog/>
 
+<PageTitle>Tilføj ressource</PageTitle>
 
-<div id="main-container">
-	<h1 id="header-text">Opret en ny ressource</h1><br/>
+
+<div id="main-content">
+	<div id="resource-content">
+	<h3 class="text-center padding-10px">Opret en ny ressource</h3>
+
+	
+
 		<RadzenTemplateForm TItem="ResourceModel" Data="@resourceModel" Submit="@ShowDialog">
-			<div id="resource-details-container">
-				<label for="Name">Ressourcenavn</label><br />
-				<RadzenTextBox Name="Name" @bind-Value=resourceModel.Name Placeholder="Navn på ressource..."></RadzenTextBox><br />
-				<RadzenRequiredValidator Component="Name" Text="Angiv venligst ressourcenavn."></RadzenRequiredValidator><br/>
-				<label for="Type">Ressourcetype</label><br />
-				<RadzenDropDown Name="Type" @bind-Value=resourceModel.Type TValue="string" Data=@resourceTypes /><br />
-				<RadzenRequiredValidator Component="Type" Text="Angiv venligst ressourcetype."></RadzenRequiredValidator><br/>
-				<label for="BasePrice">Pris pr. dag</label><br />
-				<RadzenNumeric Name="BasePrice" Min="0"  @bind-Value=resourceModel.BasePrice TValue="decimal" ShowUpDown="false" Placeholder="Pris i DKK..."></RadzenNumeric><br />
-				<RadzenRequiredValidator Component="BasePrice" Text="Angiv venligst pris pr. dag i DKK."></RadzenRequiredValidator><br/>
-				<label for="Location">Pladsnummer</label><br />
-				<RadzenNumeric Name="Location" Min="1" @bind-Value=resourceModel.Location TValue="int" ShowUpDown="false" Placeholder="Pladsnr..."></RadzenNumeric><br />
-				<RadzenRequiredValidator Component="Location" Text="Angiv venligst pladsnr."></RadzenRequiredValidator><br/>
-				<label for="Description">Beskrivelse</label><br />
-				<RadzenTextArea id="Description" @bind-Value=resourceModel.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea><br/>
-				<div id="add-button">
-					<RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit">Opret</RadzenButton>
-				</div>
-			</div>
+			<RadzenStack>
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel Component="NameRequiredInput">
+						Ressourcenavn <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1"/>
+					</RadzenLabel>
+					<RadzenTextBox Name="NameRequiredInput" @bind-Value=@resourceModel.Name Style="width: 100%; max-width: 400px;"/>
+					<RadzenRequiredValidator Component="NameRequiredInput" Text="Navn skal angives" />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel Component="TypeRequiredInput">
+						Ressourcetype <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1"/>
+					</RadzenLabel>
+                    <RadzenDropDown Name="TypeRequiredInput" TValue="string" @bind-Value="resourceModel.Type" Data="@resourceTypes" Placeholder="Vælg type" Style="width: 100%; max-width: 400px;"/>
+					<RadzenRequiredValidator Component="TypeRequiredInput" Text="Type skal angives"/>
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel Component="BasePriceRequiredInput">
+						Pris pr. dag <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1"/>
+					</RadzenLabel>
+					<RadzenNumeric Name="BasePriceRequiredInput" Min="0" @bind-Value=@resourceModel.BasePrice TValue="decimal" ShowUpDown="false" Placeholder="Pris i DKK..."/>
+					<RadzenRequiredValidator Component="BasePriceRequiredInput" Text="Pris skal angives"/>
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel Component="LocationRequiredInput">
+						Pladsnr. <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1"/>
+					</RadzenLabel>
+					<RadzenNumeric Name="LocationRequiredInput" Min="1" @bind-Value=@resourceModel.Location TValue="int" ShowUpDown="false" Placeholder="Pladsnr..."/>
+					<RadzenRequiredValidator Component="LocationRequiredInput" Text="Pladsnr. skal angives"/>
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel Component="Description">
+						Beskrivelse
+					</RadzenLabel>
+					<RadzenTextArea id="Description" @bind-Value=resourceModel.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea>
+				</RadzenStack>
+			<RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
+			</RadzenStack>
 		</RadzenTemplateForm>
+	</div>
+	<div id="preview-content">
+		<h3 class="text-center padding-10px">Forhåndsvisning</h3>
+
+        <div id="resource-preview">
+
+            <b><p>@resourceModel.Name</p></b>
+            <p><b>Type: </b>@resourceModel.Type</p>
+            <p><b>Pladsnr.: </b>@resourceModel.Location</p>
+
+            <hr />
+
+			<p><b>Beskrivelse: </b>@resourceModel.Description</p>
+
+            <p><b>Pris pr. dag:</b></p>
+            <h4>DKK @resourceModel.BasePrice ,-</h4>
+        </div>
+	</div>
 </div>
 
 @code {
@@ -53,12 +99,7 @@
 		resourceModel.Name = textInfo.ToTitleCase(resourceModel.Name);
 		var result = await DialogService.OpenAsync("Oprettelse af ny ressource", ds =>
         @<RadzenStack Gap="1.5rem">
-            <h3>Ønsker du at tilføje en ny ressource med følgende informationer?</h3>
-			<p><b>Navn: </b>@resourceModel.Name</p>
-			<p><b>Type: </b>@resourceModel.Type</p>
-			<p><b>Pris pr. dag: </b>@resourceModel.BasePrice ,-</p>
-			<p><b>Pladsnummer: </b>@resourceModel.Location</p>
-			<p><b>Beskrivelse: </b>@resourceModel.Description</p>
+            <h3>Ønsker du at oprette en ny ressource?</h3>
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
                 <RadzenStack Orientation="Orientation.Horizontal">
                     <RadzenButton Text="Ja" Click="() => CreateResource(resourceModel, ds)" Style="width: 80px;" />
