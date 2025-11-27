@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.ServiceInterfaces.Command
 {
-    public interface IGuestCreateBookingService
+    public interface ICreateBookingByGuestCommandHandler
     {
         Task<IResult<CreateBookingByGuestResponseDto>> HandleAsync(CreateBookingByGuestCommandDto dto);
     }

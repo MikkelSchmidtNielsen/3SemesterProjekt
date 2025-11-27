@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Services.Query
 {
-    public class GetAllResourcesService : IGetAllResourcesService
+    public class ReadAllResourcesQueryHandler : IReadAllResourcesQueryHandler
     {
         private readonly IResourceRepository _repo;
 
-        public GetAllResourcesService(IResourceRepository repo)
+        public ReadAllResourcesQueryHandler(IResourceRepository repo)
         {
             _repo = repo;
         }

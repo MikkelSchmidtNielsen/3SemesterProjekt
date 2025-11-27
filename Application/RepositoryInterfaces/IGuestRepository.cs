@@ -13,6 +13,6 @@ namespace Application.RepositoryInterfaces
     {
         Task<IResult<Guest>> GetGuestByIdAsync(int id);
         Task<IResult<Guest>> CreateGuestAsync(Guest guest);
-        Task<IResult<Guest>> GetGuestByEmailAsync(string email);
+        Task<IResult<Guest>> ReadGuestByEmailAsync(string email);
     }
 }

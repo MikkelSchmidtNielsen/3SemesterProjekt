@@ -49,7 +49,7 @@ namespace Persistence.Repository
 			}
 		}
 
-        public async Task<IResult<Guest>> GetGuestByEmailAsync(string email)
+        public async Task<IResult<Guest>> ReadGuestByEmailAsync(string email)
         {
             try
             {

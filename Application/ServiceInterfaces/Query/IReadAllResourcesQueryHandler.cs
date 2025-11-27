@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.ServiceInterfaces.Query
 {
-    public interface IGetAllResourcesService
+    public interface IReadAllResourcesQueryHandler
     {
         Task<IResult<IEnumerable<Resource>>> HandleAsync();
     }

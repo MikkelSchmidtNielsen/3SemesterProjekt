@@ -36,8 +36,8 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IBookingCheckInQuery, BookingCheckInQuery>();
             services.AddScoped<IBookingCheckOutQuery, BookingCheckOutQuery>();
             services.AddScoped<ISendEmail, SendEmailMailKit>();
-            services.AddScoped<IGetAllResourcesService, GetAllResourcesService>();
-            services.AddScoped<IGuestCreateBookingService, GuestCreateBookingService>();
+            services.AddScoped<IReadAllResourcesQueryHandler, ReadAllResourcesQueryHandler>();
+            services.AddScoped<ICreateBookingByGuestCommandHandler, GuestCreateBookingService>();
 
             //Add repositories
             services.AddScoped<IBookingRepository, BookingRepository>();

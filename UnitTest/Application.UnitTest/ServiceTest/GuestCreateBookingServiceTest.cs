@@ -58,7 +58,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Guest Repository
             guestRepo
-                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .Setup(repo => repo.ReadGuestByEmailAsync(dto.Email))
                 .ReturnsAsync(Result<Guest>.Success(guest));
 
             // Mock Resource Repository
@@ -66,16 +66,16 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 .Setup(repo => repo.GetResourceByIdAsync(dto.Resource.Id))
                 .ReturnsAsync(Result<Resource>.Success(resource));
 
-            CreateBookingByGuestFactoryDto domainDto = Mapper.Map<CreateBookingByGuestFactoryDto>(dto);
+            CreateBookingFactoryDto domainDto = Mapper.Map<CreateBookingFactoryDto>(dto);
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()))
+                .Setup(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             // Mock Booking Repository
             bookingRepo
-                .Setup(repo => repo.GuestCreateBookingAsync(booking))
+                .Setup(repo => repo.CreateBookingAsync(booking))
                 .ReturnsAsync(Result<Booking>.Success(booking));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -146,7 +146,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Guest Repository
             guestRepo
-                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .Setup(repo => repo.ReadGuestByEmailAsync(dto.Email))
                 .ReturnsAsync(Result<Guest>.Error(null!, emailException));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -166,12 +166,12 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(emailException, error.Exception);
 
             // Verify mock were called
-            guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
+            guestRepo.Verify(query => query.ReadGuestByEmailAsync(dto.Email), Times.Once);
 
             // Verify mocks weren't called
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Never());
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Never);
-            bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Never);
+            bookingRepo.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
         [Fact]
@@ -209,7 +209,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Guest Repository
             guestRepo
-                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .Setup(repo => repo.ReadGuestByEmailAsync(dto.Email))
                 .ReturnsAsync(Result<Guest>.Success(guest));
 
             Exception resourceException = new Exception("Resourcen findes ikke");
@@ -236,12 +236,12 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(resourceException, error.Exception);
 
             // Verify mock were called
-            guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
+            guestRepo.Verify(query => query.ReadGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
 
             // Verify mocks weren't called
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Never);
-            bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Never);
+            bookingRepo.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
         [Fact]
@@ -278,7 +278,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Guest Repository
             guestRepo
-                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .Setup(repo => repo.ReadGuestByEmailAsync(dto.Email))
                 .ReturnsAsync(Result<Guest>.Success(guest));
 
             // Mock Resource Repository
@@ -290,7 +290,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()))
+                .Setup(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()))
                 .Returns(Result<Booking>.Error(booking, bookingException));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -310,13 +310,13 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(bookingException, error.Exception);
 
             // Verify mock were called
-            guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
+            guestRepo.Verify(query => query.ReadGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Once());
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Once());
             
             // Verify mocks weren't called
 
-            bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Never);
+            bookingRepo.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
         [Fact]
@@ -354,7 +354,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Guest Repository
             guestRepo
-                .Setup(repo => repo.GetGuestByEmailAsync(dto.Email))
+                .Setup(repo => repo.ReadGuestByEmailAsync(dto.Email))
                 .ReturnsAsync(Result<Guest>.Success(guest));
 
             // Mock Resource Repository
@@ -364,14 +364,14 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking Factory
             bookingFactory
-                .Setup(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()))
+                .Setup(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             Exception bookingRepoException = new Exception("Fejl");
 
             // Mock Booking Repository
             bookingRepo
-                .Setup(repo => repo.GuestCreateBookingAsync(booking))
+                .Setup(repo => repo.CreateBookingAsync(booking))
                 .ReturnsAsync(Result<Booking>.Error(booking, bookingRepoException));
 
             GuestCreateBookingService sut = new GuestCreateBookingService
@@ -391,10 +391,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(bookingRepoException, error.Exception);
 
             // Verify mock were called
-            guestRepo.Verify(query => query.GetGuestByEmailAsync(dto.Email), Times.Once);
+            guestRepo.Verify(query => query.ReadGuestByEmailAsync(dto.Email), Times.Once);
             resourceRepo.Verify(command => command.GetResourceByIdAsync(It.IsAny<int>()), Times.Once());
-            bookingFactory.Verify(factory => factory.GuestCreate(It.IsAny<CreateBookingByGuestFactoryDto>()), Times.Once());
-            bookingRepo.Verify(repo => repo.GuestCreateBookingAsync(It.IsAny<Booking>()), Times.Once());
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Once());
+            bookingRepo.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Once());
         }
     }
 }

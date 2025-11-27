@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services.Command
 {
-    public class GuestCreateBookingService : IGuestCreateBookingService
+    public class GuestCreateBookingService : ICreateBookingByGuestCommandHandler
     {
         private readonly IGuestRepository _guestRepository;
         private readonly IResourceRepository _resourceRepository;
@@ -31,10 +31,10 @@ namespace Application.Services.Command
 
         public async Task<IResult<CreateBookingByGuestResponseDto>> HandleAsync(CreateBookingByGuestCommandDto inputDto)
         {
-            CreateBookingByGuestFactoryDto domainDto = Mapper.Map<CreateBookingByGuestFactoryDto>(inputDto);
+            CreateBookingFactoryDto domainDto = Mapper.Map<CreateBookingFactoryDto>(inputDto);
 
             // Check if the guest already has a user:
-            IResult<Guest> guestUserRequest = await _guestRepository.GetGuestByEmailAsync(domainDto.Email);
+            IResult<Guest> guestUserRequest = await _guestRepository.ReadGuestByEmailAsync(domainDto.Email);
 
             if (guestUserRequest.IsSucces() == false)
             {
@@ -62,7 +62,7 @@ namespace Application.Services.Command
             domainDto.TotalPrice = CalculateTotalPrice(domainDto, resourceResult);
 
             // Create booking
-            IResult<Booking> bookingCreateRequest = _bookingFactory.GuestCreate(domainDto);
+            IResult<Booking> bookingCreateRequest = _bookingFactory.Create(domainDto);
             if (bookingCreateRequest.IsSucces() == false)
             {
                 CreateBookingByGuestResponseDto createdDto = Mapper.Map<CreateBookingByGuestResponseDto>(domainDto);
@@ -71,7 +71,7 @@ namespace Application.Services.Command
             Booking bookingCreateResult = bookingCreateRequest.GetSuccess().OriginalType;
 
             // Save the booking in DB:
-            IResult<Booking> bookingSaveRequest = await _bookingRepository.GuestCreateBookingAsync(bookingCreateResult);
+            IResult<Booking> bookingSaveRequest = await _bookingRepository.CreateBookingAsync(bookingCreateResult);
             if (bookingSaveRequest.IsSucces() == false)
             {
                 CreateBookingByGuestResponseDto createdDto = Mapper.Map<CreateBookingByGuestResponseDto>(domainDto);
@@ -92,7 +92,7 @@ namespace Application.Services.Command
         }
 
         // Calculate TotalPrice for resource
-        protected decimal CalculateTotalPrice(CreateBookingByGuestFactoryDto domainDto, Resource resource)
+        protected decimal CalculateTotalPrice(CreateBookingFactoryDto domainDto, Resource resource)
         {
             // Today + total days of staying
             int days = domainDto.EndDate.DayNumber - domainDto.StartDate.DayNumber + 1;
