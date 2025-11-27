@@ -78,24 +78,23 @@ namespace Domain.Models
         /// <returns></returns>
         protected static int GetNumberOfDecimals(decimal TotalPrice)
         {
-            // Vi starter med at konvertere decimalen til en string: "converted" ja
+            // Convert the decimal to a string, ignoring CultureInfo so that it works with both DOT and COMMAS.
             string converted = TotalPrice.ToString(CultureInfo.InvariantCulture);
 
-            // Check for at tallet skal indeholde decimaler
+            // Check that the number indeed contains punctuation
             if (converted.Contains("."))
             {
-                // .Split() bruges til at dele "converted" ved komma-tallet, resultaterne gemmes i et string[]: "splitString"
-                // Altså har vi nu et string[] med to indhold på to positioner:
-                // 1. position ([0]): Alt før komma-tallet.
-                // 2. position ([1]): Alt efter komma-tallet.
+                // Split() is used to create a string[] when a punctuation mark is encountered, with everything before the mark
+                // in position[0] and everything after the mark in position [1].
                 string[] splitString = converted.Split('.');
 
-                // .Lenght bruges til at tælle hvor mange chars der findes på "splitString"'s 2. position ([1]),
-                // hvilket giver antallet af decimaler som gemmes som en int: "count".
+                // .Lenght is used to count how many chars is in position[1] of the array,
+                // resulting in the number of decimals a number has
                 int count = splitString[1].Length;
 
                 return count;
             }
+            // Return 0 if the number doesn't have a punctuation mark
             else return 0;
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Application.ApplicationDto.Command
+﻿using Domain.Models;
+
+namespace Application.ApplicationDto.Command
 {
     public class BookingCreateRequestDto
     {
