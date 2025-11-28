@@ -14,6 +14,7 @@ using Persistence.Repository;
 using Infrastructure.Email;
 using System.ComponentModel.Design;
 using Application.InfrastructureInterfaces;
+using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -38,9 +39,11 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<ISendEmail, SendEmailMailKit>();
             services.AddScoped<IReadAllResourcesQueryHandler, ReadAllResourcesQueryHandler>();
             services.AddScoped<ICreateBookingByGuestCommandHandler, GuestCreateBookingService>();
+			services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
+			services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();
 
-            //Add repositories
-            services.AddScoped<IBookingRepository, BookingRepository>();
+			//Add repositories
+			services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IResourceRepository, ResourceRepository>();
             services.AddScoped<IGuestRepository, GuestRepository>();
 
