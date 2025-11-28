@@ -11,6 +11,10 @@ jobs:
     name: Build and Test .NET Application
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: Monolith
+
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository

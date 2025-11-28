@@ -12,6 +12,10 @@ jobs:
     if: ${{ github.event.pull_request.merged == true}}
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: Monolith
+
     env:
       TAG: pr-${{ github.event.pull_request.number }}
 
