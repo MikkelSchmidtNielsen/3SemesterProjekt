@@ -5,46 +5,37 @@ using Common.ResultInterfaces;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
+using Application.InfrastructureInterfaces.SendEmailSpecifications;
 
 namespace Infrastructure.Email
 {
 	public class SendEmailMailKit : ISendEmail
 	{
-		private static readonly TimeOnly DefaultCheckIn = new(12, 0);
-		private static readonly TimeOnly DefaultCheckOut = new(11, 0);
 		private static readonly string DefaultSenderEmail = "noreply@foxtrox.dk";
 		private static readonly string PasswordDefaultSender = "Foxtrox.dk";
 
 
-		public IResult<SendEmailCommandDto> SendEmail(SendEmailCommandDto dto)
+		public IResult<ISendEmailSpecification> SendEmail(ISendEmailSpecification emailSpecification)
 		{
 			try
 			{
 				// Validate and Transform Email
-				string emailInCorrectFormat = ValidateEmail(dto);
+				string emailInCorrectFormat = ValidateEmail(emailSpecification.RecieverEmail);
 
-				// Creates the message
-				string message = "";
-				switch (dto.Subject)
-				{
-					case ISendEmail.EmailSubject.OrderConfirmation:
-						message = CreateMessageOrderConfirmation(dto);
-						break;
-				}
+				// Sends actual email
+				SendEmail(emailInCorrectFormat, emailSpecification.Subject, emailSpecification.Body);
 
-				// Sends the email
-				SendEmail(emailInCorrectFormat, dto.Subject, message);
-				return Result<SendEmailCommandDto>.Success(dto);
+				return Result<ISendEmailSpecification>.Success(emailSpecification);
 			}
 			catch (Exception ex)
 			{
-				return Result<SendEmailCommandDto>.Error(dto, ex);
+				return Result<ISendEmailSpecification>.Error(emailSpecification, ex);
 			}
-
 		}
-		protected static string ValidateEmail(SendEmailCommandDto dto)
+
+		protected static string ValidateEmail(string recieveremail)
 		{
-			if (!MailboxAddress.TryParse(dto.Guest.Email, out MailboxAddress mail))
+			if (!MailboxAddress.TryParse(recieveremail, out MailboxAddress mail))
 			{
 				throw new Exception("Email was in wrong format");
 			}
@@ -55,44 +46,7 @@ namespace Infrastructure.Email
 			return mail.Address;
 		}
 
-		protected static string CreateMessageOrderConfirmation(SendEmailCommandDto dto)
-		{
-			if (dto.Guest.FirstName is null || string.IsNullOrWhiteSpace(dto.Guest.FirstName))
-			{
-				throw new Exception("Missing Information About the booking");
-			}
-
-			return $@"
-					Hej {dto.Guest.FirstName},
-
-					Tak for din booking!
-
-					Her er detaljerne for din reservation:
-
-					Ressource:
-					- Navn: {dto.Resource.Name}
-					- Type: {dto.Resource.Type}
-
-					Periode:
-					- Startdato: {dto.Booking.StartDate:dd-MM-yyyy}
-					- Slutdato : {dto.Booking.EndDate:dd-MM-yyyy}
-
-					Check-ind og check-ud:
-					- Check-ind: {DefaultCheckIn:HH\\:mm}
-					- Check-ud : {DefaultCheckOut:HH\\:mm}
-
-					Pris:
-					- Totalpris: {dto.Booking.TotalPrice:C}
-
-					Vi glæder os til at byde dig velkommen!
-
-					Venlig hilsen
-					Dit Bookingteam
-					";
-
-		}
-
-		protected void SendEmail(string receiverEmail, ISendEmail.EmailSubject subject, string message)
+		protected void SendEmail(string receiverEmail, string subject, string body)
 		{
 			// MailKit format to send Email via MailKit NuggetPackage
 			MimeMessage emailToBeSent = new MimeMessage();
@@ -100,12 +54,12 @@ namespace Infrastructure.Email
 			emailToBeSent.To.Add(new MailboxAddress("Kunde", receiverEmail));
 			emailToBeSent.Subject = subject.ToString();
 
-			var body = new TextPart("plain")
+			var emailBody = new TextPart("plain")
 			{
-				Text = message
+				Text = body
 			};
 
-			emailToBeSent.Body = body;
+			emailToBeSent.Body = emailBody;
 
 			using (var client = new SmtpClient())
 			{

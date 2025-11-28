@@ -1,5 +1,6 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureInterfaces;
+using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -26,6 +27,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
 			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<ISendEmailSpecification> emailSpec = new Mock<ISendEmailSpecification>();
 
 			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
@@ -72,8 +74,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 EndDate = bookingDto.EndDate,
                 TotalPrice = 300
             };
-            SendEmailCommandDto sendEmailDto = Impression.Of<SendEmailCommandDto>().Randomize().Create();
-
+            
 
 			// Mock Resource query
 			resourceIdQuery
@@ -97,8 +98,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock ISendEmail
             sendEmail
-                .Setup(send => send.SendEmail(It.IsAny<SendEmailCommandDto>()))
-                .Returns(Result<SendEmailCommandDto>.Success(sendEmailDto));
+                .Setup(send => send.SendEmail(It.IsAny<ISendEmailSpecification>()))
+                .Returns(Result<ISendEmailSpecification>.Success(emailSpec.Object));
 
             BookingCreateCommand sut = new BookingCreateCommand
             (
