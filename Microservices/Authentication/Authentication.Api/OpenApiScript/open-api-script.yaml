@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+    version: 1.0.0
+    title: User authentication API
+paths:
+  '/register-user/{email}':
+    summary: Path to register a user 
+    description: User is being auto registrated by the request
+    post:
+        responses:
+          '201':
+            description: Succesful response - returns a JWT.
+            content:
+              application/jwt:
+                schema: 
+                  $ref: '#/components/schemas/userResponse'
+          
+          '400':
+            $ref: '#/components/responses/400Error'
+
+          '409':
+            $ref: '#/components/responses/409Error'
+
+          '500':
+            $ref: '#/components/responses/500Error'
+
+    parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+
+components:
+  schemas: 
+    userResponse:
+      description: Returns a JSON web token (JWT) required to login.
+      type: string
+    
+    badResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+  responses:
+    400Error:
+      description: Error response - Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/badResponse'
+
+    409Error:
+      description: Error response - couldn't create user conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/badResponse'
+
+    500Error:
+      description: Error response - unexpected error occurred
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/badResponse'

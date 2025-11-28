@@ -1,0 +1,23 @@
+{
+  "runtime": "Net90",
+  "defaultVariables": null,
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "open-api-script.yaml",
+      "output": null,
+      "newLineBehavior": "Auto"
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpController": {
+      "controllerBaseClass": "Microsoft.AspNetCore.Mvc.ControllerBase",
+      "controllerTarget": "AspNetCore",
+      "className": "Auth",
+      "namespace": "Authentication.Api.Controllers",
+      "generateOptionalParameters": true,
+      "additionalNamespaceUsages": [
+      ],
+      "output": "../Controllers/AuthController.cs"
+    }
+  }
+}

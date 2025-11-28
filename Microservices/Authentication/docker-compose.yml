@@ -1,0 +1,35 @@
+services:
+  authentication-service:
+    build:
+      context: .
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - Jwt__SecretKey=g9V4p2QmL8sT0wZ3D1aH7nK5fR2bE6yJ
+      - Jwt__Issuer=http://authentication-service:8080
+      - Jwt__Audience=DanlineCustomers
+      - ConnectionStrings__DefaultConnection=server=mysql-db;port=3306;database=authdb;user=root;password=root
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+
+  mysql-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: authdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 3s
+
+volumes:
+  mysql_data:
