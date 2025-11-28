@@ -13,14 +13,18 @@ namespace Application.Services.Command
 {
     public class GuestCreateCommand : IGuestCreateCommand
     {
-        IGuestFactory _guestFactory;
-        IGuestRepository _repo;
+		IGuestFactory _guestFactory;
+		IGuestRepository _repo;
+		IUnitOfWork _uow;
+		IUserAuthenticationApiService _userAuthenticationApiService;
 
-        public GuestCreateCommand(IGuestFactory guestFactory, IGuestRepository repo)
-        {
-            _guestFactory = guestFactory;
-            _repo = repo;
-        }
+		public GuestCreateCommand(IGuestFactory guestFactory, IGuestRepository repo, IUnitOfWork uow, IUserAuthenticationApiService userAuthenticationApiService)
+		{
+			_guestFactory = guestFactory;
+			_repo = repo;
+			_uow = uow;
+			_userAuthenticationApiService = userAuthenticationApiService;
+		}
 
 		public async Task<IResult<Guest>> CreateGuestAsync(GuestCreateRequestDto guestCreateDto)
 		{

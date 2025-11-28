@@ -11,6 +11,6 @@ namespace Domain.DomainInterfaces
 {
     public interface IGuestFactory
     {
-        IResult<Guest> Create(CreatedGuestDto dto);
-    }
+		Task<IResult<Guest>> CreateAsync(CreatedGuestDto dto);
+	}
 }
