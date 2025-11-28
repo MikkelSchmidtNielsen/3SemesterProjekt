@@ -23,7 +23,7 @@
 	  <Folder Include="Services\" />
 	</ItemGroup>
 
-	<Target Name="NSwag" BeforeTargets="Build">
+	<Target Name="NSwag" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
 		<Exec WorkingDirectory="$(ProjectDir)OpenApiScript"
 			Command="nswag run open-api-script.nswag" />
 	</Target>
