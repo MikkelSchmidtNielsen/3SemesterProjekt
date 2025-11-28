@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
-
+	
 namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 {
     internal class HttpClientModule
