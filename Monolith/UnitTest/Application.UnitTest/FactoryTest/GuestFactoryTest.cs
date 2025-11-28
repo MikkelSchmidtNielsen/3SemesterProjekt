@@ -8,7 +8,7 @@ namespace UnitTest.Application.UnitTest.FactoryTest
     public class GuestFactoryTest
     {
         [Fact]
-        public void FactoryCreation_ShouldReturnSuccess_WhenGivenCorrectGuest()
+        public async void FactoryCreation_ShouldReturnSuccess_WhenGivenCorrectGuest()
         {
             // Arrange
             GuestFactory factory = new GuestFactory();
