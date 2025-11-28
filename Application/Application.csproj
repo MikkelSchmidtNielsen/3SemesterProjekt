@@ -14,9 +14,6 @@
 	<ItemGroup>
 		<Folder Include="InfrastructureInterfaces\" />
 		<Folder Include="ApplicationDto\Query\" />
+		<Folder Include="ServiceInterfaces\Command\" />
 	</ItemGroup>
-  <ItemGroup>
-	  <Folder Include="ServiceInterfaces\Command\" />
-  </ItemGroup>
-
 </Project>

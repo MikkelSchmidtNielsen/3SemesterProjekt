@@ -36,7 +36,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             int guestId = 1;
             int resourceId = 1;
             Guest guest = new Guest(firstName: "Allan", lastName:"Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
-            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
+            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 150, location: 5, description: "");
 
             CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
@@ -122,7 +122,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             int guestId = 1;
             int resourceId = 1;
             Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
-            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
+            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 150, location: 5, description: "");
 
             CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
@@ -186,7 +186,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             int guestId = 1;
             int resourceId = 1;
             Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
-            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
+            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 150, location: 5, description: "");
 
             CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
@@ -256,7 +256,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             int guestId = 1;
             int resourceId = 1;
             Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
-            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
+            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 150, location: 5, description: "");
 
             CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {
@@ -331,7 +331,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             int guestId = 1;
             int resourceId = 1;
             Guest guest = new Guest(firstName: "Allan", lastName: "Allansen", phoneNumber: 12345678, email: "test@test.dk", country: "Danmark", language: "Danish", address: "Allanvej 11");
-            Resource resource = new Resource("Paradis", "Hytte", 150, 5, "");
+            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 150, location: 5, description: "");
 
             CreateBookingByGuestCommandDto dto = new CreateBookingByGuestCommandDto
             {

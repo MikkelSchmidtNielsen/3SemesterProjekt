@@ -104,7 +104,7 @@ namespace UnitTest.Domain.UnitTest
             decimal totalPrice = 1000;
 
             // Act
-            Resource resource = new Resource("Paradis", "Hytte", 500, 5, "");
+            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 500, location: 5, description: "");
 
             // Assert
             Assert.Throws<ArgumentException>(() => new Booking(guestId, resourceId, startDate, endDate, totalPrice));
