@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "open-api-script.yaml",
+      "url": "file://./open-api-script.yaml",
       "output": null,
       "newLineBehavior": "Auto"
     }
