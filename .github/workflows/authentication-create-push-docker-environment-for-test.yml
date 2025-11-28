@@ -1,7 +1,9 @@
-name: Create & push docker environment for test
+name: (Authentication) Create & push docker environment for test
 
 on:
   pull_request:
+    paths: 
+       - 'Microservices/**'
     branches: [ "development" ]
     types: [closed] 
 
@@ -27,5 +29,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO }}:latest
-            ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO }}:${{ env.TAG }}
+            ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO_AUTH }}:latest
+            ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO_AUTH }}:${{ env.TAG }}
