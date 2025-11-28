@@ -1,4 +1,5 @@
 ﻿using Application.Factories;
+using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
@@ -6,15 +7,15 @@ using Application.Services.Command;
 using Application.Services.Query;
 using Common.ExternalConfig;
 using Domain.DomainInterfaces;
+using Infrastructure.Email;
+using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence;
 using Persistence.EntityFramework;
 using Persistence.Repository;
-using Infrastructure.Email;
 using System.ComponentModel.Design;
-using Application.InfrastructureInterfaces;
-using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -52,7 +53,10 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IResourceFactory, ResourceFactory>();
             services.AddScoped<IGuestFactory, GuestFactory>();
 
-            HttpClientModule.RegisterHttpClients(services, configuration);
+			//Add UnitOfWork
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+			HttpClientModule.RegisterHttpClients(services, configuration);
         }
     }
 }
