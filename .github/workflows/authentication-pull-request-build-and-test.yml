@@ -24,15 +24,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x' 
-       
-       # ➕ Install NSwag CLI (required for MSBuild target)
-      - name: Install NSwag CLI
-        run: dotnet tool install --global NSwag.ConsoleCore
-
-      # ➕ Ensure tools path is available
-      - name: Add .NET tools to PATH
-        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          dotnet-version: '9.0.x'        
 
       # Step 3: Get nuggetpackages needed for testing
       - name: Restore dependencies
