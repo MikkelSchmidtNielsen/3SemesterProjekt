@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<Target Name="NSwag" BeforeTargets="Build">
-		<Exec Command="nswag run OpenApiScript/open-api-script.nswag" />
+		<Exec Command="nswag run Authentication.Api/OpenApiScript/open-api-script.nswag" />
 	</Target>
 
 </Project>
