@@ -37,23 +37,24 @@
                     <RadzenTextBox Name="EmailInput" @bind-Value=@_bookingModel.Guest.Email Style="width: 100%; max-width: 400px;" />
                 </RadzenStack>
 
-                <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
-                    <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
-                    @if (_resources != null && _resources.Any())
-                    {
-                        <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" Data="_resources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
-                    }
-                    else
-                    {
-                        <RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" />
-                    }
-                </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
+            @if (_resources != null && _resources.Any())
+            {
+                <RadzenDropDown TValue="int?" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+            }
+            else
+            {
+                <RadzenDropDown TValue="int?" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" Name="DropDownClear"/>
+            }     
+            <RadzenRequiredValidator Component="DropDownClear" Text="Vælg en ressource"/>
+        </RadzenStack>
 
                 <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
                     <RadzenLabel Component="StartDateInput">
                         Start dato <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Skal udfyldes" Variant="Variant.Outlined" IsPill="true" class="rz-ml-1" />
                     </RadzenLabel>
-                    <RadzenDatePicker Name="StartDateInput" @bind-Value="_bookingModel.StartDate" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" DateFormat="dd/MM/yyyy"
+                    <RadzenDatePicker Name="StartDateInput" @bind-Value="_bookingModel.StartDate" DateFormat="dd/MM/yyyy"
                                       Min="@DateTime.Now" Style="width:250px" />
                     <ValidationMessage For="@(() => _bookingModel.StartDate)" />
                     <RadzenRequiredValidator Component="StartDateInput" Text="Start dato skal sættes" />
@@ -66,7 +67,7 @@
                     <RadzenDatePicker Name="EndDateInput" @bind-Value="_bookingModel.EndDate" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" DateFormat="dd/MM/yyyy"
                                       Min="@DateTime.Now" Style="width:250px" />
                     <ValidationMessage For="@(() => _bookingModel.StartDate)" />
-                    <RadzenRequiredValidator Component="StartDateInput" Text="Slut dato skal sættes" />
+                    <RadzenRequiredValidator Component="EndDateInput" Text="Slut dato skal sættes" />
                 </RadzenStack>
 
                 <RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />

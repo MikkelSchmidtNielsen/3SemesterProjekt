@@ -48,5 +48,21 @@ namespace Persistence.Repository
 				return Result<Guest>.Error(originalType: null!, exception: ex);
 			}
 		}
-	}
+
+        public async Task<IResult<Guest>> ReadGuestByEmailAsync(string email)
+        {
+            try
+            {
+                Guest guest = await _db.Guests.FirstAsync(x => x.Email == email);
+
+                return Result<Guest>.Success(guest);
+            }
+            catch (Exception ex)
+            {
+                var custom = new InvalidOperationException("Vi kunne ikke finde dig i databasen", ex);
+
+                return Result<Guest>.Error(originalType: null!, custom);
+            }
+        }
+    }
 }

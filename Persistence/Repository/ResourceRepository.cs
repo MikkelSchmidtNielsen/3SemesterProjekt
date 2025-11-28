@@ -57,7 +57,6 @@ namespace Persistence.Repository
                 return Result<Resource>.Error(resource, ex);
             }
         }
-
     
         // READ
         public async Task<IResult<Resource>> GetResourceByIdAsync(int id)
@@ -71,8 +70,8 @@ namespace Persistence.Repository
 			}
 			catch (Exception ex)
 			{
-				// Returns invalid resource with exception
-				return Result<Resource>.Error(originalType: null!, exception: ex);
+                // Returns invalid resource with exception
+                return Result<Resource>.Error(originalType: null!, exception: ex);
 			}
 		}
 
@@ -90,5 +89,5 @@ namespace Persistence.Repository
 				return Result<IEnumerable<Resource>>.Error(originalType: null!, exception: ex);
 			}
 		}
-	}
+    }
 }

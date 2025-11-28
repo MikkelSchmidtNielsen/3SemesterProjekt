@@ -1,4 +1,5 @@
-﻿using Common.ResultInterfaces;
+﻿using Common;
+using Common.ResultInterfaces;
 using Domain.Models;
 
 namespace Application.RepositoryInterfaces

@@ -12,8 +12,8 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251119135015_Camping")]
-    partial class Camping
+    [Migration("20251125114204_DeleteGuestName")]
+    partial class DeleteGuestName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,9 @@ namespace Persistence.Migrations
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("isCheckedIn")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

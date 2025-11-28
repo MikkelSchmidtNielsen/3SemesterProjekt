@@ -28,7 +28,6 @@ namespace Domain.Models
             IsAvailable = true;
 
             ValidateInformation();
-
         }
 
         public Resource(CreateResourceDto dto)
@@ -53,12 +52,12 @@ namespace Domain.Models
             {
                 throw new Exception("Resource name is null.");
             }
-            else if(Type == null)
+            else if (Type == null)
             {
                 throw new Exception("Resource type is null.");
             }
             else
-        {
+            {
                 return true;
             }
         }

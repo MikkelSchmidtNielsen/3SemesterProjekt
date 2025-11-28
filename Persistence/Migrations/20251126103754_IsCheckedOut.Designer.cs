@@ -12,8 +12,8 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251121113021_CampingDB")]
-    partial class CampingDB
+    [Migration("20251126103754_IsCheckedOut")]
+    partial class IsCheckedOut
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,9 @@ namespace Persistence.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("isCheckedIn")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isCheckedOut")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

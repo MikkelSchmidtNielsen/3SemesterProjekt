@@ -1,18 +1,20 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ModelsDto
+namespace Application.ApplicationDto.Command
 {
-    public class BookingCreateFactoryDto
+    public class CreateBookingByGuestCommandDto
     {
-        public int Id { get; set; }
-        public int GuestId { get; set; }
+        public string Email { get; set; }
         public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public decimal TotalPrice { get; set; }
+        public Guest? Guest { get; set; }
+        public Resource Resource { get; set; }
     }
 }

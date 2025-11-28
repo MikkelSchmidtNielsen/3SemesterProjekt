@@ -88,7 +88,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Booking factory
             bookingFactory
-                .Setup(factory => factory.Create(It.IsAny<BookingCreateFactoryDto>()))
+                .Setup(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             // Mock Repository
@@ -126,7 +126,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             // Verify mocks were called
             resourceIdQuery.Verify(query => query.GetResourceByIdAsync(bookingDto.ResourceId), Times.Once);
             guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<BookingCreateFactoryDto>()), Times.Once);
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Once);
             repository.Verify(repo => repo.CreateBookingAsync(booking), Times.Once);
         }
 
@@ -176,7 +176,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Verify mocks weren't called
             guestCreateCommand.Verify(command => command.CreateGuestAsync(It.IsAny<GuestCreateRequestDto>()), Times.Never());
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<BookingCreateFactoryDto>()), Times.Never);
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Never);
             repository.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
@@ -241,7 +241,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
 
             // Verify mocks weren't called
-            bookingFactory.Verify(factory => factory.Create(It.IsAny<BookingCreateFactoryDto>()), Times.Never);
+            bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Never);
             repository.Verify(repo => repo.CreateBookingAsync(It.IsAny<Booking>()), Times.Never);
         }
 
@@ -302,7 +302,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 .ReturnsAsync(Result<Guest>.Success(guest));
 
             bookingFactory
-                .Setup(factory => factory.Create(It.IsAny<BookingCreateFactoryDto>()))
+                .Setup(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()))
                 .Returns(Result<Booking>.Success(booking));
 
             repository

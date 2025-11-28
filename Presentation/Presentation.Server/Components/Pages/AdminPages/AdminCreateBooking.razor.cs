@@ -47,10 +47,12 @@ namespace Presentation.Server.Components.Pages.AdminPages
             }
 		}
 
-        private void UpdateBookingPreview(int resourceId, DateOnly startDate, DateOnly endDate)
+        private void UpdateBookingPreview(int? resourceId, DateOnly startDate, DateOnly endDate)
         {
-            GetResourceNameById(resourceId);
-            CalculateTempPrice(resourceId, startDate, endDate);
+            // Since the method needs a non-nullable int, and we need resourceId to be nullable for the RadzenRequiredValidator Component, we convert resourceId to a non-nullable int
+            int resourseIdToInt = resourceId.GetValueOrDefault();
+            GetResourceNameById(resourseIdToInt);
+            CalculateTempPrice(resourseIdToInt, startDate, endDate);
         }
 
         private void GetResourceNameById(int resourceId)
@@ -133,7 +135,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
     internal class BookingModel
     {
-        public int ResourceId { get; set; }
+        public int? ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public GuestCreateRequestDto Guest { get; set; }

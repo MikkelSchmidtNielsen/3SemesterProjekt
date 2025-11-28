@@ -32,6 +32,7 @@ namespace Persistence.Repository
 			}
 		}
 
+        // READ
         public async Task<IResult<IEnumerable<Booking>>> GetActiveBookingsWithMissingCheckInsAsync()
         {
             try // Tries to retrieve all missed check-ins from today and earlier and return them as a successful result.
