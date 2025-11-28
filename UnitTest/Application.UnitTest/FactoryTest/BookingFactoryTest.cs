@@ -24,7 +24,7 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 					   // accept id. Since the id is init: Init means "settable during initialization, which includes inside a
 					   // constructor or in an object initializer.
 
-			Resource resourceForTest = new Resource("Familiehytten", "Hytte", 400, 1, null) { Id = 1 };
+			Resource resourceForTest = new Resource(name: "Familiehytten", type: "Hytte", basePrice: 400, location: 1, description: null) { Id = 1 };
 
 			BookingFactory factory = new BookingFactory();
 			CreateBookingFactoryDto dto = new CreateBookingFactoryDto
@@ -42,11 +42,11 @@ namespace UnitTest.Application.UnitTest.FactoryTest
             
 			// Assert
 			Assert.True(result.IsSucces());
-			//Assert.Equal(dto.Guest.Id, succes.OriginalType.Guest.Id);
-			//Assert.Equal(dto.ResourceId, succes.OriginalType.ResourceId);
-			//Assert.Equal(dto.StartDate, succes.OriginalType.StartDate);
-			//Assert.Equal(dto.EndDate, succes.OriginalType.EndDate);
-			//Assert.Equal(dto.TotalPrice, succes.OriginalType.TotalPrice);   
+			Assert.Equal(dto.Guest.Id, succes.OriginalType.GuestId);
+			Assert.Equal(dto.Resource.Id, succes.OriginalType.ResourceId);
+			Assert.Equal(dto.StartDate, succes.OriginalType.StartDate);
+			Assert.Equal(dto.EndDate, succes.OriginalType.EndDate);
+			Assert.Equal(dto.TotalPrice, succes.OriginalType.TotalPrice);
 		}
     }
 }
