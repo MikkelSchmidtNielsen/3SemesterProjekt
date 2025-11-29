@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "file://./open-api-script.yaml",
+      "url": "open-api-script.yaml",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -16,6 +16,9 @@
       "namespace": "Authentication.Api.Controllers",
       "generateOptionalParameters": true,
       "additionalNamespaceUsages": [
+        "Microsoft.AspNetCore.Mvc",
+        "System.CodeDom.Compiler",
+        "System.Threading.Tasks"
       ],
       "output": "../Controllers/AuthController.cs"
     }

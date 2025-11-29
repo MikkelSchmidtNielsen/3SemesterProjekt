@@ -24,8 +24,7 @@
 	</ItemGroup>
 
 	<Target Name="NSwag" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
-		<Exec WorkingDirectory="$(ProjectDir)OpenApiScript"
-			Command="nswag run open-api-script.nswag" />
+		<Exec Command="nswag run OpenApiScript/open-api-script.nswag" />
 	</Target>
 
 </Project>
