@@ -13,7 +13,7 @@
       "controllerBaseClass": "Microsoft.AspNetCore.Mvc.ControllerBase",
       "controllerTarget": "AspNetCore",
       "className": "Auth",
-      "namespace": "OpenAPITest.Controllers",
+      "namespace": "Authentication.Api.Controllers",
       "generateOptionalParameters": true,
       "additionalNamespaceUsages": [
         "Microsoft.AspNetCore.Mvc",
