@@ -17,6 +17,12 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\InversionOfControl\InversionOfControl.csproj" />
+  </ItemGroup>
+
 	<Target Name="NSwag" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
 		<Exec Command="nswag run OpenApiScript/open-api-script.nswag" />
 	</Target>

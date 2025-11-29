@@ -15,6 +15,7 @@
       "className": "Resource",
       "namespace": "Api.Controllers",
       "generateOptionalParameters": true,
+      "generateDtoTypes":  false,
       "additionalNamespaceUsages": [
         "Microsoft.AspNetCore.Mvc",
         "System.CodeDom.Compiler",
