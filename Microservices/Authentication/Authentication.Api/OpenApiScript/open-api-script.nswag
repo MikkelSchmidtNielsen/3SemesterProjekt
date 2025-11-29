@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "file://./open-api-script.yaml",
+      "url": "open-api-script.yaml",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -13,9 +13,12 @@
       "controllerBaseClass": "Microsoft.AspNetCore.Mvc.ControllerBase",
       "controllerTarget": "AspNetCore",
       "className": "Auth",
-      "namespace": "Authentication.Api.Controllers",
+      "namespace": "OpenAPITest.Controllers",
       "generateOptionalParameters": true,
       "additionalNamespaceUsages": [
+        "Microsoft.AspNetCore.Mvc",
+        "System.CodeDom.Compiler",
+        "System.Threading.Tasks"
       ],
       "output": "../Controllers/AuthController.cs"
     }
