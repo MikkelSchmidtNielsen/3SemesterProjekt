@@ -1,20 +1,28 @@
 openapi: 3.0.0
 info:
     version: 1.0.0
-    title: User authentication API
+    title: Resource API
+
 paths:
-  '/register-user/{email}':
-    summary: Path to register a user 
-    description: User is being auto registrated by the request
+  '/resource':
+    summary: Path to create a resource
+    description: Creates a new resource in the system
     post:
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createResourceDto'
+
         responses:
           '201':
-            description: Succesful response - returns a JWT.
+            description: Successful response - returns the created resource.
             content:
-              application/jwt:
-                schema: 
-                  $ref: '#/components/schemas/userResponse'
-          
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/resourceResponse'
+
           '400':
             $ref: '#/components/responses/400Error'
 
@@ -24,19 +32,50 @@ paths:
           '500':
             $ref: '#/components/responses/500Error'
 
-    parameters:
-      - name: email
-        in: path
-        required: true
-        schema:
-          type: string
-
 components:
-  schemas: 
-    userResponse:
-      description: Returns a JSON web token (JWT) required to login.
-      type: string
-    
+  schemas:
+
+    createResourceDto:
+      type: object
+      required:
+        - name
+        - type
+        - basePrice
+        - location
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        location:
+          type: integer
+        description:
+          type: string
+          nullable: true
+
+    resourceResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        location:
+          type: integer
+        description:
+          type: string
+          nullable: true
+        isAvailable:
+          type: boolean
+
     badResponse:
       type: object
       properties:
@@ -52,7 +91,7 @@ components:
             $ref: '#/components/schemas/badResponse'
 
     409Error:
-      description: Error response - couldn't create user conflict
+      description: Error response - Resource conflict
       content:
         application/json:
           schema:

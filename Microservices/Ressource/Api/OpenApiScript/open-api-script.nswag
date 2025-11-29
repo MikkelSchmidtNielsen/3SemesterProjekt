@@ -12,15 +12,15 @@
     "openApiToCSharpController": {
       "controllerBaseClass": "Microsoft.AspNetCore.Mvc.ControllerBase",
       "controllerTarget": "AspNetCore",
-      "className": "Auth",
-      "namespace": "OpenAPITest.Controllers",
+      "className": "Resource",
+      "namespace": "Api.Controllers",
       "generateOptionalParameters": true,
       "additionalNamespaceUsages": [
         "Microsoft.AspNetCore.Mvc",
         "System.CodeDom.Compiler",
         "System.Threading.Tasks"
       ],
-      "output": "../Controllers/AuthController.cs"
+      "output": "../Controllers/ResourceController.cs"
     }
   }
 }
