@@ -1,0 +1,39 @@
+﻿name: (Authentication) Build and Test on Pull Request
+
+on:
+  pull_request:
+    paths: 
+       - 'Microservices/Authentication/**'
+    branches: [ "development" ]
+
+jobs:
+  build-and-test:
+    name: Build and Test .NET Application
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Microservices/Authentication
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      # Step 2: Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'        
+
+      # Step 3: Get nuggetpackages needed for testing
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Step 4: Build the solution
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      # Step 5: Run tests (xUnit)
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal

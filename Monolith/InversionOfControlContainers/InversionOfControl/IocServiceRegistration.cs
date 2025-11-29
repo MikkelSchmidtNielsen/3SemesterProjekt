@@ -1,0 +1,62 @@
+﻿using Application.Factories;
+using Application.InfrastructureInterfaces;
+using Application.RepositoryInterfaces;
+using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
+using Application.Services.Command;
+using Application.Services.Query;
+using Common.ExternalConfig;
+using Domain.DomainInterfaces;
+using Infrastructure.Email;
+using Infrastructure.InternalApiCalls.UserAuthenticationApi;
+using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Persistence;
+using Persistence.EntityFramework;
+using Persistence.Repository;
+using System.ComponentModel.Design;
+
+namespace InversionOfControlContainers.InversionOfControl
+{
+    public class IocServiceRegistration
+    {
+        public static void RegisterService(IServiceCollection services, IConfiguration configuration)
+        {
+            ConfigurationDictionary.CreateDictionary(configuration);
+
+            //Add DbContext
+            services.AddDbContext<SqlServerDbContext>();
+
+            //Add services
+            services.AddScoped<ICreateResourceService, CreateResourceService>();
+            services.AddScoped<IBookingCreateCommand, BookingCreateCommand>();
+            services.AddScoped<IGuestCreateCommand, GuestCreateCommand>();
+            services.AddScoped<IGuestIdQuery, GuestIdQuery>();
+            services.AddScoped<IResourceAllQuery, ResourceAllQuery>();
+            services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
+            services.AddScoped<IBookingCheckInQuery, BookingCheckInQuery>();
+            services.AddScoped<IBookingCheckOutQuery, BookingCheckOutQuery>();
+            services.AddScoped<ISendEmail, SendEmailMailKit>();
+            services.AddScoped<IReadAllResourcesQueryHandler, ReadAllResourcesQueryHandler>();
+            services.AddScoped<ICreateBookingByGuestCommandHandler, GuestCreateBookingService>();
+			services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
+			services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();
+
+			//Add repositories
+			services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IResourceRepository, ResourceRepository>();
+            services.AddScoped<IGuestRepository, GuestRepository>();
+
+            //Add factories
+            services.AddScoped<IBookingFactory, BookingFactory>();
+            services.AddScoped<IResourceFactory, ResourceFactory>();
+            services.AddScoped<IGuestFactory, GuestFactory>();
+
+			//Add UnitOfWork
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+			HttpClientModule.RegisterHttpClients(services, configuration);
+        }
+    }
+}
