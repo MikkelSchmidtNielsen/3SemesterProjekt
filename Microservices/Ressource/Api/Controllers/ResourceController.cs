@@ -40,7 +40,7 @@ namespace Api.Controllers
 
         /// <returns>Resource created successfully</returns>
 
-        System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPOSTAsync(CreateResourceCommandDto body);
+        System.Threading.Tasks.Task<ApiResponseDto> CreateResourceAsync(CreateResourceCommandDto body);
 
         /// <summary>
         /// Get filtered list of resources
@@ -53,7 +53,7 @@ namespace Api.Controllers
 
         /// <returns>List of resources</returns>
 
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ResourceResponseDto>> ResourcesAllAsync(string name = null, System.Collections.Generic.IEnumerable<string> type = null, int? location = null, bool? isAvailable = null, decimal? minPrice = null, decimal? maxPrice = null);
+        System.Threading.Tasks.Task<ApiResponseDto> GetResourcesAsync(string name = null, System.Collections.Generic.IEnumerable<string> type = null, int? location = null, bool? isAvailable = null, decimal? minPrice = null, decimal? maxPrice = null);
 
         /// <summary>
         /// Get a single resource by ID
@@ -62,7 +62,7 @@ namespace Api.Controllers
 
         /// <returns>Resource found</returns>
 
-        System.Threading.Tasks.Task<ResourceResponseDto> ResourcesGETAsync(int id);
+        System.Threading.Tasks.Task<ApiResponseDto> GetResourceByIdAsync(int id);
 
         /// <summary>
         /// Update an existing resource
@@ -71,7 +71,7 @@ namespace Api.Controllers
 
         /// <returns>Resource updated</returns>
 
-        System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPUTAsync(int id, UpdateResourceByIdCommandDto body);
+        System.Threading.Tasks.Task<ApiResponseDto> UpdateResourceByIdAsync(int id, UpdateResourceByIdCommandDto body);
 
         /// <summary>
         /// Delete a resource by ID
@@ -80,7 +80,7 @@ namespace Api.Controllers
 
         /// <returns>Resource deleted successfully</returns>
 
-        System.Threading.Tasks.Task ResourcesDELETEAsync(int id);
+        System.Threading.Tasks.Task<ApiResponseDto> DeleteResourceByIdAsync(int id);
 
     }
 
@@ -100,10 +100,10 @@ namespace Api.Controllers
         /// </summary>
         /// <returns>Resource created successfully</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("resources")]
-        public System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPOST([Microsoft.AspNetCore.Mvc.FromBody] CreateResourceCommandDto body)
+        public System.Threading.Tasks.Task<ApiResponseDto> CreateResource([Microsoft.AspNetCore.Mvc.FromBody] CreateResourceCommandDto body)
         {
 
-            return _implementation.ResourcesPOSTAsync(body);
+            return _implementation.CreateResourceAsync(body);
         }
 
         /// <summary>
@@ -112,10 +112,10 @@ namespace Api.Controllers
         /// <param name="type">Multi-value filter for resource types</param>
         /// <returns>List of resources</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("resources")]
-        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ResourceResponseDto>> ResourcesAll([Microsoft.AspNetCore.Mvc.FromQuery] string name = null, [Microsoft.AspNetCore.Mvc.FromQuery] System.Collections.Generic.IEnumerable<string> type = null, [Microsoft.AspNetCore.Mvc.FromQuery] int? location = null, [Microsoft.AspNetCore.Mvc.FromQuery] bool? isAvailable = null, [Microsoft.AspNetCore.Mvc.FromQuery] decimal? minPrice = null, [Microsoft.AspNetCore.Mvc.FromQuery] decimal? maxPrice = null)
+        public System.Threading.Tasks.Task<ApiResponseDto> GetResources([Microsoft.AspNetCore.Mvc.FromQuery] string name = null, [Microsoft.AspNetCore.Mvc.FromQuery] System.Collections.Generic.IEnumerable<string> type = null, [Microsoft.AspNetCore.Mvc.FromQuery] int? location = null, [Microsoft.AspNetCore.Mvc.FromQuery] bool? isAvailable = null, [Microsoft.AspNetCore.Mvc.FromQuery] decimal? minPrice = null, [Microsoft.AspNetCore.Mvc.FromQuery] decimal? maxPrice = null)
         {
 
-            return _implementation.ResourcesAllAsync(name, type, location, isAvailable, minPrice, maxPrice);
+            return _implementation.GetResourcesAsync(name, type, location, isAvailable, minPrice, maxPrice);
         }
 
         /// <summary>
@@ -123,10 +123,10 @@ namespace Api.Controllers
         /// </summary>
         /// <returns>Resource found</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("resources/{id}")]
-        public System.Threading.Tasks.Task<ResourceResponseDto> ResourcesGET(int id)
+        public System.Threading.Tasks.Task<ApiResponseDto> GetResourceById(int id)
         {
 
-            return _implementation.ResourcesGETAsync(id);
+            return _implementation.GetResourceByIdAsync(id);
         }
 
         /// <summary>
@@ -134,10 +134,10 @@ namespace Api.Controllers
         /// </summary>
         /// <returns>Resource updated</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("resources/{id}")]
-        public System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPUT(int id, [Microsoft.AspNetCore.Mvc.FromBody] UpdateResourceByIdCommandDto body)
+        public System.Threading.Tasks.Task<ApiResponseDto> UpdateResourceById(int id, [Microsoft.AspNetCore.Mvc.FromBody] UpdateResourceByIdCommandDto body)
         {
 
-            return _implementation.ResourcesPUTAsync(id, body);
+            return _implementation.UpdateResourceByIdAsync(id, body);
         }
 
         /// <summary>
@@ -145,10 +145,10 @@ namespace Api.Controllers
         /// </summary>
         /// <returns>Resource deleted successfully</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("resources/{id}")]
-        public System.Threading.Tasks.Task ResourcesDELETE(int id)
+        public System.Threading.Tasks.Task<ApiResponseDto> DeleteResourceById(int id)
         {
 
-            return _implementation.ResourcesDELETEAsync(id);
+            return _implementation.DeleteResourceByIdAsync(id);
         }
 
     }

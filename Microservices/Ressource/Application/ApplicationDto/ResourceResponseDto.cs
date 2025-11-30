@@ -17,6 +17,5 @@ namespace Application.ApplicationDto
 		public bool? IsAvailable { get; set; }
 		public string? Description { get; set; }
 		public byte[] RowVersions { get; set; }
-		public HttpStatusCode StatusCode { get; set; }
 	}
 }

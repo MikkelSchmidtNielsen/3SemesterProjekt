@@ -22,7 +22,7 @@ namespace Application.Services.Query
 			_resourceRepository = resourceRepository;
 		}
 
-		public async Task<IResult<IEnumerable<ResourceResponseDto>>> HandleAsync(ReadResourceListQueryDto criteria)
+		public async Task<IResult<ICollection<ResourceResponseDto>>> HandleAsync(ReadResourceListQueryDto criteria)
 		{
 			IResult<IEnumerable<Resource>> result = await _resourceRepository.GetAllResourcesAsync(criteria);
 
@@ -34,24 +34,20 @@ namespace Application.Services.Query
 				foreach(var resource in result.GetError().OriginalType)
 				{
 					ResourceResponseDto resourceDto = Mapper.Map<ResourceResponseDto>(resource);
-					resourceDto.StatusCode = HttpStatusCode.InternalServerError;
-
 					response.Add(resourceDto);
 				}
 
-				return Result<IEnumerable<ResourceResponseDto>>.Error(response, result.GetError().Exception!).SetStatusCode(result.StatusCode);
+				return Result<ICollection<ResourceResponseDto>>.Error(response, result.GetError().Exception!).SetStatusCode(result.StatusCode);
 			}
 			else
 			{
 				foreach (var resource in result.GetSuccess().OriginalType)
 				{
 					ResourceResponseDto resourceDto = Mapper.Map<ResourceResponseDto>(resource);
-					resourceDto.StatusCode = HttpStatusCode.OK;
-
 					response.Add(resourceDto);
 				}
 
-				return Result<IEnumerable<ResourceResponseDto>>.Success(response).SetStatusCode(result.StatusCode);
+				return Result<ICollection<ResourceResponseDto>>.Success(response).SetStatusCode(result.StatusCode);
 			}	
 		}
 	}

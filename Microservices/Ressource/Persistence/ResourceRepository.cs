@@ -17,6 +17,7 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
+		// Create
         public async Task<IResult<Resource>> AddResourceToDBAsync(Resource resource)
         {
             try
@@ -52,6 +53,7 @@ namespace Persistence.Repository
         // LIST
         public async Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync(ReadResourceListQueryDto criteria)
         {
+			// query is a holder of all criteria
 			IQueryable<Resource> query = _db.Resources.AsQueryable();
 
 			if (!string.IsNullOrWhiteSpace(criteria.Name))
@@ -72,6 +74,7 @@ namespace Persistence.Repository
 			if (criteria.MaxPrice.HasValue)
 				query = query.Where(r => r.BasePrice <= criteria.MaxPrice.Value);
 	
+			// query.ToList searches the database with given criteria
 			return Result<IEnumerable<Resource>>.Success(await query.ToListAsync());
 		}
     }

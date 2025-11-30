@@ -10,6 +10,6 @@ namespace Application.ServiceInterfaces.Query
 {
 	public interface IReadResourceWithCriteriaQueryHandler
 	{
-		public Task<IResult<IEnumerable<ResourceResponseDto>>> HandleAsync(ReadResourceListQueryDto criteria);
+		public Task<IResult<ICollection<ResourceResponseDto>>> HandleAsync(ReadResourceListQueryDto criteria);
 	}
 }
