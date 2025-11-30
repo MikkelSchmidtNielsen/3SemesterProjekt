@@ -1,8 +1,10 @@
-﻿using Application.RepositoryInterfaces;
+﻿using Application.ApplicationDto;
+using Application.RepositoryInterfaces;
 using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Persistence.Repository
 {
@@ -15,33 +17,6 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
-        public async Task<IResult<Resource>> GetResourceByResourceNameAsync(string resourceName)
-        {
-            Resource? resource = await _db.Resources.FirstOrDefaultAsync(x => x.Name == resourceName);
-
-            if (resource is null)
-            {
-                return Result<Resource>.Error(resource, new Exception("En ressource med dette navn eksisterer ikke."));
-            }
-            else
-            {
-                return Result<Resource>.Success(resource);
-            }
-        }
-
-        public async Task<IResult<Resource>> GetResourceByLocationAsync(int resourceLocation)
-        {
-            Resource? resource = await _db.Resources.FirstOrDefaultAsync(x => x.Location == resourceLocation);
-
-            if (resource is null)
-            {
-                return Result<Resource>.Error(resource, new Exception("Der kunne ikke findes en ressource med det valgte pladsnr."));
-            }
-            else
-            {
-                return Result<Resource>.Success(resource);
-            }
-        }
         public async Task<IResult<Resource>> AddResourceToDBAsync(Resource resource)
         {
             try
@@ -49,11 +24,11 @@ namespace Persistence.Repository
                 await _db.Resources.AddAsync(resource);
                 await _db.SaveChangesAsync();
 
-                return Result<Resource>.Success(resource);
+                return Result<Resource>.Success(resource).SetStatusCode(System.Net.HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
-                return Result<Resource>.Error(resource, ex);
+                return Result<Resource>.Error(resource, ex).SetStatusCode(System.Net.HttpStatusCode.InternalServerError);
             }
         }
     
@@ -75,18 +50,29 @@ namespace Persistence.Repository
 		}
 
         // LIST
-        public async Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync()
+        public async Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync(ReadResourceListQueryDto criteria)
         {
-			try
-			{
-				IEnumerable<Resource> resources = await _db.Resources.ToListAsync();
-				return Result<IEnumerable<Resource>>.Success(resources);
-			}
-			catch (Exception ex)
-			{
-				// Returns invalid list with exception
-				return Result<IEnumerable<Resource>>.Error(originalType: null!, exception: ex);
-			}
+			IQueryable<Resource> query = _db.Resources.AsQueryable();
+
+			if (!string.IsNullOrWhiteSpace(criteria.Name))
+				query = query.Where(r => r.Name.Contains(criteria.Name));
+
+			if (criteria.Type != null && criteria.Type.Any())
+				query = query.Where(r => criteria.Type.Contains(r.Type));
+
+			if (criteria.Location.HasValue)
+				query = query.Where(r => r.Location == criteria.Location.Value);
+
+			if (criteria.IsAvailable.HasValue)
+				query = query.Where(r => r.IsAvailable == criteria.IsAvailable.Value);
+
+			if (criteria.MinPrice.HasValue)
+				query = query.Where(r => r.BasePrice >= criteria.MinPrice.Value);
+
+			if (criteria.MaxPrice.HasValue)
+				query = query.Where(r => r.BasePrice <= criteria.MaxPrice.Value);
+	
+			return Result<IEnumerable<Resource>>.Success(await query.ToListAsync());
 		}
     }
 }

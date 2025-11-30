@@ -15,11 +15,12 @@
       "className": "Resource",
       "namespace": "Api.Controllers",
       "generateOptionalParameters": true,
-      "generateDtoTypes":  false,
+      "generateDtoTypes": false,
       "additionalNamespaceUsages": [
         "Microsoft.AspNetCore.Mvc",
         "System.CodeDom.Compiler",
-        "System.Threading.Tasks"
+        "System.Threading.Tasks",
+        "Application.ApplicationDto"
       ],
       "output": "../Controllers/ResourceController.cs"
     }

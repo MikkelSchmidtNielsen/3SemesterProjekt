@@ -1,41 +1,178 @@
 openapi: 3.0.0
 info:
-    version: 1.0.0
-    title: Resource API
+  version: 1.0.0
+  title: Resource API
+  description: API for managing Resources
 
 paths:
-  '/resource':
-    summary: Path to create a resource
-    description: Creates a new resource in the system
+  # =========================
+  # CREATE
+  # =========================
+  /resources:
     post:
-        requestBody:
-          required: true
+      summary: Create a new resource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResourceCommandDto'
+      responses:
+        '201':
+          description: Resource created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/createResourceDto'
+                $ref: '#/components/schemas/ResourceResponseDto'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '409':
+          $ref: '#/components/responses/409Error'
+        '500':
+          $ref: '#/components/responses/500Error'
 
-        responses:
-          '201':
-            description: Successful response - returns the created resource.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/resourceResponse'
+  # =========================
+  # READ (LIST) med filtrering
+  # =========================
+    get:
+      summary: Get filtered list of resources
+      parameters:
+        - $ref: '#/components/parameters/NameQueryParam'
+        - $ref: '#/components/parameters/TypeQueryParam'
+        - $ref: '#/components/parameters/LocationQueryParam'
+        - $ref: '#/components/parameters/IsAvailableQueryParam'
+        - $ref: '#/components/parameters/MinPriceQueryParam'
+        - $ref: '#/components/parameters/MaxPriceQueryParam'
+      responses:
+        '200':
+          description: List of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceResponseDto'
+        '500':
+          $ref: '#/components/responses/500Error'
 
-          '400':
-            $ref: '#/components/responses/400Error'
+  # =========================
+  # READ (SINGLE)
+  # =========================
+  /resources/{id}:
+    get:
+      summary: Get a single resource by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceResponseDto'
+        '404':
+          $ref: '#/components/responses/404Error'
+        '500':
+          $ref: '#/components/responses/500Error'
 
-          '409':
-            $ref: '#/components/responses/409Error'
+  # =========================
+  # UPDATE
+  # =========================
+    put:
+      summary: Update an existing resource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResourceByIdCommandDto'
+      responses:
+        '200':
+          description: Resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceResponseDto'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+        '409':
+          $ref: '#/components/responses/409Error'
+        '500':
+          $ref: '#/components/responses/500Error'
 
-          '500':
-            $ref: '#/components/responses/500Error'
+  # =========================
+  # DELETE
+  # =========================
+    delete:
+      summary: Delete a resource by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Resource deleted successfully
+        '404':
+          $ref: '#/components/responses/404Error'
+        '500':
+          $ref: '#/components/responses/500Error'
 
 components:
+  # =========================
+  # DTOs
+  # =========================
   schemas:
+    HttpStatusCodeEnum:
+      type: string
+      description: HTTP status code enum for responses
+      enum:
+        - OK           # 200
+        - Created      # 201
+        - NoContent    # 204
+        - BadRequest   # 400
+        - NotFound     # 404
+        - Conflict     # 409
+        - InternalServerError # 500
 
-    createResourceDto:
+    ResourceResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        location:
+          type: integer
+        isAvailable:
+          type: boolean
+        description:
+          type: string
+        rowVersion:
+          type: string
+          format: byte
+        statusCode:
+          $ref: '#/components/schemas/HttpStatusCodeEnum'
+
+    CreateResourceCommandDto:
       type: object
       required:
         - name
@@ -54,13 +191,12 @@ components:
           type: integer
         description:
           type: string
-          nullable: true
 
-    resourceResponse:
+    UpdateResourceByIdCommandDto:
       type: object
+      required:
+        - rowVersion
       properties:
-        id:
-          type: integer
         name:
           type: string
         type:
@@ -72,34 +208,112 @@ components:
           type: integer
         description:
           type: string
-          nullable: true
         isAvailable:
           type: boolean
-
-    badResponse:
-      type: object
-      properties:
-        message:
+        rowVersion:
           type: string
+          format: byte
 
+  # =========================
+  # Error Responses
+  # =========================
   responses:
     400Error:
-      description: Error response - Invalid input
+      description: Bad Request
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/badResponse'
+            type: object
+            properties:
+              message:
+                type: string
+
+    404Error:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
 
     409Error:
-      description: Error response - Resource conflict
+      description: Conflict
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/badResponse'
+            type: object
+            properties:
+              message:
+                type: string
+              currentRowVersion:
+                type: string
+                format: byte
+              clientRowVersion:
+                type: string
+                format: byte
 
     500Error:
-      description: Error response - unexpected error occurred
+      description: Internal Server Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/badResponse'
+            type: object
+            properties:
+              message:
+                type: string
+
+
+  # =========================
+  # Parameters for queries
+  # =========================
+  parameters:
+    NameQueryParam:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+
+    TypeQueryParam:
+      name: type
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: true
+      description: Multi-value filter for resource types
+
+    LocationQueryParam:
+      name: location
+      in: query
+      required: false
+      schema:
+        type: integer
+
+    IsAvailableQueryParam:
+      name: isAvailable
+      in: query
+      required: false
+      schema:
+        type: boolean
+
+    MinPriceQueryParam:
+      name: minPrice
+      in: query
+      required: false
+      schema:
+        type: number
+        format: decimal
+
+    MaxPriceQueryParam:
+      name: maxPrice
+      in: query
+      required: false
+      schema:
+        type: number
+        format: decimal

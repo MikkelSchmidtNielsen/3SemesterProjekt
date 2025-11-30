@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.ModelsDto
 {
-    public class CreateResourceDto
+    public class CreateResourceFactoryDto
     {
         public string Name { get; set; }
         public string Type { get; set; }

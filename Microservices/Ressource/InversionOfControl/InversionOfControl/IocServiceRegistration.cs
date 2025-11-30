@@ -27,9 +27,9 @@ namespace InversionOfControlContainers.InversionOfControl
             string secretKey = configuration["Jwt:SecretKey"] ?? throw new InvalidOperationException("Jwt:SecretKey is not configured.");
 
             // Add services
-            services.AddScoped<ICreateTokenCommandHandler>(_ => new CreateTokenCommandHandler(secretKey));
+            //services.AddScoped<ICreateTokenCommandHandler>(_ => new CreateTokenCommandHandler(secretKey));
 
-            services.AddScoped<ICreateUserCommandHandler, CreateUserCommandHandler>();
+            //services.AddScoped<ICreateUserCommandHandler, CreateUserCommandHandler>();
 
             // Add repositories
             services.AddScoped<IResourceRepository, ResourceRepository>();

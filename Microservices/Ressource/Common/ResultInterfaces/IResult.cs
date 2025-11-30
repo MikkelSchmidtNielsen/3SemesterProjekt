@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,5 +15,7 @@ namespace Common.ResultInterfaces
         IResultError<T> GetError();
         bool IsConflict();
         IResultConflict<T> GetConflict();
+        public HttpStatusCode StatusCode { get; }
+        public T? OriginalType {  get; }
     }
 }

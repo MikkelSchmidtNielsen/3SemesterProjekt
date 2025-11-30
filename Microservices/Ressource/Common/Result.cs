@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Common.ResultInterfaces;
@@ -12,11 +13,16 @@ namespace Common
     /// </summary>
     public class Result<T> : IResult<T>, IResultConflict<T>, IResultError<T>, IResultSuccess<T>
     {
-        public T OriginalType { get; }
+        public T? OriginalType { get; }
         public T? CurrentType { get; }
         public Exception? Exception { get; }
         public ResultType Outcome { get; private set; }
-        public enum ResultType { Success, Conflict, Error }
+
+        public HttpStatusCode StatusCode => _statusCode;
+
+        private HttpStatusCode _statusCode;
+
+		public enum ResultType { Success, Conflict, Error }
 
         public Result(T originalType)
         {
@@ -116,5 +122,11 @@ namespace Common
 
             return instance;
         }
-    }
+
+		public Result<T> SetStatusCode(HttpStatusCode statusCode)
+		{
+            _statusCode = statusCode;
+            return this;
+		}
+	}
 }

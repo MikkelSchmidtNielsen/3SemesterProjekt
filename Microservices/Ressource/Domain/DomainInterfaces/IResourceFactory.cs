@@ -11,6 +11,6 @@ namespace Domain.DomainInterfaces
 {
 	public interface IResourceFactory
 	{
-		public Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto);
+		public Task<IResult<Resource>> CreateResourceAsync(CreateResourceFactoryDto dto);
 	}
 }

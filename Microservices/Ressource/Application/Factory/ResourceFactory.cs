@@ -1,15 +1,11 @@
-﻿using Application.RepositoryInterfaces;
+﻿using Application.ApplicationDto;
+using Application.RepositoryInterfaces;
 using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace Application.Factories
 {
@@ -21,23 +17,23 @@ namespace Application.Factories
 		{
 			_repository = repository;
 		}
-		public async Task<IResult<Resource>> CreateResourceAsync(CreateResourceDto dto)
+		public async Task<IResult<Resource>> CreateResourceAsync(CreateResourceFactoryDto dto)
 		{
-			var resourceNameResult = await _repository.GetResourceByResourceNameAsync(dto.Name);
-			var resourceLocationResult = await _repository.GetResourceByLocationAsync(dto.Location);
+			// Gets a IEnumerable of all resources with dtos Name
+			var resourceNameResult = await _repository.GetAllResourcesAsync(new ReadResourceListQueryDto() { Name = dto.Name});
 
-			if (resourceNameResult.IsSucces())
+			// Gets a IEnumerable of all resources with dtos Location
+			var resourceLocationResult = await _repository.GetAllResourcesAsync(new ReadResourceListQueryDto() { Location = dto.Location });
+
+			// If a resource with either Name or Location exist. Return error
+			if (resourceNameResult.GetSuccess().OriginalType.Any() || resourceLocationResult.GetSuccess().OriginalType.Any())
 			{
-                return Result<Resource>.Error(resourceNameResult.GetSuccess().OriginalType, new Exception("En ressource med dette navn eksisterer allerede."));
-            }
-			else if (resourceLocationResult.IsSucces())
-			{
-				return Result<Resource>.Error(resourceLocationResult.GetSuccess().OriginalType, new Exception("Der findes allerede en ressource på denne placering."));
+				return Result<Resource>.Error(null, new Exception("En ressource eksistere allerede med det navn eller placering")).SetStatusCode(System.Net.HttpStatusCode.Conflict);
 			}
 			else
 			{
                 Resource resource = new Resource(dto);
-                return Result<Resource>.Success(resource);
+                return Result<Resource>.Success(resource).SetStatusCode(System.Net.HttpStatusCode.OK);
 			}
 		}
 	}

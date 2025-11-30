@@ -1,6 +1,6 @@
-﻿using Common.ResultInterfaces;
+﻿using Application.ApplicationDto;
+using Common.ResultInterfaces;
 using Domain.Models;
-using Application.ApplicationDto.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface ICreateResourceHandler
     {
-        public Task<IResult<Resource>> Handle(UICreateResourceDto dto);
+        public Task<IResult<ResourceResponseDto>> HandleAsync(CreateResourceCommandDto dto);
     }
 }

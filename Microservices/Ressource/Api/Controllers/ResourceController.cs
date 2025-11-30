@@ -7,6 +7,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.CodeDom.Compiler;
 using System.Threading.Tasks;
+using Application.ApplicationDto;
 
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
@@ -32,11 +33,54 @@ namespace Api.Controllers
     public interface IResourceController
     {
 
+        /// <summary>
+        /// Create a new resource
+        /// </summary>
 
 
-        /// <returns>Successful response - returns the created resource.</returns>
+        /// <returns>Resource created successfully</returns>
 
-        System.Threading.Tasks.Task<ResourceResponse> ResourceAsync(CreateResourceDto body);
+        System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPOSTAsync(CreateResourceCommandDto body);
+
+        /// <summary>
+        /// Get filtered list of resources
+        /// </summary>
+
+
+        /// <param name="type">Multi-value filter for resource types</param>
+
+
+
+        /// <returns>List of resources</returns>
+
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ResourceResponseDto>> ResourcesAllAsync(string name = null, System.Collections.Generic.IEnumerable<string> type = null, int? location = null, bool? isAvailable = null, decimal? minPrice = null, decimal? maxPrice = null);
+
+        /// <summary>
+        /// Get a single resource by ID
+        /// </summary>
+
+
+        /// <returns>Resource found</returns>
+
+        System.Threading.Tasks.Task<ResourceResponseDto> ResourcesGETAsync(int id);
+
+        /// <summary>
+        /// Update an existing resource
+        /// </summary>
+
+
+        /// <returns>Resource updated</returns>
+
+        System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPUTAsync(int id, UpdateResourceByIdCommandDto body);
+
+        /// <summary>
+        /// Delete a resource by ID
+        /// </summary>
+
+
+        /// <returns>Resource deleted successfully</returns>
+
+        System.Threading.Tasks.Task ResourcesDELETEAsync(int id);
 
     }
 
@@ -51,101 +95,65 @@ namespace Api.Controllers
             _implementation = implementation;
         }
 
-        /// <returns>Successful response - returns the created resource.</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("resource")]
-        public System.Threading.Tasks.Task<ResourceResponse> Resource([Microsoft.AspNetCore.Mvc.FromBody] CreateResourceDto body)
+        /// <summary>
+        /// Create a new resource
+        /// </summary>
+        /// <returns>Resource created successfully</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("resources")]
+        public System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPOST([Microsoft.AspNetCore.Mvc.FromBody] CreateResourceCommandDto body)
         {
 
-            return _implementation.ResourceAsync(body);
+            return _implementation.ResourcesPOSTAsync(body);
+        }
+
+        /// <summary>
+        /// Get filtered list of resources
+        /// </summary>
+        /// <param name="type">Multi-value filter for resource types</param>
+        /// <returns>List of resources</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("resources")]
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ResourceResponseDto>> ResourcesAll([Microsoft.AspNetCore.Mvc.FromQuery] string name = null, [Microsoft.AspNetCore.Mvc.FromQuery] System.Collections.Generic.IEnumerable<string> type = null, [Microsoft.AspNetCore.Mvc.FromQuery] int? location = null, [Microsoft.AspNetCore.Mvc.FromQuery] bool? isAvailable = null, [Microsoft.AspNetCore.Mvc.FromQuery] decimal? minPrice = null, [Microsoft.AspNetCore.Mvc.FromQuery] decimal? maxPrice = null)
+        {
+
+            return _implementation.ResourcesAllAsync(name, type, location, isAvailable, minPrice, maxPrice);
+        }
+
+        /// <summary>
+        /// Get a single resource by ID
+        /// </summary>
+        /// <returns>Resource found</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("resources/{id}")]
+        public System.Threading.Tasks.Task<ResourceResponseDto> ResourcesGET(int id)
+        {
+
+            return _implementation.ResourcesGETAsync(id);
+        }
+
+        /// <summary>
+        /// Update an existing resource
+        /// </summary>
+        /// <returns>Resource updated</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("resources/{id}")]
+        public System.Threading.Tasks.Task<ResourceResponseDto> ResourcesPUT(int id, [Microsoft.AspNetCore.Mvc.FromBody] UpdateResourceByIdCommandDto body)
+        {
+
+            return _implementation.ResourcesPUTAsync(id, body);
+        }
+
+        /// <summary>
+        /// Delete a resource by ID
+        /// </summary>
+        /// <returns>Resource deleted successfully</returns>
+        [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("resources/{id}")]
+        public System.Threading.Tasks.Task ResourcesDELETE(int id)
+        {
+
+            return _implementation.ResourcesDELETEAsync(id);
         }
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CreateResourceDto
-    {
-
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Type { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("basePrice", Required = Newtonsoft.Json.Required.Always)]
-        public decimal BasePrice { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("location", Required = Newtonsoft.Json.Required.Always)]
-        public int Location { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ResourceResponse
-    {
-
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Type { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("basePrice", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public decimal BasePrice { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("location", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Location { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsAvailable { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class BadResponse
-    {
-
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
+    
 
 
 }

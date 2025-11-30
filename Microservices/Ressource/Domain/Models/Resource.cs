@@ -1,6 +1,7 @@
 ﻿using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,10 @@ namespace Domain.Models
         public string? Description { get; private set; }
         public bool IsAvailable { get; private set; }
 
-        public Resource(CreateResourceDto dto)
+        [Timestamp]
+		public byte[] RowVersions { get; private set; }
+
+		public Resource(CreateResourceFactoryDto dto)
         {
             Name = dto.Name;
             Type = dto.Type;
@@ -26,7 +30,7 @@ namespace Domain.Models
             Description = dto.Description;
             IsAvailable = true;
 
-            ValidateInformation();
+			ValidateInformation();
         }
         private Resource()
         {
