@@ -6,8 +6,8 @@ namespace Application.RepositoryInterfaces
 {
 	public interface IResourceRepository
 	{
-		public Task<IResult<Resource>> AddResourceToDBAsync(Resource resource);
-		Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync(ReadResourceListQueryDto criteria);
-		Task<IResult<Resource>> GetResourceByIdAsync(int id);
+		public Task<IResult<Resource>> CreateAsync(Resource resource);
+		Task<IResult<IEnumerable<Resource>>> GetAllAsync(ReadResourceListQueryDto criteria);
+		Task<IResult<Resource>> GetByIdAsync(int id);
 	}
 }

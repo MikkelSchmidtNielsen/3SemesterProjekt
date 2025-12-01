@@ -24,12 +24,12 @@ namespace Application.Factories
 		public async Task<Resource> CreateAsync(CreateResourceFactoryDto dto)
 		{
 			// Gets a IEnumerable of all resources with dtos Name
-			var resourceNameResult = await _repository.GetAllResourcesAsync(new ReadResourceListQueryDto() { Name = dto.Name});
+			var resourceNameResult = await _repository.GetAllAsync(new ReadResourceListQueryDto() { Name = dto.Name});
 
 			if (resourceNameResult.GetSuccess().OriginalType.Any()) throw new ConflictException("Der eksistere allerede en resource med det navn");
 
 			// Gets a IEnumerable of all resources with dtos Location
-			var resourceLocationResult = await _repository.GetAllResourcesAsync(new ReadResourceListQueryDto() { Location = dto.Location });
+			var resourceLocationResult = await _repository.GetAllAsync(new ReadResourceListQueryDto() { Location = dto.Location });
 
 			if (resourceLocationResult.GetSuccess().OriginalType.Any()) throw new ConflictException("Der eksistere allerede en resource på den lokalation");
 

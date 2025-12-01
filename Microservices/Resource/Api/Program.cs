@@ -20,11 +20,12 @@ namespace Api
 			builder.Services.AddSwaggerGen();
 
 			// IoC
-			//builder.Services.AddScoped<IResourceController, ResourceControllerImplementation>();
+			builder.Services.AddScoped<IResourceController, ResourceControllerImplementation>();
 			IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
 
 			// ExceptionHandler Middleware
 			builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+			builder.Services.AddProblemDetails();
 
 			var app = builder.Build();
 
@@ -44,6 +45,8 @@ namespace Api
 			app.UseHttpsRedirection();
 			app.UseAuthorization();
 			app.MapControllers();
+
+			app.UseExceptionHandler();
 
 			app.Run();
 		}

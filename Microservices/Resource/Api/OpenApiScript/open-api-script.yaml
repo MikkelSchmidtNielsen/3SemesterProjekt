@@ -50,6 +50,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ResourceResponseDto'
+        '404':
+          $ref: '#/components/responses/404Error'
         '500':
           $ref: '#/components/responses/500Error'
 

@@ -29,7 +29,7 @@ namespace UnitTest.DomainUnitTest
 			// Arrange 
 			Mock<IResourceRepository> mockRepository = new Mock<IResourceRepository>();
 			mockRepository
-				.Setup(repo => repo.GetAllResourcesAsync(It.Is<ReadResourceListQueryDto>(x => x.Name != null)))
+				.Setup(repo => repo.GetAllAsync(It.Is<ReadResourceListQueryDto>(x => x.Name != null)))
 				.ReturnsAsync(Result<IEnumerable<Resource>>.Success(firstGetAllResourceReturn));
 
 			ResourceFactory sut =
@@ -59,11 +59,11 @@ namespace UnitTest.DomainUnitTest
 
 			Mock<IResourceRepository> mockRepository = new Mock<IResourceRepository>();
 			mockRepository
-				.Setup(repo => repo.GetAllResourcesAsync(It.Is<ReadResourceListQueryDto>(x => x.Name != null)))
+				.Setup(repo => repo.GetAllAsync(It.Is<ReadResourceListQueryDto>(x => x.Name != null)))
 				.ReturnsAsync(Result<IEnumerable<Resource>>.Success(Array.Empty<Resource>()));
 
 			mockRepository
-				.Setup(repo => repo.GetAllResourcesAsync(It.Is<ReadResourceListQueryDto>(x => x.Location != null || x.Location == 0)))
+				.Setup(repo => repo.GetAllAsync(It.Is<ReadResourceListQueryDto>(x => x.Location != null || x.Location == 0)))
 				.ReturnsAsync(Result<IEnumerable<Resource>>.Success(firstGetAllResourceReturn));
 
 			ResourceFactory sut =
@@ -93,11 +93,11 @@ namespace UnitTest.DomainUnitTest
 			// Arrange 
 			Mock<IResourceRepository> mockRepository = new Mock<IResourceRepository>();
 			mockRepository
-				.Setup(repo => repo.GetAllResourcesAsync(It.Is<ReadResourceListQueryDto>(x => x.Name != null)))
+				.Setup(repo => repo.GetAllAsync(It.Is<ReadResourceListQueryDto>(x => x.Name != null)))
 				.ReturnsAsync(Result<IEnumerable<Resource>>.Success(Array.Empty<Resource>()));
 
 			mockRepository
-				.Setup(repo => repo.GetAllResourcesAsync(It.Is<ReadResourceListQueryDto>(x => x.Location != null || x.Location == 0)))
+				.Setup(repo => repo.GetAllAsync(It.Is<ReadResourceListQueryDto>(x => x.Location != null || x.Location == 0)))
 				.ReturnsAsync(Result<IEnumerable<Resource>>.Success(Array.Empty<Resource>()));
 
 			ResourceFactory sut =

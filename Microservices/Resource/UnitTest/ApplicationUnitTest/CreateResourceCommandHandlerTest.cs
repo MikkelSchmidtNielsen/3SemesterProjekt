@@ -33,7 +33,7 @@ namespace UnitTest.ApplicationUnitTest
 
 			Mock<IResourceRepository> mockRepository = new Mock<IResourceRepository>();
 			mockRepository
-				.Setup(repo => repo.AddResourceToDBAsync(factoryRetunResource))
+				.Setup(repo => repo.CreateAsync(factoryRetunResource))
 				.ReturnsAsync(Result<Resource>.Success(factoryRetunResource));
 
 			CreateResourceCommandHandler sut = 
@@ -48,7 +48,7 @@ namespace UnitTest.ApplicationUnitTest
 			await sut.HandleAsync(dto);
 
 			// Assert
-			mockRepository.Verify(repo => repo.AddResourceToDBAsync(factoryRetunResource), Times.Once());
+			mockRepository.Verify(repo => repo.CreateAsync(factoryRetunResource), Times.Once());
 		}
 
 		[Fact]
@@ -67,7 +67,7 @@ namespace UnitTest.ApplicationUnitTest
 
 			Mock<IResourceRepository> mockRepository = new Mock<IResourceRepository>();
 			mockRepository
-				.Setup(repo => repo.AddResourceToDBAsync(factoryRetunResource))
+				.Setup(repo => repo.CreateAsync(factoryRetunResource))
 				.ReturnsAsync(Result<Resource>.Success(factoryRetunResource));
 
 			CreateResourceCommandHandler sut =
@@ -82,7 +82,7 @@ namespace UnitTest.ApplicationUnitTest
 
 			// Assert
 			mockFactory.Verify(fc => fc.CreateAsync(It.IsAny<CreateResourceFactoryDto>()), Times.Once());
-			mockRepository.Verify(repo => repo.AddResourceToDBAsync(factoryRetunResource), Times.Once());
+			mockRepository.Verify(repo => repo.CreateAsync(factoryRetunResource), Times.Once());
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Application.Services.Query
 
 		public async Task<IResult<ResourceResponseDto>> HandleAsync(int id)
 		{
-			var result = await _resourceRepository.GetResourceByIdAsync(id);
+			var result = await _resourceRepository.GetByIdAsync(id);
 
 			// Returns Dto format based on repository result
 			return result.IsSucces() ?
