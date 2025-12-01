@@ -8,6 +8,6 @@ namespace Application.RepositoryInterfaces
 	{
 		public Task<IResult<Resource>> CreateAsync(Resource resource);
 		Task<IResult<IEnumerable<Resource>>> GetAllAsync(ReadResourceListQueryDto criteria);
-		Task<IResult<Resource>> GetByIdAsync(int id);
+		Task<IResult<Resource?>> GetByIdAsync(int id);
 	}
 }

@@ -34,20 +34,12 @@ namespace Persistence.Repository
         }
     
         // READ
-        public async Task<IResult<Resource>> GetByIdAsync(int id)
+        public async Task<IResult<Resource?>> GetByIdAsync(int id)
         {
-			try
-			{
-				Resource resource = await _db.Resources
-					.FirstAsync(x => x.Id == id);
+			Resource? resource = await _db.Resources
+				.FirstOrDefaultAsync(x => x.Id == id);
 
-				return Result<Resource>.Success(resource);
-			}
-			catch (Exception ex)
-			{
-                // Returns invalid resource with exception
-                return Result<Resource>.Error(originalType: null!, exception: ex);
-			}
+			return Result<Resource>.Success(resource);
 		}
 
         // LIST
