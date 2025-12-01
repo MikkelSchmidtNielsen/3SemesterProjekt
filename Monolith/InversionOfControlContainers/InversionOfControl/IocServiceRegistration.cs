@@ -8,6 +8,7 @@ using Application.Services.Query;
 using Common.ExternalConfig;
 using Domain.DomainInterfaces;
 using Infrastructure.Email;
+using Infrastructure.InternalApiCalls.ResourceApi;
 using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using InversionOfControlContainers.InversionOfControl.HttpClientSetup;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,7 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddDbContext<SqlServerDbContext>();
 
             //Add services
-            services.AddScoped<ICreateResourceService, CreateResourceService>();
+            services.AddScoped<ICreateResourceCommand, CreateResourceCommand>();
             services.AddScoped<IBookingCreateCommand, BookingCreateCommand>();
             services.AddScoped<IGuestCreateCommand, GuestCreateCommand>();
             services.AddScoped<IGuestIdQuery, GuestIdQuery>();
@@ -42,15 +43,14 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<ICreateBookingByGuestCommandHandler, GuestCreateBookingService>();
 			services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
 			services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();
+            services.AddScoped<IResourceApiService, ResourceApiService>();
 
 			//Add repositories
 			services.AddScoped<IBookingRepository, BookingRepository>();
-            services.AddScoped<IResourceRepository, ResourceRepository>();
             services.AddScoped<IGuestRepository, GuestRepository>();
 
             //Add factories
             services.AddScoped<IBookingFactory, BookingFactory>();
-            services.AddScoped<IResourceFactory, ResourceFactory>();
             services.AddScoped<IGuestFactory, GuestFactory>();
 
 			//Add UnitOfWork

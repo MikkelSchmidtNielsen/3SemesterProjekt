@@ -9,7 +9,6 @@ namespace Persistence.EntityFramework
     public class SqlServerDbContext : DbContext
     {
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Resource> Resources { get; set; }
         public DbSet<Guest> Guests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -21,7 +20,6 @@ namespace Persistence.EntityFramework
         {
             // Apply configurations
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
-            modelBuilder.ApplyConfiguration(new ResourceConfiguration());
             modelBuilder.ApplyConfiguration(new GuestConfiguration());
         }
     }

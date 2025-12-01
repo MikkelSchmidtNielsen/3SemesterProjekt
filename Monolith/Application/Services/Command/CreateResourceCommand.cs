@@ -1,5 +1,4 @@
 ﻿using Application.ApplicationDto.Command;
-using Application.Factories;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Common;
@@ -7,30 +6,23 @@ using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Command
 {
-    public class CreateResourceService : ICreateResourceService
+    public class CreateResourceCommand : ICreateResourceCommand
     {
-        private readonly IResourceFactory _factory;
-        private readonly IResourceRepository _repository;
+        private readonly 
 
-        public CreateResourceService(IResourceFactory factory, IResourceRepository repository)
+        public CreateResourceCommand()
         {
-            _factory = factory;
-            _repository = repository;
+            
         }
 
         public async Task<IResult<Resource>> CreateResourceAsync(UICreateResourceDto dto)
         {
-            var domainDto = Mapper.Map<CreateResourceDto>(dto);
+            CreateResourceCommandDto commandDto = Mapper.Map<CreateResourceCommandDto>(dto);
 
-            var newResource = await _factory.CreateResourceAsync(domainDto);
+
 
             if (newResource.IsSucces())
             {

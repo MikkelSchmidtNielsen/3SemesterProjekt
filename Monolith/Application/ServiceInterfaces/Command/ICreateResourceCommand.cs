@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.ServiceInterfaces.Command
 {
-    public interface ICreateResourceService
+    public interface ICreateResourceCommand
     {
         public Task<IResult<Resource>> CreateResourceAsync(UICreateResourceDto dto);
     }
