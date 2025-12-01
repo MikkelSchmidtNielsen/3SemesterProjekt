@@ -30,20 +30,20 @@ namespace Domain.Models
 
 			ValidateInformation();
         }
-        private Resource()
+        protected Resource()
         {
 
         }
 
-        public bool ValidateInformation()
+        protected bool ValidateInformation()
         {
             if (Name == null)
             {
-                throw new Exception("Resource name is null.");
+                throw new ArgumentException("Resource name is null.");
             }
             else if (Type == null)
             {
-                throw new Exception("Resource type is null.");
+                throw new ArgumentException("Resource type is null.");
             }
             else
             {

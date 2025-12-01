@@ -5,9 +5,7 @@ info:
   description: API for managing Resources
 
 paths:
-  # =========================
   # CREATE
-  # =========================
   /resources:
     post:
       summary: Create a new resource
@@ -32,9 +30,7 @@ paths:
         '500':
           $ref: '#/components/responses/500Error'
 
-    # =========================
     # READ (LIST)
-    # =========================
     get:
       summary: Get filtered list of resources
       operationId: GetResources
@@ -57,9 +53,7 @@ paths:
         '500':
           $ref: '#/components/responses/500Error'
 
-  # =========================
   # READ (SINGLE)
-  # =========================
   /resources/{id}:
     get:
       summary: Get a single resource by ID
@@ -82,9 +76,7 @@ paths:
         '500':
           $ref: '#/components/responses/500Error'
 
-    # =========================
     # UPDATE
-    # =========================
     put:
       summary: Update an existing resource
       operationId: UpdateResourceById
@@ -116,9 +108,7 @@ paths:
         '500':
           $ref: '#/components/responses/500Error'
 
-    # =========================
     # DELETE
-    # =========================
     delete:
       summary: Delete a resource by ID
       operationId: DeleteResourceById
@@ -138,9 +128,7 @@ paths:
 
 
 components:
-  # =========================
   # DTOs
-  # =========================
   schemas:
     ResourceResponseDto:
       type: object
@@ -212,9 +200,7 @@ components:
         message:
           type: string
 
-  # =========================
   # Error Responses
-  # =========================
   responses:
     400Error:
       description: Bad Request
@@ -244,9 +230,7 @@ components:
           schema:
             $ref: '#/components/schemas/BadResponse'
 
-  # =========================
   # Parameters for queries
-  # =========================
   parameters:
     NameQueryParam:
       name: name
