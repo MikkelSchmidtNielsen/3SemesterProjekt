@@ -39,7 +39,7 @@ namespace Application.Services.Command
             // Creates Resource
             var newResource = await _factory.CreateAsync(domainDto);
 
-            IResult<Resource> createdResource = await _repository.AddResourceToDBAsync(newResource);
+            IResult<Resource> createdResource = await _repository.CreateAsync(newResource);
 
             return Result<ResourceResponseDto>.Success(Mapper.Map<ResourceResponseDto>(createdResource.GetSuccess().OriginalType));
 		}

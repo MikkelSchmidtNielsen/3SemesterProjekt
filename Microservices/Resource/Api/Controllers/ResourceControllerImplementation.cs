@@ -31,7 +31,7 @@ namespace Api.Controllers
 			if (result.IsSucces() is false)
 			{
 				// Shoud always be succesfuld if not let ExceptionHandler Middleware handle it
-				throw new Exception();
+				throw result.GetError().Exception!;
 			}
 
 			_contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.Created.ToInt();
@@ -50,7 +50,7 @@ namespace Api.Controllers
 			if (result.IsSucces() is false)
 			{
 				// Shoud always be succesfuld if not let ExceptionHandler Middleware handle it
-				throw new Exception();
+				throw result.GetError().Exception!;
 			}
 
 			_contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.OK.ToInt();
@@ -74,7 +74,7 @@ namespace Api.Controllers
 			if (result.IsSucces() is false)
 			{
 				// Shoud always be succesfuld if not let ExceptionHandler Middleware handle it
-				throw new Exception();
+				throw result.GetError().Exception!;
 			}
 
 			_contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.OK.ToInt();

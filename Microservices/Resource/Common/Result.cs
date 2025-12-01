@@ -86,7 +86,7 @@ namespace Common
         /// <summary>
         /// Gives the wrapper a successful response
         /// </summary>
-        public static Result<T> Success(T originalType)
+        public static Result<T?> Success(T originalType)
         {
             Result<T> instance = new Result<T>(originalType);
 

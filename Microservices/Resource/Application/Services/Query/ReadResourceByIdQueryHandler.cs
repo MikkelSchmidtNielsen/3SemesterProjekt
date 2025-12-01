@@ -2,7 +2,9 @@
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
 using Common;
+using Common.CustomExceptions;
 using Common.ResultInterfaces;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,10 @@ namespace Application.Services.Query
 	{
 		private readonly IResourceRepository _resourceRepository;
 
+		private ReadResourceByIdQueryHandler() // For unittest
+		{
+		}
+
 		public ReadResourceByIdQueryHandler(IResourceRepository resourceRepository)
 		{
 			_resourceRepository = resourceRepository;
@@ -22,12 +28,18 @@ namespace Application.Services.Query
 
 		public async Task<IResult<ResourceResponseDto>> HandleAsync(int id)
 		{
-			var result = await _resourceRepository.GetResourceByIdAsync(id);
+			IResult<Resource?> result = await _resourceRepository.GetByIdAsync(id);
 
-			// Returns Dto format based on repository result
-			return result.IsSucces() ?
-				Result<ResourceResponseDto>.Success(Mapper.Map<ResourceResponseDto>(result.GetSuccess().OriginalType))
-				: Result<ResourceResponseDto>.Error(Mapper.Map<ResourceResponseDto>(new ResourceResponseDto()), result.GetError().Exception!);
+			// If response from database is null throw error
+			Resource? resource = result.IsSucces() ? result.GetSuccess().OriginalType : null;
+
+			if(resource is null)
+			{
+				throw new NotFoundException("Der er ikke nogen Resources i databasen med det Id");
+			}
+
+			// else return as success
+			return Result<ResourceResponseDto>.Success(Mapper.Map<ResourceResponseDto>(resource));
 		}
 	}
 }

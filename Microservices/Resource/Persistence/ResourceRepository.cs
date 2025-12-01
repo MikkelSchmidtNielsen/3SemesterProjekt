@@ -18,7 +18,7 @@ namespace Persistence.Repository
 		}
 
 		// Create
-        public async Task<IResult<Resource>> AddResourceToDBAsync(Resource resource)
+        public async Task<IResult<Resource>> CreateAsync(Resource resource)
         {
             try
             {
@@ -34,24 +34,16 @@ namespace Persistence.Repository
         }
     
         // READ
-        public async Task<IResult<Resource>> GetResourceByIdAsync(int id)
+        public async Task<IResult<Resource?>> GetByIdAsync(int id)
         {
-			try
-			{
-				Resource resource = await _db.Resources
-					.FirstAsync(x => x.Id == id);
+			Resource? resource = await _db.Resources
+				.FirstOrDefaultAsync(x => x.Id == id);
 
-				return Result<Resource>.Success(resource);
-			}
-			catch (Exception ex)
-			{
-                // Returns invalid resource with exception
-                return Result<Resource>.Error(originalType: null!, exception: ex);
-			}
+			return Result<Resource>.Success(resource);
 		}
 
         // LIST
-        public async Task<IResult<IEnumerable<Resource>>> GetAllResourcesAsync(ReadResourceListQueryDto criteria)
+        public async Task<IResult<IEnumerable<Resource>>> GetAllAsync(ReadResourceListQueryDto criteria)
         {
 			// query is a holder of all criteria
 			IQueryable<Resource> query = _db.Resources.AsQueryable();
@@ -59,8 +51,16 @@ namespace Persistence.Repository
 			if (!string.IsNullOrWhiteSpace(criteria.Name))
 				query = query.Where(r => r.Name.Contains(criteria.Name));
 
-			if (criteria.Type != null && criteria.Type.Any())
-				query = query.Where(r => criteria.Type.Contains(r.Type));
+			if (criteria.Type is not null)
+			{
+				// If Type only contains null or empty strings
+				criteria.Type = criteria.Type
+								.Where(t => !string.IsNullOrWhiteSpace(t))
+								.ToList();
+
+				if (criteria.Type.Any())
+					query = query.Where(r => criteria.Type.Contains(r.Type));
+			}
 
 			if (criteria.Location.HasValue)
 				query = query.Where(r => r.Location == criteria.Location.Value);

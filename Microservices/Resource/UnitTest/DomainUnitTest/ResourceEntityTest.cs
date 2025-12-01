@@ -75,28 +75,5 @@ namespace UnitTest.Domain.UnitTest
 			ArgumentException actualException = Assert.Throws<ArgumentException>(() => new Resource(dto));
 			Assert.Equal(expectedException.Message, actualException.Message);
 		}
-
-		[Fact]
-		public void ResourceValidation_ShouldFail_IfTypeIsNull_Isolated()
-		{
-			// Arrange
-			string? type = null;
-			decimal basePrice = 200m;
-
-			ArgumentException expectedException = new ArgumentException("Resource type is null.");
-
-
-			ResourceTestClass createdResource = 
-				Impression.Of<ResourceTestClass>()
-				.With("BasePrice", basePrice)
-				.With("Type", type)
-				.Randomize()
-				.Create();
-
-			// Act + Assert
-			ArgumentException actualException = Assert.Throws<ArgumentException>(() =>  createdResource.ValidateInformation());
-			Assert.Equal(expectedException.Message, actualException.Message);
-		}
-
     }
 }

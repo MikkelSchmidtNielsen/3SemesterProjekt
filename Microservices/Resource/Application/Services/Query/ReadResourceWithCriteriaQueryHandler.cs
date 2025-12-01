@@ -2,6 +2,8 @@
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
 using Common;
+using Common.CustomExceptions;
+using Common.ExtensionMethods;
 using Common.ResultInterfaces;
 using Domain.Models;
 using System;
@@ -17,38 +19,35 @@ namespace Application.Services.Query
 	{
 		private readonly IResourceRepository _resourceRepository;
 
+		private ReadResourceWithCriteriaQueryHandler() // For UnitTest
+		{
+		}
+
 		public ReadResourceWithCriteriaQueryHandler(IResourceRepository resourceRepository)
 		{
 			_resourceRepository = resourceRepository;
 		}
 
+		
+
 		public async Task<IResult<ICollection<ResourceResponseDto>>> HandleAsync(ReadResourceListQueryDto criteria)
 		{
-			IResult<IEnumerable<Resource>> result = await _resourceRepository.GetAllResourcesAsync(criteria);
+			IResult<IEnumerable<Resource>> result = await _resourceRepository.GetAllAsync(criteria);
 
-			List<ResourceResponseDto> response = new List<ResourceResponseDto>();
+			List<ResourceResponseDto> reponses = new List<ResourceResponseDto>();
 
-			// Returns Dto format based on repository result
-			if (result.IsSucces() is false)
+			// If it not a Succes, then it will throw an exception which our ExceptionHandler handles
+			foreach (Resource resource in result.GetSuccess().OriginalType)
 			{
-				foreach(var resource in result.GetError().OriginalType)
-				{
-					ResourceResponseDto resourceDto = Mapper.Map<ResourceResponseDto>(resource);
-					response.Add(resourceDto);
-				}
-
-				return Result<ICollection<ResourceResponseDto>>.Error(response, result.GetError().Exception!);
+				reponses.Add(Mapper.Map<ResourceResponseDto>(resource));
 			}
-			else
-			{
-				foreach (var resource in result.GetSuccess().OriginalType)
-				{
-					ResourceResponseDto resourceDto = Mapper.Map<ResourceResponseDto>(resource);
-					response.Add(resourceDto);
-				}
 
-				return Result<ICollection<ResourceResponseDto>>.Success(response);
-			}	
+			if (reponses.Count is 0)
+			{
+				throw new NotFoundException("Der er ikke nogen Resources i databasen med de kriteria");
+			}
+			
+			return Result<ICollection<ResourceResponseDto>>.Success(reponses);
 		}
 	}
 }
