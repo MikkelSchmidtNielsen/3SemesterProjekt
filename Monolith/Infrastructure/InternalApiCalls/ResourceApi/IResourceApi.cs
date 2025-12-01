@@ -11,7 +11,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
         /// </summary>
         /// <param name="dto">The resource data to be sent in the JSON body</param>
         /// <returns>Api response</returns>
-        [Post("/register-resource")]
+        [Post("/resources")]
         Task<CreateResourceByApiResponseDto> RegisterUserAsync([Body] CreateResourceCommandDto dto);
     }
 }

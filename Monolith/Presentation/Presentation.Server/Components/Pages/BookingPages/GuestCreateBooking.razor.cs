@@ -26,25 +26,25 @@ namespace Presentation.Server.Components.Pages.BookingPages
         };
 
         // Load resources
-        protected override async Task OnInitializedAsync()
-        {
-            IResult<IEnumerable<Resource>> result = await _getAllResourcesService.HandleAsync();
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    IResult<IEnumerable<Resource>> result = await _getAllResourcesService.HandleAsync();
 
-            if (result.IsSucces())
-            {
-                IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
+        //    if (result.IsSucces())
+        //    {
+        //        IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
 
-                _listOfResources = resources;
-            }
-            else
-            {
-                IResultError<IEnumerable<Resource>> error = result.GetError();
+        //        _listOfResources = resources;
+        //    }
+        //    else
+        //    {
+        //        IResultError<IEnumerable<Resource>> error = result.GetError();
 
-                string message = error.Exception!.Message;
+        //        string message = error.Exception!.Message;
 
-                await _dialogService.Alert(message, "Error");
-            }
-        }
+        //        await _dialogService.Alert(message, "Error");
+        //    }
+        //}
 
         // Create the booking 
         private async Task GuestCreateBookingAsync(GuestBookingModel guestBookingModel)

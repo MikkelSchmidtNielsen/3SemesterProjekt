@@ -27,25 +27,25 @@ namespace Presentation.Server.Components.Pages.AdminPages
             Guest = new GuestCreateRequestDto()
         };
 
-        protected override async Task OnInitializedAsync()
-        {
-            IResult<IEnumerable<Resource>> result = await _resourceQuery.GetAllResourcesAsync();
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    IResult<IEnumerable<Resource>> result = await _resourceQuery.GetAllResourcesAsync();
 
-            if (result.IsSucces())
-            {
-                IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
+        //    if (result.IsSucces())
+        //    {
+        //        IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
 
-                _resources = resources;
-            }
-            else
-            {
-                IResultError<IEnumerable<Resource>> error = result.GetError();
+        //        _resources = resources;
+        //    }
+        //    else
+        //    {
+        //        IResultError<IEnumerable<Resource>> error = result.GetError();
 
-                string message = error.Exception!.Message;
+        //        string message = error.Exception!.Message;
 
-                await DialogService.Alert(message, "Error");
-            }
-		}
+        //        await DialogService.Alert(message, "Error");
+        //    }
+		//}
 
         private void UpdateBookingPreview(int? resourceId, DateOnly startDate, DateOnly endDate)
         {

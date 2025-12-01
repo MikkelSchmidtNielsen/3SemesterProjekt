@@ -1,8 +1,8 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;

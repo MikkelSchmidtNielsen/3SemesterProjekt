@@ -13,8 +13,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 {
     internal class BookingCreateCommandTestClass : BookingCreateCommand
     {
-		public BookingCreateCommandTestClass(IBookingRepository repository, IResourceIdQuery resourceIdQuery, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail) 
-            : base(repository, resourceIdQuery, bookingFactory, guestCreateCommand, sendEmail)
+		public BookingCreateCommandTestClass(IBookingRepository repository, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail) 
+            : base(repository, bookingFactory, guestCreateCommand, sendEmail)
 		{
 		}
 

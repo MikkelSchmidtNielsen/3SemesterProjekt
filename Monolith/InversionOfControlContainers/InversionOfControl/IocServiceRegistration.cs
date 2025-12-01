@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Persistence.EntityFramework;
 using Persistence.Repository;
-using System.ComponentModel.Design;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -34,12 +33,9 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IBookingCreateCommand, BookingCreateCommand>();
             services.AddScoped<IGuestCreateCommand, GuestCreateCommand>();
             services.AddScoped<IGuestIdQuery, GuestIdQuery>();
-            services.AddScoped<IResourceAllQuery, ResourceAllQuery>();
-            services.AddScoped<IResourceIdQuery, ResourceIdQuery>();
             services.AddScoped<IBookingCheckInQuery, BookingCheckInQuery>();
             services.AddScoped<IBookingCheckOutQuery, BookingCheckOutQuery>();
             services.AddScoped<ISendEmail, SendEmailMailKit>();
-            services.AddScoped<IReadAllResourcesQueryHandler, ReadAllResourcesQueryHandler>();
             services.AddScoped<ICreateBookingByGuestCommandHandler, GuestCreateBookingService>();
 			services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
 			services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();

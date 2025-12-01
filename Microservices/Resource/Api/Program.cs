@@ -20,7 +20,7 @@ namespace Api
 			builder.Services.AddSwaggerGen();
 
 			// IoC
-			//builder.Services.AddScoped<IResourceController, ResourceControllerImplementation>();
+			builder.Services.AddScoped<IResourceController, ResourceControllerImplementation>();
 			IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
 
 			// ExceptionHandler Middleware
@@ -40,6 +40,8 @@ namespace Api
 			// Set for all uses, so I can use it via Docker
 			app.UseSwagger();
 			app.UseSwaggerUI();
+
+			app.UseExceptionHandler();
 
 			app.UseHttpsRedirection();
 			app.UseAuthorization();

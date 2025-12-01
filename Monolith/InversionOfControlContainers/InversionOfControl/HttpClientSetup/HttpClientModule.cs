@@ -1,4 +1,5 @@
-﻿using Infrastructure.InternalApiCalls.UserAuthenticationApi;
+﻿using Infrastructure.InternalApiCalls.ResourceApi;
+using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
@@ -19,6 +20,12 @@ namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 				client.Timeout = TimeSpan.FromSeconds(30);
 			});
 
+			services.AddHttpClient("Resource", client =>
+			{
+				client.BaseAddress = new Uri(configuration["ApiBaseUrls:Resource"]!);
+				client.Timeout = TimeSpan.FromSeconds(30);
+			});
+
 			RegisterRefit(services);
 		}
 
@@ -31,6 +38,15 @@ namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 				{
 					var factory = sp.GetRequiredService<IHttpClientFactory>();
 					var http = factory.CreateClient("Authentication");
+					client.BaseAddress = http.BaseAddress;
+				});
+
+			services
+				.AddRefitClient<IResourceApi>()
+				.ConfigureHttpClient((sp, client) =>
+				{
+					IHttpClientFactory factory = sp.GetRequiredService<IHttpClientFactory>();
+					HttpClient http = factory.CreateClient("Resource");
 					client.BaseAddress = http.BaseAddress;
 				});
 		}

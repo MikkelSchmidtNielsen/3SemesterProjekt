@@ -2,7 +2,7 @@
 using Application.InfrastructureDto;
 using Common.ResultInterfaces;
 
-namespace Application.InfrastructureInterfaces
+namespace Application.ServiceInterfaces.Query
 {
     public interface IResourceApiService
     {

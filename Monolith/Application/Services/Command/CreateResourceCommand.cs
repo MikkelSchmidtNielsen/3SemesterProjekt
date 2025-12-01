@@ -1,37 +1,46 @@
 ﻿using Application.ApplicationDto.Command;
-using Application.RepositoryInterfaces;
+using Application.ApplicationDto.Command.Responses;
+using Application.InfrastructureDto;
 using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
-using Domain.DomainInterfaces;
-using Domain.Models;
-using Domain.ModelsDto;
 
 namespace Application.Services.Command
 {
     public class CreateResourceCommand : ICreateResourceCommand
     {
-        private readonly 
+        private readonly IResourceApiService _apiService;
 
-        public CreateResourceCommand()
+        public CreateResourceCommand(IResourceApiService apiService)
         {
-            
+            _apiService = apiService;
         }
 
-        public async Task<IResult<Resource>> CreateResourceAsync(UICreateResourceDto dto)
+        public async Task<IResult<CreateResourceUIResponseDto>> CreateResourceAsync(UICreateResourceDto dto)
         {
             CreateResourceCommandDto commandDto = Mapper.Map<CreateResourceCommandDto>(dto);
 
+            IResult<CreateResourceByApiResponseDto> response = await _apiService.CreateResourceAsync(commandDto);
 
-
-            if (newResource.IsSucces())
+            if (response.IsSucces() == false)
             {
-                var result = await _repository.AddResourceToDBAsync(newResource.GetSuccess().OriginalType);
-                return result;
+                // Get exception
+                Exception ex = response.GetError().Exception!;
+
+                // Return to UI
+                return Result<CreateResourceUIResponseDto>.Error(null!, ex);
             }
             else
             {
-                return newResource;
+                // Get success
+                CreateResourceByApiResponseDto succes = response.GetSuccess().OriginalType;
+
+                // Mapping success
+                CreateResourceUIResponseDto succesDto = Mapper.Map<CreateResourceUIResponseDto>(succes);
+
+                // Returb to UI
+                return Result<CreateResourceUIResponseDto>.Success(succesDto);
             }
         }
     }

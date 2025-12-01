@@ -1,6 +1,6 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
+using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
 using Infrastructure.InternalApiCalls.UserAuthenticationApi;
