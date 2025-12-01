@@ -20,6 +20,6 @@ namespace Application.RepositoryInterfaces
 		/// </summary>
 		/// <param name="email"></param>
 		/// <returns></returns>
-		public Task<IResult<string>> CheckIfEmailIsAvailable(string email);
+		public Task<IResult<string>> CheckIfEmailIsAvailableAsync(string email);
 	}
 }

@@ -26,7 +26,7 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 			};
 			Mock<IGuestRepository> guestRepository = new Mock<IGuestRepository>();
 			guestRepository
-				.Setup(repo => repo.CheckIfEmailIsAvailable(It.IsAny<string>())).ReturnsAsync(Result<string>.Success(dto.Email));
+				.Setup(repo => repo.CheckIfEmailIsAvailableAsync(It.IsAny<string>())).ReturnsAsync(Result<string>.Success(dto.Email));
 
 			GuestFactory factory = new GuestFactory(guestRepository.Object);
 
@@ -63,7 +63,7 @@ namespace UnitTest.Application.UnitTest.FactoryTest
 
 			Mock<IGuestRepository> guestRepository = new Mock<IGuestRepository>();
 			guestRepository
-				.Setup(repo => repo.CheckIfEmailIsAvailable(It.IsAny<string>())).ReturnsAsync(Result<string>.Error(null, expectedException));
+				.Setup(repo => repo.CheckIfEmailIsAvailableAsync(It.IsAny<string>())).ReturnsAsync(Result<string>.Error(null, expectedException));
 
 			GuestFactory factory = new GuestFactory(guestRepository.Object);
 

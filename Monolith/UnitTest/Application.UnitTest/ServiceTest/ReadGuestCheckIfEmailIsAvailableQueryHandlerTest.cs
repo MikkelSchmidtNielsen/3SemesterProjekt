@@ -28,7 +28,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 			Mock<IGuestRepository> mockGuestRepo = new Mock<IGuestRepository>();
 			mockGuestRepo.
-				Setup(repo => repo.CheckIfEmailIsAvailable(It.IsAny<string>())).
+				Setup(repo => repo.CheckIfEmailIsAvailableAsync(It.IsAny<string>())).
 				ReturnsAsync(Result<string>.Success(userEmail));
 
 			ReadGuestCheckIfEmailIsAvailableQueryHandler sut = new ReadGuestCheckIfEmailIsAvailableQueryHandler
@@ -56,7 +56,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 			Mock<IGuestRepository> mockGuestRepo = new Mock<IGuestRepository>();
 			mockGuestRepo.
-				Setup(repo => repo.CheckIfEmailIsAvailable(It.IsAny<string>())).
+				Setup(repo => repo.CheckIfEmailIsAvailableAsync(It.IsAny<string>())).
 				ReturnsAsync(Result<string>.Conflict(userEmail, userEmail, expectedError));
 
 			ReadGuestCheckIfEmailIsAvailableQueryHandler sut = new ReadGuestCheckIfEmailIsAvailableQueryHandler

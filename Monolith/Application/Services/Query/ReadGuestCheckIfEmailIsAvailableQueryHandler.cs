@@ -23,7 +23,7 @@ namespace Application.Services.Query
 		public async Task<IResult<ReadGuestCheckIfEmailIsAvailableResponseDto>> HandleAsync(ReadGuestCheckIfEmailIsAvailableQueryDto dto)
 		{
 			// Checks if Email exist in database
-			var repoResult = await _guestRepository.CheckIfEmailIsAvailable(dto.Email);
+			var repoResult = await _guestRepository.CheckIfEmailIsAvailableAsync(dto.Email);
 
 			// If repoResult is not a succes, then returns a new error
 			if (repoResult.IsSucces() is false)

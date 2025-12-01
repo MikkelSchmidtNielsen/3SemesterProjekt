@@ -16,7 +16,7 @@ namespace Persistence.Repository
 			_db = db;
 		}
 
-		public async Task<IResult<string>> CheckIfEmailIsAvailable(string email)
+		public async Task<IResult<string>> CheckIfEmailIsAvailableAsync(string email)
 		{
 			try
 			{
