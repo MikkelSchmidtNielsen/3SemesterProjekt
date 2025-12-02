@@ -12,6 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="ApplicationDto\Query\" />
+	  <Folder Include="InfrastructureInterfaces\ReadResourceFilters\" />
 	</ItemGroup>
 </Project>

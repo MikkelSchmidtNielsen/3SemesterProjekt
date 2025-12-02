@@ -1,9 +1,5 @@
-﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.ApplicationDto.Query.Responses;
+using Domain.Models;
 
 namespace Application.InfrastructureInterfaces.SendEmailSpecifications
 {
@@ -19,7 +15,7 @@ namespace Application.InfrastructureInterfaces.SendEmailSpecifications
 		private static readonly TimeOnly DefaultCheckIn = new(12, 0);
 		private static readonly TimeOnly DefaultCheckOut = new(11, 0);
 
-		public SendOrderConfirmationEmail(Booking booking, Guest guest, Resource resource)
+		public SendOrderConfirmationEmail(Booking booking, Guest guest, ReadResourceByIdQueryResponseDto resource)
 		{
 			RecieverEmail = guest.Email!;
 
@@ -28,7 +24,7 @@ namespace Application.InfrastructureInterfaces.SendEmailSpecifications
 			Body = GenerateBody(booking, guest, resource);
 		}
 
-		protected static string GenerateBody(Booking booking, Guest guest, Resource resource)
+		protected static string GenerateBody(Booking booking, Guest guest, ReadResourceByIdQueryResponseDto resource)
 		{
 			if (guest.FirstName is null || string.IsNullOrWhiteSpace(guest.FirstName))
 			{

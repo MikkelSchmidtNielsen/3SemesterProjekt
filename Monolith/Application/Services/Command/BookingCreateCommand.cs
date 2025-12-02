@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query.Responses;
 using Application.InfrastructureInterfaces;
 using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Application.RepositoryInterfaces;
@@ -15,15 +16,15 @@ namespace Application.Services.Command
     public class BookingCreateCommand : IBookingCreateCommand
     {
         private readonly IBookingRepository _repository;
-        //private readonly IResourceIdQuery _resourceIdQuery;
+        private readonly IReadResourceByIdQuery _readResourceByIdQuery;
         private readonly IBookingFactory _bookingFactory;
         private readonly IGuestCreateCommand _guestCreateCommand;
         private readonly ISendEmail _sendEmail;
 
-		public BookingCreateCommand(IBookingRepository repository, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail)
+		public BookingCreateCommand(IBookingRepository repository, IReadResourceByIdQuery readResourceByIdQuery, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail)
 		{
 			_repository = repository;
-			//_resourceIdQuery = resourceIdQuery;
+            _readResourceByIdQuery = readResourceByIdQuery;
 			_bookingFactory = bookingFactory;
 			_guestCreateCommand = guestCreateCommand;
 			_sendEmail = sendEmail;
@@ -35,15 +36,15 @@ namespace Application.Services.Command
             BookingRequestResultDto dto = Mapper.Map<BookingRequestResultDto>(bookingCreateDto);
 
             // Get resource by id for price calculation
-            //IResult<Resource> resourceQueryRequest = await _resourceIdQuery.GetResourceByIdAsync(bookingCreateDto.ResourceId);
+            IResult<ReadResourceByIdQueryResponseDto> resourceQueryRequest = await _readResourceByIdQuery.ReadResourceByIdAsync(bookingCreateDto.ResourceId);
 
-    //        if (resourceQueryRequest.IsError())
-    //        {
-				//// Returns an error because the ressource could not be found, so no booking could be created
-				//return Result<BookingRequestResultDto>.Error(dto, resourceQueryRequest.GetError().Exception!);
-    //        }
+            if (resourceQueryRequest.IsError())
+            {
+                // Returns an error because the ressource could not be found, so no booking could be created
+                return Result<BookingRequestResultDto>.Error(dto, resourceQueryRequest.GetError().Exception!);
+            }
 
-    //        AddPriceToDto(dto, resourceQueryRequest.GetSuccess().OriginalType);
+            AddPriceToDto(dto, resourceQueryRequest.GetSuccess().OriginalType);
 
             // Create guest
             IResult<Guest> guestCreateRequest = await CreateGuestAsync(dto, bookingCreateDto);
@@ -71,9 +72,9 @@ namespace Application.Services.Command
                 {
                     Booking emailBooking = bookingCreateRequest.GetSuccess().OriginalType;
                     Guest emailGuest = guestCreateRequest.GetSuccess().OriginalType;
-                    //Resource emailResource = resourceQueryRequest.GetSuccess().OriginalType;
+                    ReadResourceByIdQueryResponseDto emailResource = resourceQueryRequest.GetSuccess().OriginalType;
 
-					SendOrderConfirmationEmail emailSpecification = new SendOrderConfirmationEmail(emailBooking, emailGuest, null);
+					SendOrderConfirmationEmail emailSpecification = new SendOrderConfirmationEmail(emailBooking, emailGuest, emailResource);
 
 					var emailResult = _sendEmail.SendEmail(emailSpecification);
 
@@ -113,7 +114,7 @@ namespace Application.Services.Command
         /// <summary>
         /// Calculates and adds price to dto
         /// </summary>
-        protected void AddPriceToDto(BookingRequestResultDto dto, Resource resource)
+        protected void AddPriceToDto(BookingRequestResultDto dto, ReadResourceByIdQueryResponseDto resource)
         {
             // Today + total days of staying
             int days = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;

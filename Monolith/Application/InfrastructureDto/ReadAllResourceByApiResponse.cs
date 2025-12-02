@@ -1,7 +1,8 @@
 ﻿namespace Application.InfrastructureDto
 {
-    public class CreateResourceByApiResponseDto
+    public class ReadAllResourceByApiResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public decimal BasePrice { get; set; }

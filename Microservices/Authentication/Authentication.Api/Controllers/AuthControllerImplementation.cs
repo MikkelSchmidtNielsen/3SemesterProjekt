@@ -1,6 +1,5 @@
 ﻿using Application.ApplicationDto;
 using Application.ServiceInterfaces.Command;
-using Common.Exceptions;
 using Common.ExtensionMethods;
 using Common.ResultInterfaces;
 using System.Net;

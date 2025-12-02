@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query.Responses;
 using Application.InfrastructureInterfaces;
 using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Application.RepositoryInterfaces;
@@ -23,7 +24,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         {
             // Arrange
             Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IReadResourceByIdQuery> resourceIdQuery = new Mock<IReadResourceByIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
 			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
@@ -43,14 +44,9 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 }
             };
 
-            Resource resource = new Resource
-            (
-                name: "Test Hytte",
-                type: "Hytte",
-                basePrice: 100,
-                location: 3,
-                description: null
-            );
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>()
+                .Randomize()
+                .Create();
 
             Guest guest = new Guest
             (
@@ -78,8 +74,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 			// Mock Resource query
 			resourceIdQuery
-                .Setup(query => query.GetResourceByIdAsync(bookingDto.ResourceId))
-                .ReturnsAsync(Result<Resource>.Success(resource));
+                .Setup(query => query.ReadResourceByIdAsync(bookingDto.ResourceId))
+                .ReturnsAsync(Result<ReadResourceByIdQueryResponseDto>.Success(resource));
 
             // Mock Guest creation
             guestCreateCommand
@@ -124,7 +120,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(expectedDto.EndDate, success.EndDate);
 
             // Verify mocks were called
-            resourceIdQuery.Verify(query => query.GetResourceByIdAsync(bookingDto.ResourceId), Times.Once);
+            resourceIdQuery.Verify(query => query.ReadResourceByIdAsync(bookingDto.ResourceId), Times.Once);
             guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
             bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Once);
             repository.Verify(repo => repo.CreateBookingAsync(booking), Times.Once);

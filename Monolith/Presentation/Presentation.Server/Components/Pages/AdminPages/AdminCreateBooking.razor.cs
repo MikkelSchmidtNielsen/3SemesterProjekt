@@ -1,4 +1,6 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
+using Application.ApplicationDto.Query.Responses;
 using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
@@ -18,7 +20,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         string _bookingResult = "";
 
-        IEnumerable<Resource> _resources = Array.Empty<Resource>();
+        IEnumerable<ReadAllResourceQueryResponseDto> _resources = Array.Empty<ReadAllResourceQueryResponseDto>();
 
         BookingModel _bookingModel = new BookingModel
         {
@@ -27,25 +29,27 @@ namespace Presentation.Server.Components.Pages.AdminPages
             Guest = new GuestCreateRequestDto()
         };
 
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    IResult<IEnumerable<Resource>> result = await _resourceQuery.GetAllResourcesAsync();
+        ResourceFilterDto _filter = new ResourceFilterDto();
 
-        //    if (result.IsSucces())
-        //    {
-        //        IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
+        protected override async Task OnInitializedAsync()
+        {
+            IResult<IEnumerable<ReadAllResourceQueryResponseDto>> result = await _resourceQuery.ReadAllResourcesAsync(_filter);
 
-        //        _resources = resources;
-        //    }
-        //    else
-        //    {
-        //        IResultError<IEnumerable<Resource>> error = result.GetError();
+            if (result.IsSucces())
+            {
+                IEnumerable<ReadAllResourceQueryResponseDto> resources = result.GetSuccess().OriginalType;
 
-        //        string message = error.Exception!.Message;
+                _resources = resources;
+            }
+            else
+            {
+                IResultError<IEnumerable<ReadAllResourceQueryResponseDto>> error = result.GetError();
 
-        //        await DialogService.Alert(message, "Error");
-        //    }
-		//}
+                string message = error.Exception!.Message;
+
+                await DialogService.Alert(message, "Error");
+            }
+        }
 
         private void UpdateBookingPreview(int? resourceId, DateOnly startDate, DateOnly endDate)
         {
@@ -57,7 +61,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         private void GetResourceNameById(int resourceId)
         {
-            foreach (Resource resource in _resources)
+            foreach (ReadAllResourceQueryResponseDto resource in _resources)
             {
                 if (resource.Id == resourceId)
                 {
@@ -70,7 +74,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
         {
             int days = endDate.DayNumber - startDate.DayNumber + 1;
 
-            foreach (Resource resource in _resources)
+            foreach (ReadAllResourceQueryResponseDto resource in _resources)
             {
                 if (resource.Id == resourceId)
                 {
