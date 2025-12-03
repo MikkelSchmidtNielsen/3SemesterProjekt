@@ -46,6 +46,7 @@ namespace Presentation
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
 
             app.Run();
+
         }
     }
 }
