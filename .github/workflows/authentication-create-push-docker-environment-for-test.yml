@@ -6,7 +6,8 @@ on:
        - 'Microservices/Authentication/**'
     branches: [ "development" ]
     types: [closed] 
-
+  workflow_dispatch:
+  
 jobs:
   build:
     if: ${{ github.event.pull_request.merged == true}}
