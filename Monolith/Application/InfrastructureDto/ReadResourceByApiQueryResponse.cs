@@ -1,6 +1,6 @@
-﻿namespace Application.ApplicationDto.Query.Responses
+﻿namespace Application.InfrastructureDto
 {
-    public class ReadAllResourceQueryResponseDto
+    public class ReadResourceByApiQueryResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

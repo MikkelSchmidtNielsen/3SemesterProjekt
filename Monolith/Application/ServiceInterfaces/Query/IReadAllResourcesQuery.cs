@@ -6,6 +6,6 @@ namespace Application.ServiceInterfaces.Query
 {
     public interface IReadAllResourcesQuery
     {
-        public Task<IResult<IEnumerable<ReadAllResourceQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter);
+        public Task<IResult<IEnumerable<ReadResourceQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter);
     }
 }

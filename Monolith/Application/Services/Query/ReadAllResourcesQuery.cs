@@ -16,9 +16,9 @@ namespace Application.Services.Query
             _apiService = apiService;
         }
 
-        public async Task<IResult<IEnumerable<ReadAllResourceQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter)
+        public async Task<IResult<IEnumerable<ReadResourceQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter)
         {
-            IResult<IEnumerable<ReadAllResourceByApiResponse>> response = await _apiService.ReadAllResourcesAsync(filter);
+            IResult<IEnumerable<ReadResourceByApiQueryResponse>> response = await _apiService.ReadAllResourcesAsync(filter);
 
             if (response.IsSucces() == false)
             {
@@ -26,25 +26,25 @@ namespace Application.Services.Query
                 Exception ex = response.GetError().Exception!;
 
                 // Return to UI
-                return Result<IEnumerable<ReadAllResourceQueryResponseDto>>.Error(null!, ex);
+                return Result<IEnumerable<ReadResourceQueryResponseDto>>.Error(null!, ex);
             }
             else
             {
                 // Get success
-                IEnumerable<ReadAllResourceByApiResponse> succes = response.GetSuccess().OriginalType;
+                IEnumerable<ReadResourceByApiQueryResponse> succes = response.GetSuccess().OriginalType;
 
-                List<ReadAllResourceQueryResponseDto> listOfSuccess = new List<ReadAllResourceQueryResponseDto>();
+                List<ReadResourceQueryResponseDto> listOfSuccess = new List<ReadResourceQueryResponseDto>();
 
                 // Mapping success
-                foreach (var ressource in succes)
+                foreach (var resource in succes)
                 {
-                    ReadAllResourceQueryResponseDto succesDto = Mapper.Map<ReadAllResourceQueryResponseDto>(succes);
+                    ReadResourceQueryResponseDto succesDto = Mapper.Map<ReadResourceQueryResponseDto>(resource);
 
                     listOfSuccess.Add(succesDto);
                 }
                 
                 // Return to UI
-                return Result<IEnumerable<ReadAllResourceQueryResponseDto>>.Success(listOfSuccess);
+                return Result<IEnumerable<ReadResourceQueryResponseDto>>.Success(listOfSuccess);
             }
         }
     }

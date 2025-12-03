@@ -10,12 +10,6 @@ namespace Persistence.EntityFramework.EfModelConfigurations
         {
             builder.ToTable("Booking");
             builder.HasKey(booking => booking.Id);
-
-            // Relations
-            builder.HasOne(booking => booking.Resource)
-                   .WithMany(resource => resource.Bookings)                       
-                   .HasForeignKey(booking => booking.ResourceId)
-                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

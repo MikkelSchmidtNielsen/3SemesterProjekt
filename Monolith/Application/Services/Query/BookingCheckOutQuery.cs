@@ -1,51 +1,84 @@
 ﻿using Application.ApplicationDto.Query;
+using Application.ApplicationDto.Query.Responses;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Query
 {
     public class BookingCheckOutQuery : IBookingCheckOutQuery
     {
-        private readonly IBookingRepository _repository;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IReadAllResourcesQuery _resourcesQuery;
+        private readonly ResourceFilterDto _filter = new ResourceFilterDto { IsAvailable = false };
 
-        public BookingCheckOutQuery(IBookingRepository repository)
+        public BookingCheckOutQuery(IBookingRepository bookingRepository, IReadAllResourcesQuery resourcesQuery)
         {
-            _repository = repository;
+            _bookingRepository = bookingRepository;
+            _resourcesQuery = resourcesQuery;
         }
 
-        public async Task<IResult<List<BookingMissingCheckOutResponseDto>>> GetFinishedBookingsWithMissingCheckOutsAsync()
+        public async Task<IResult<List<ReadBookingMissingCheckOutQueryResponseDto>>> GetFinishedBookingsWithMissingCheckOutsAsync()
         {
-            List<BookingMissingCheckOutResponseDto> missedCheckOuts = new List<BookingMissingCheckOutResponseDto>(); // Creates a list for missing check outs.
-            IResult<IEnumerable<Booking>> getResultFromRepo = await _repository.GetFinishedBookingsWithMissingCheckOutsAsync(); // Retrieves bookings with missed checkouts
+            // Creates tasks to run
+            Task<IResult<IEnumerable<Booking>>> missingCheckOutTask = _bookingRepository.GetFinishedBookingsWithMissingCheckOutsAsync();
+            Task<IResult<IEnumerable<ReadResourceQueryResponseDto>>> resourcesTask = _resourcesQuery.ReadAllResourcesAsync(_filter);
 
-            if (getResultFromRepo.IsSucces() && getResultFromRepo.GetSuccess().OriginalType.Any()) // Runs if there are any missing checkouts
+            // Runs both task simultaneously, so they don't wait for each other
+            await Task.WhenAll(missingCheckOutTask, resourcesTask);
+
+            // Get task results
+            IResult<IEnumerable<Booking>> missingCheckOutTaskResult = missingCheckOutTask.Result;
+            IResult<IEnumerable<ReadResourceQueryResponseDto>> resourcesTaskResult = resourcesTask.Result;
+
+            // Failed to get bookings return error message
+            if (missingCheckOutTaskResult.IsSucces() == false)
             {
-                foreach (var booking in getResultFromRepo.GetSuccess().OriginalType) // Iterates through the list from the repo and converts the booking into a dto.
+                return Result<List<ReadBookingMissingCheckOutQueryResponseDto>>.Error(null!, new Exception("Kunne ikke hente bookinger fra databasen."));
+            }
+
+            // Failed to get resources return error message
+            if (resourcesTaskResult.IsSucces() == false)
+            {
+                return Result<List<ReadBookingMissingCheckOutQueryResponseDto>>.Error(null!, new Exception("Kunne ikke hente ressourcer fra databasen."));
+            }
+
+            // Get success results
+            IEnumerable<Booking> missingCheckOut = missingCheckOutTaskResult.GetSuccess().OriginalType;
+            IEnumerable<ReadResourceQueryResponseDto> resources = resourcesTaskResult.GetSuccess().OriginalType;
+
+            // Mapping the resources to a dictionary for instant look up
+            Dictionary<int, ReadResourceQueryResponseDto> resourceMap = resources.ToDictionary(resource => resource.Id, resource => resource);
+
+            // Creates the response list to return
+            List<ReadBookingMissingCheckOutQueryResponseDto> responseList = new List<ReadBookingMissingCheckOutQueryResponseDto>();
+
+            foreach (Booking booking in missingCheckOut) // Iterates through each booking and "converts" them into a dto.
+            {
+                // Gets value from dictionary
+                if (resourceMap.TryGetValue(booking.ResourceId, out ReadResourceQueryResponseDto? matchingResource))
                 {
-                    BookingMissingCheckOutResponseDto missedCheckOutInfo = new BookingMissingCheckOutResponseDto
+                    ReadBookingMissingCheckOutQueryResponseDto missingCheckoutInfo = new ReadBookingMissingCheckOutQueryResponseDto
                     {
                         BookingId = booking.Id,
-                        ResourceName = booking.Resource.Name,
-                        ResourceLocation = booking.Resource.Location,
-                        BookingEndDate = booking.EndDate,
+                        ResourceName = matchingResource.Name,
+                        ResourceLocation = matchingResource.Location,
+                        BookingEndDate = booking.StartDate,
                         GuestName = $"{booking.Guest.FirstName} {booking.Guest.LastName}"
                     };
-                    missedCheckOuts.Add(missedCheckOutInfo); // Gets added to the list that the method will return.
+
+                    responseList.Add(missingCheckoutInfo);
                 }
-                return Result<List<BookingMissingCheckOutResponseDto>>.Success(missedCheckOuts); // Returns list with missing checkouts.
             }
-            else
+
+            if (responseList.Any())
             {
-                return Result<List<BookingMissingCheckOutResponseDto>>.Error(missedCheckOuts, new Exception("Der er ingen manglende udtjekninger.")); // Returns an empty list if there are no missing checkouts.
+                return Result<List<ReadBookingMissingCheckOutQueryResponseDto>>.Success(responseList);
             }
+
+            return Result<List<ReadBookingMissingCheckOutQueryResponseDto>>.Error(responseList, new Exception("Der er ingen manglende indtjekninger."));
         }
     }
 }

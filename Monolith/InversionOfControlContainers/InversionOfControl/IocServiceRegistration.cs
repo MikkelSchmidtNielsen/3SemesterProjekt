@@ -38,8 +38,11 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<ISendEmail, SendEmailMailKit>();
             services.AddScoped<ICreateBookingByGuestCommandHandler, GuestCreateBookingService>();
 			services.AddScoped<IUserAuthenticationApiService, UserAuthenticationApiService>();
-			services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();
+            services.AddScoped<IReadGuestByEmailQuery, ReadGuestByEmailQuery>();
+            services.AddScoped<IReadGuestCheckIfEmailIsAvailableQueryHandler, ReadGuestCheckIfEmailIsAvailableQueryHandler>();
             services.AddScoped<IResourceApiService, ResourceApiService>();
+            services.AddScoped<IReadAllResourcesQuery, ReadAllResourcesQuery>();
+            services.AddScoped<IReadResourceByIdQuery, ReadResourceByIdQuery>();
 
 			//Add repositories
 			services.AddScoped<IBookingRepository, BookingRepository>();

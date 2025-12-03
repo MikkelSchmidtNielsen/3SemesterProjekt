@@ -15,7 +15,6 @@ namespace Domain.Models
 
         // Entity Framework
         public Guest Guest { get; private set; } // private set for unit test.
-        public Resource Resource { get; private set; } // private set for unit test.
 
         protected Booking() { }
 
@@ -31,7 +30,7 @@ namespace Domain.Models
 
             ValidateBookingInformation();
 		}
-        protected Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource) // Constructor for unit test.
+        protected Booking(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest) // Constructor for unit test.
         {
             GuestId = guestId;
             ResourceId = resourceId;
@@ -39,7 +38,6 @@ namespace Domain.Models
             EndDate = endDate;
             TotalPrice = totalPrice;
             Guest = guest;
-            Resource = resource;
         }
 
 
