@@ -12,8 +12,8 @@ using Persistence.EntityFramework;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20251126103754_IsCheckedOut")]
-    partial class IsCheckedOut
+    [Migration("20251203141155_initial-create")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,8 +58,6 @@ namespace Persistence.Migrations
 
                     b.HasIndex("GuestId");
 
-                    b.HasIndex("ResourceId");
-
                     b.ToTable("Booking", (string)null);
                 });
 
@@ -98,39 +96,6 @@ namespace Persistence.Migrations
                     b.ToTable("Guest", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Resource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Location")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Resource", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Models.Booking", b =>
                 {
                     b.HasOne("Domain.Models.Guest", "Guest")
@@ -139,25 +104,12 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Resource", "Resource")
-                        .WithMany("Bookings")
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Guest");
-
-                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("Domain.Models.Guest", b =>
                 {
                     b.Navigation("Booking");
-                });
-
-            modelBuilder.Entity("Domain.Models.Resource", b =>
-                {
-                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }
