@@ -4,6 +4,9 @@ info:
   title: Resource API
   description: API for managing Resources
 
+security:
+  - ApiKeyAuth: []
+  
 paths:
   # CREATE
   /resources:
@@ -25,6 +28,8 @@ paths:
                 $ref: '#/components/schemas/ResourceResponseDto'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
         '409':
           $ref: '#/components/responses/409Error'
         '500':
@@ -50,6 +55,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ResourceResponseDto'
+        '401':
+          $ref: '#/components/responses/401Error'
         '404':
           $ref: '#/components/responses/404Error'
         '500':
@@ -73,6 +80,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceResponseDto'
+        '401':
+          $ref: '#/components/responses/401Error'
         '404':
           $ref: '#/components/responses/404Error'
         '500':
@@ -103,6 +112,8 @@ paths:
                 $ref: '#/components/schemas/ResourceResponseDto'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
         '404':
           $ref: '#/components/responses/404Error'
         '409':
@@ -123,6 +134,8 @@ paths:
       responses:
         '204':
           description: Resource deleted successfully
+        '401':
+          $ref: '#/components/responses/401Error'
         '404':
           $ref: '#/components/responses/404Error'
         '500':
@@ -130,8 +143,14 @@ paths:
 
 
 components:
-  # DTOs
   schemas:
+    securitySchemes:
+      ApiKeyAuth:
+        type: apiKey
+        in: header
+        name: X-Api-Key
+
+  # DTOs
     ResourceResponseDto:
       type: object
       properties:
@@ -206,6 +225,13 @@ components:
   responses:
     400Error:
       description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+
+    401Error:
+      description: Unathorized
       content:
         application/json:
           schema:

@@ -15,7 +15,7 @@ namespace InversionOfControlContainers.InversionOfControl
 {
     public static class IocServiceRegistration
     {
-        public static void RegisterService(IServiceCollection services, IConfiguration configuration)
+        public static void RegisterService(this IServiceCollection services, IConfiguration configuration)
         {
             // Get connectionstring from config
             string connString = configuration.GetConnectionString("Default") ?? 
