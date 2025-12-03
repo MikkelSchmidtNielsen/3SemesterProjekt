@@ -1,5 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
-using Application.ApplicationDto.Query.Responses;
+using Application.ApplicationDto.Query;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;

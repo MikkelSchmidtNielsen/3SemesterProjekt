@@ -1,11 +1,10 @@
 ﻿using Application.ApplicationDto.Command;
-using Application.ApplicationDto.Query.Responses;
+using Application.ApplicationDto.Query;
 using Application.InfrastructureInterfaces;
 using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.ServiceInterfaces.Query;
-using Application.Services.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
@@ -52,38 +51,36 @@ namespace Application.Services.Command
             // Creates a Guest object to fill
             Guest? guest = null;
 
-            // If email not added -> create the guest
-            if (string.IsNullOrWhiteSpace(bookingCreateDto.Guest.Email))
+            bool guestFound = false;
+
+            // If email added -> find the guest
+            if (string.IsNullOrWhiteSpace(bookingCreateDto.Guest.Email) == false)
             {
-                // Create guest
-                IResult<Guest> guestCreateRequest = await CreateGuestAsync(dto, bookingCreateDto);
+                // Check if guest exists by email
+                IResult<Guest> guestQueryRequest = await _readGuestByEmailQuery.ReadGuestByEmailAsync(bookingCreateDto.Guest.Email!);
+
+                if (guestQueryRequest.IsSucces())
+                {
+                    guest = guestQueryRequest.GetSuccess().OriginalType;
+                    guestFound = true;
+                }
+            }
+
+            // Guest not found
+            if (guestFound == false)
+            {
+                IResult<Guest> guestCreateRequest = await _guestCreateCommand.CreateGuestAsync(bookingCreateDto.Guest);
 
                 if (guestCreateRequest.IsSucces() == false)
                 {
-                    // Returns an error because the guest could not be created, so no booking exists
                     return Result<BookingRequestResultDto>.Error(dto, guestCreateRequest.GetError().Exception!);
                 }
 
-                // Get success
                 guest = guestCreateRequest.GetSuccess().OriginalType;
             }
-            else // Get the guest from database
-            {
-                // Check if guest exists
-                IResult<Guest> guestQueryRequest = await _readGuestByEmailQuery.ReadGuestByEmailAsync(bookingCreateDto.Guest.Email!);
 
-                if (guestQueryRequest.IsSucces() == false)
-                {
-                    // Returns an error because the guest could not be created, so no booking exists
-                    return Result<BookingRequestResultDto>.Error(dto, guestQueryRequest.GetError().Exception!);
-                }
-
-                // Get success
-                guest = guestQueryRequest.GetSuccess().OriginalType;
-
-                // Add guest id to dto
-                dto.GuestId = guest.Id;
-            }
+            // Add guest id to dto
+            dto.GuestId = guest.Id;
 
             // Create booking
             IResult<Booking> bookingCreateRequest = _bookingFactory.Create(Mapper.Map<CreateBookingFactoryDto>(dto));
@@ -124,21 +121,6 @@ namespace Application.Services.Command
                 return Result<BookingRequestResultDto>.Error(dto, repoCreateBookingRequest.GetError().Exception!);
             }
             // NEEDS A CONFLICT RETURN
-        }
-
-        /// <summary>
-        /// Creates guest and adds id to dto if succeeded
-        /// </summary>
-        protected async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
-        {
-            IResult<Guest> guestResult = await _guestCreateCommand.CreateGuestAsync(input.Guest);
-
-            if (guestResult.IsSucces())
-            {
-                dto.GuestId = guestResult.GetSuccess().OriginalType.Id;
-            }
-
-            return guestResult;
         }
 
         /// <summary>

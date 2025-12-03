@@ -10,10 +10,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
     internal static class BookingTestHelper
     {
         public static Booking CreateBookingWithResourceAndGuest(
-            int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource
+            int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest
         )
         {
-            var createdBooking = new BookingCheckInAndOutQueryTestClass(guestId, resourceId, startDate, endDate, totalPrice, guest, resource);
+            var createdBooking = new BookingCheckInAndOutQueryTestClass(guestId, resourceId, startDate, endDate, totalPrice, guest);
 
             return createdBooking;
         }

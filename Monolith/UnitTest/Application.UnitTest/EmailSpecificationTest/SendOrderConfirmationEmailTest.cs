@@ -1,4 +1,4 @@
-﻿using Application.ApplicationDto.Query.Responses;
+﻿using Application.ApplicationDto.Query;
 using Application.InfrastructureInterfaces;
 using Domain.Models;
 using System;

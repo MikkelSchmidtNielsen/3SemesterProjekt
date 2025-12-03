@@ -1,4 +1,5 @@
-﻿using Application.RepositoryInterfaces;
+﻿using Application.ApplicationDto.Query;
+using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Query;
 using Application.Services.Query;
 using Common;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnitTest.UnitTestHelpingTools;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
@@ -18,30 +20,59 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         public async Task GetFinishedBookingsWithMissingCheckOutsAsync_ShouldPass_WhenGivenListOfMissedCheckouts()
         {
             // Arrange
-
             Mock<IBookingRepository> bookingRepo = new Mock<IBookingRepository>();
+            Mock<IReadAllResourcesQuery> resourcesQuery = new Mock<IReadAllResourcesQuery>();
 
-            Guest guest1 = new Guest("Hans", "Hansen", null, null, null, null, null);
-            Guest guest2 = new Guest("Ole", "Olsen", null, null, null, null, null);
-            Resource resource1 = new Resource("Familiehytten", "Hytte", 400, 1, null);
-            Resource resource2 = new Resource("Teltplads", "Plads", 200, 2, null);
+            Guest guest1 = Impression.Of<Guest>()
+                .With("Id", 1)
+                .WithDefaults()
+                .Create();
 
-            var unitTestBooking1 = BookingTestHelper.CreateBookingWithResourceAndGuest(3, 6, DateOnly.FromDateTime(DateTime.Now.AddDays(-4)), DateOnly.FromDateTime(DateTime.Now), 2000, guest1, resource1);
-            var unitTestBooking2 = BookingTestHelper.CreateBookingWithResourceAndGuest(6, 12, DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), DateOnly.FromDateTime(DateTime.Now), 6000, guest2, resource2);
+            Guest guest2 = Impression.Of<Guest>()
+                .With("Id", 2)
+                .WithDefaults()
+                .Create();
+
+            ReadResourceQueryResponseDto resource1 = Impression.Of<ReadResourceQueryResponseDto>()
+                .With("Id", 1)
+                .With("IsAvailable", false)
+                .WithDefaults()
+                .Create();
+
+            ReadResourceQueryResponseDto resource2 = Impression.Of<ReadResourceQueryResponseDto>()
+                .With("Id", 2)
+                .With("IsAvailable", false)
+                .WithDefaults()
+                .Create();
+
+            var unitTestBooking1 = BookingTestHelper.CreateBookingWithResourceAndGuest(1, 1, DateOnly.FromDateTime(DateTime.Now.AddDays(-4)), DateOnly.FromDateTime(DateTime.Now), 2000, guest1);
+            var unitTestBooking2 = BookingTestHelper.CreateBookingWithResourceAndGuest(2, 2, DateOnly.FromDateTime(DateTime.Now.AddDays(-5)), DateOnly.FromDateTime(DateTime.Now), 6000, guest2);
 
             IEnumerable<Booking> missedCheckOuts = new List<Booking>() { unitTestBooking1,  unitTestBooking2 };
-            bookingRepo.Setup(x => x.CreateBookingAsync(unitTestBooking1)).ReturnsAsync(Result<Booking>.Success(unitTestBooking1));
-            bookingRepo.Setup(x => x.CreateBookingAsync(unitTestBooking2)).ReturnsAsync(Result<Booking>.Success(unitTestBooking2));
-            bookingRepo.Setup(x => x.GetFinishedBookingsWithMissingCheckOutsAsync()).ReturnsAsync(Result<IEnumerable<Booking>>.Success(missedCheckOuts));
+            IEnumerable<ReadResourceQueryResponseDto> resourceList = new List<ReadResourceQueryResponseDto>() { resource1, resource2 };
 
-            IBookingCheckOutQuery bookingCheckOutQuery = new BookingCheckOutQuery(bookingRepo.Object);
+            bookingRepo
+                .Setup(x => x.CreateBookingAsync(unitTestBooking1))
+                .ReturnsAsync(Result<Booking>.Success(unitTestBooking1));
+
+            bookingRepo
+                .Setup(x => x.CreateBookingAsync(unitTestBooking2))
+                .ReturnsAsync(Result<Booking>.Success(unitTestBooking2));
+
+            bookingRepo
+                .Setup(x => x.GetFinishedBookingsWithMissingCheckOutsAsync())
+                .ReturnsAsync(Result<IEnumerable<Booking>>.Success(missedCheckOuts));
+
+            resourcesQuery
+                .Setup(x => x.ReadAllResourcesAsync(It.IsAny<ResourceFilterDto>()))
+                .ReturnsAsync(Result<IEnumerable<ReadResourceQueryResponseDto>>.Success(resourceList));
+
+            IBookingCheckOutQuery bookingCheckOutQuery = new BookingCheckOutQuery(bookingRepo.Object, resourcesQuery.Object);
 
             // Act
-
             var result = await bookingCheckOutQuery.GetFinishedBookingsWithMissingCheckOutsAsync();
 
             // Assert
-
             Assert.NotEmpty(result.GetSuccess().OriginalType);
         }
     }

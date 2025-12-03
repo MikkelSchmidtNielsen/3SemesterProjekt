@@ -1,6 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.ApplicationDto.Query;
-using Application.ApplicationDto.Query.Responses;
 using Common;
 using Common.ResultInterfaces;
 using Domain.ModelsDto;

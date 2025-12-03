@@ -1,5 +1,5 @@
-﻿using Application.ApplicationDto.Command.Responses;
-using Application.ApplicationDto.Query.Responses;
+﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
 using Application.InfrastructureDto;
 using Application.ServiceInterfaces.Query;
 using Common;

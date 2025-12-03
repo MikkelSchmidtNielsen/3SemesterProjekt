@@ -1,8 +1,7 @@
-﻿namespace Application.ApplicationDto.Query.Responses
+﻿namespace Application.ApplicationDto.Command
 {
-    public class ReadResourceByIdQueryResponseDto
+    public class CreateResourceUIResponseDto
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public decimal BasePrice { get; set; }

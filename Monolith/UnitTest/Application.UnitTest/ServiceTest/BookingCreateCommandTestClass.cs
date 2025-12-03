@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
 using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
@@ -8,22 +9,28 @@ using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
+using UnitTest.UnitTestHelpingTools;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
     internal class BookingCreateCommandTestClass : BookingCreateCommand
     {
-		public BookingCreateCommandTestClass(IBookingRepository repository, IBookingFactory bookingFactory, IGuestCreateCommand guestCreateCommand, ISendEmail sendEmail) 
-            : base(repository, bookingFactory, guestCreateCommand, sendEmail)
+		public BookingCreateCommandTestClass(
+            IBookingRepository repository, 
+            IReadResourceByIdQuery resourceByIdQuery,
+            IBookingFactory bookingFactory, 
+            IReadGuestByEmailQuery guestByEmailQuery,
+            IGuestCreateCommand guestCreateCommand, 
+            ISendEmail sendEmail
+        ) 
+            : base
+            (
+                  repository, resourceByIdQuery, bookingFactory, guestByEmailQuery, guestCreateCommand, sendEmail
+            )
 		{
 		}
 
-		new public async Task<IResult<Guest>> CreateGuestAsync(BookingRequestResultDto dto, BookingCreateRequestDto input)
-        {
-            return await base.CreateGuestAsync(dto, input);
-        }
-
-        new public void AddPriceToDto(BookingRequestResultDto dto, Resource resource)
+        new public void AddPriceToDto(BookingRequestResultDto dto, ReadResourceByIdQueryResponseDto resource)
         {
             base.AddPriceToDto(dto, resource);
         }

@@ -1,7 +1,7 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
+using Application.ServiceInterfaces.Query;
 using Application.Services.Command;
 using Common;
 using Common.ResultInterfaces;
@@ -9,7 +9,6 @@ using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
 using Moq;
-using Newtonsoft.Json.Linq;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
@@ -108,7 +107,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 			Mock<IUserAuthenticationApiService> api = new Mock<IUserAuthenticationApiService>();
 
 			GuestCreateRequestDto createDto = new GuestCreateRequestDto();
-			Guest guest = new Guest("Mikkel", null, null, null, null, null, null);
+			Guest guest = new Guest(firstName: "Mikkel", null, null, email: "test@test.dk", null, null, null);
 			Exception apiException = new Exception("Api error");
 			CreateUserByApiReponseDto apiDto = new CreateUserByApiReponseDto() { JwtToken = Guid.NewGuid().ToString() };
 

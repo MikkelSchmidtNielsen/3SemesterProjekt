@@ -1,15 +1,9 @@
-﻿using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
-using Common;
-using Common.ResultInterfaces;
-using global::Infrastructure.InternalApiCalls.UserAuthenticationApi;
+﻿using global::Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Infrastructure.InternalApiCalls;
-using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Moq;
 using Refit;
 using System.Net;
 using System.Text;
-using Xunit;
 
 namespace UnitTest.Infrastructure.UnitTest
 {
