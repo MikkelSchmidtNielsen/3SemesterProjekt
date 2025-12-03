@@ -13,12 +13,19 @@
         <RadzenTextBox @bind-Value="@_email" Disabled="@isEmailDisabled"/>
     </RadzenFormField>
 
-    <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnEmailSumbitAsync()) Disabled="@isEmailDisabled"/>
+    <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnEmailSumbitAsync()) Disabled="@isEmailDisabled" Visible="@_submitButtonVisible"/>
 </RadzenStack>
 
 <br />
 
-@if (_emailIsValidated is true)
+@if (_accountAlreadyExists is true)
+{
+<RadzenFormField Text="Indtast Engangskode" Style="width: auto;">
+    <RadzenTextBox @bind-Value="@_oneTimePassword" MaxLength="6" />
+</RadzenFormField>
+}
+
+@if (_accountDoesNotAlreadyExist is true)
 {
     <RegisterGuestComponent RegisterModelComponent="@_registerModel" OnModelSubmit="@OnModelSubmitAsync"></RegisterGuestComponent>
 }

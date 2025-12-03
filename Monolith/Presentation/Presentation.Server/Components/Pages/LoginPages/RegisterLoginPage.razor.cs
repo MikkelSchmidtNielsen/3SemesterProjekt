@@ -22,17 +22,17 @@ namespace Presentation.Server.Components.Pages.LoginPages
 
 			if (response.IsSucces() is false)
 			{
-				// Reverted back to false, so use can reinput thier email
-				isEmailDisabled = false;
-
-				SendNotification(NotificationSeverity.Error, "Error", "Email er allerde registeret til en anden konto");
+                _submitButtonVisible = false;
+                SendNotification(NotificationSeverity.Info, "Velkommen tilbage", "Der er blevet afsendt en engangskode til den indtastede email.");
+				// Shows the one-time password input UI
+				_accountAlreadyExists = true;
 				return;
 			}
 
-			SendNotification(NotificationSeverity.Success, "Success", "Email er ikke registeret endnu");
+			SendNotification(NotificationSeverity.Info, "Velkommen", "Du kan nu oprette en konto med den indtastede email.");
 
 			// Show the rest of the input UI
-			_emailIsValidated = true;
+			_accountDoesNotAlreadyExist = true;
 
 		}
 
@@ -67,6 +67,9 @@ namespace Presentation.Server.Components.Pages.LoginPages
 		private string? _email;
 		private bool isEmailDisabled = false;
 		private RegisterModel _registerModel = new();
-		private bool _emailIsValidated = false;
-	}
+		private bool _accountDoesNotAlreadyExist = false;
+        private bool _accountAlreadyExists = false;
+		private bool _submitButtonVisible = true;
+		private string? _oneTimePassword;
+    }
 }
