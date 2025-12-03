@@ -13,10 +13,6 @@ jobs:
     if: ${{ github.event.pull_request.merged == true}}
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: Monolith
-
     env:
       TAG: pr-${{ github.event.pull_request.number }}
 
@@ -30,8 +26,8 @@ jobs:
 
       - uses: docker/build-push-action@v5
         with:
-          context: Microservices/Authentication
-          file: Dockerfile
+          context: Monolith
+          file: Monolith/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO }}:latest
