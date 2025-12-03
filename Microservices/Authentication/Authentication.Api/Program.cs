@@ -50,6 +50,7 @@ namespace Authentication.Api
             app.MapControllers();
 
             app.Run();
+
         }
     }
 }
