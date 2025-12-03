@@ -16,7 +16,7 @@ namespace Authentication.Api.Controllers
 
         public async Task<string> RegisterUserAsync(string email)
         {
-            IResult<CreateUserResponseDto> result = await _handler.Handle(email);
+            IResult<CreateUserResponseDto> result = await _handler.HandleAsync(email);
 
             // Handles failures
             if (result.IsSuccess() == false)

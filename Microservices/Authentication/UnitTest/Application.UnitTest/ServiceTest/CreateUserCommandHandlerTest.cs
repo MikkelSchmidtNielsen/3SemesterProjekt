@@ -36,7 +36,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             CreateUserCommandHandler sut = new CreateUserCommandHandler(repo.Object, tokenHandler.Object);
 
             // Act
-            IResult<CreateUserResponseDto> result = await sut.Handle(email);
+            IResult<CreateUserResponseDto> result = await sut.HandleAsync(email);
 
             // Assert
             Assert.True(result.IsSuccess());
@@ -71,7 +71,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             CreateUserCommandHandler sut = new CreateUserCommandHandler(repo.Object, tokenHandler.Object);
 
             // Act
-            IResult<CreateUserResponseDto> result = await sut.Handle(email);
+            IResult<CreateUserResponseDto> result = await sut.HandleAsync(email);
 
             // Assert
             Assert.True(result.IsError());
@@ -112,7 +112,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             CreateUserCommandHandler sut = new CreateUserCommandHandler(repo.Object, tokenHandler.Object);
 
             // Act
-            IResult<CreateUserResponseDto> result = await sut.Handle(email);
+            IResult<CreateUserResponseDto> result = await sut.HandleAsync(email);
 
             // Assert
             Assert.True(result.IsError());
