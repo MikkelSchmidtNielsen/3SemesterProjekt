@@ -16,7 +16,7 @@
         {
             if (string.IsNullOrWhiteSpace(Email))
             {
-                throw new ArgumentException("Email must be provided", nameof(Email));
+                throw new ArgumentException("Email skal være angivet", nameof(Email));
             }
 
             int atIndex = Email.IndexOf('@');

@@ -25,7 +25,7 @@ namespace Application.Factories
 
 		public async Task<IResult<Guest>> CreateAsync(CreatedGuestDto dto)
 		{
-			var repoResult = await _guestRepository.CheckIfEmailIsAvailable(dto.Email!);
+			var repoResult = await _guestRepository.CheckIfEmailIsAvailableAsync(dto.Email!);
 
 			if (repoResult.IsSucces() is false)
 			{

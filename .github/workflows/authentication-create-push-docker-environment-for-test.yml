@@ -1,26 +1,25 @@
 name: (Authentication) Create & push docker environment for test
 
 on:
-  pull_request:
+  pull_request_target:
     paths: 
        - 'Microservices/Authentication/**'
     branches: [ "development" ]
     types: [closed] 
-
+  workflow_dispatch:
+  
 jobs:
   build:
     if: ${{ github.event.pull_request.merged == true}}
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: Microservices/Authentication
 
     env:
       TAG: pr-${{ github.event.pull_request.number }}
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: docker/login-action@v3
         with:
@@ -29,8 +28,8 @@ jobs:
 
       - uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: Microservices/Authentication
+          file: Microservices/Authentication/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO_AUTH }}:latest
