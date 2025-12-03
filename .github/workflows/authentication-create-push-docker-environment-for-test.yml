@@ -1,7 +1,7 @@
 name: (Authentication) Create & push docker environment for test
 
 on:
-  pull_request:
+  pull_request_target:
     paths: 
        - 'Microservices/Authentication/**'
     branches: [ "development" ]
