@@ -1,0 +1,24 @@
+﻿@page "/register"
+@inject IReadGuestCheckIfEmailIsAvailableQueryHandler _query
+@rendermode InteractiveServer
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject IGuestCreateCommand _command
+<RadzenNotification />
+
+
+
+<RadzenStack AlignItems="AlignItems.Center">
+    <RadzenFormField Text="Indtast Email" Style="width: auto;">
+        <RadzenTextBox @bind-Value="@_email" Disabled="@isEmailDisabled"/>
+    </RadzenFormField>
+
+    <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnEmailSumbitAsync()) Disabled="@isEmailDisabled"/>
+</RadzenStack>
+
+<br />
+
+@if (_emailIsValidated is true)
+{
+    <RegisterGuestComponent RegisterModelComponent="@_registerModel" OnModelSubmit="@OnModelSubmitAsync"></RegisterGuestComponent>
+}

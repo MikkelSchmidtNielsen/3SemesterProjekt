@@ -1,0 +1,19 @@
+@rendermode InteractiveServer
+
+<div class="topbar-menu">
+    <RadzenMenu class="panel-menu">
+            <RadzenLink Path="/" Style="margin: auto 5px auto 5px;">
+                <img class="logo" src="img/camping.png" />
+            </RadzenLink>
+
+        <RadzenMenuItem Text="Admin" Icon="account_circle">
+            <RadzenMenuItem Text="Booking" Path="admin-create-booking" Icon="home" />
+            <RadzenMenuItem Text="Administrer campingplads" Path="admin/manage-camp" Icon="home" />
+            <RadzenMenuItem Text="Tilføj ressource" Path="admin/add-resource" Icon="home" />
+        </RadzenMenuItem>
+        <RadzenMenuItem Text="Gæst" Icon="account_circle">
+            <RadzenMenuItem Text="Bookning" Path="guest/guest-create-booking" Icon="home" />
+        </RadzenMenuItem>
+        <RadzenMenuItem Text="Login" Path="/register" Icon="input" />
+    </RadzenMenu>
+</div>
