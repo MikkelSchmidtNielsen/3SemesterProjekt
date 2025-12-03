@@ -1,7 +1,7 @@
 name: (Authentication) Create & push docker environment for test
 
 on:
-  pull_request:
+  pull_request_target:
     paths: 
        - 'Microservices/Authentication/**'
     branches: [ "development" ]
@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: docker/login-action@v3
         with:
