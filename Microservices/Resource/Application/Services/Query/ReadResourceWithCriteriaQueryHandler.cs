@@ -36,8 +36,8 @@ namespace Application.Services.Query
 
 			List<ResourceResponseDto> reponses = new List<ResourceResponseDto>();
 
-			// If it not a Succes, then it will throw an exception which our ExceptionHandler handles
-			foreach (Resource resource in result.GetSuccess().OriginalType)
+            // If it is not a success, then it will throw an exception which our ExceptionHandler manages/takes care of
+            foreach (Resource resource in result.GetSuccess().OriginalType)
 			{
 				reponses.Add(Mapper.Map<ResourceResponseDto>(resource));
 			}
