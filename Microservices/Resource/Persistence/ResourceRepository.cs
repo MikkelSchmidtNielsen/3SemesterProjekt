@@ -1,6 +1,7 @@
 ﻿using Application.ApplicationDto;
 using Application.RepositoryInterfaces;
 using Common;
+using Common.CustomExceptions;
 using Common.ResultInterfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -77,5 +78,31 @@ namespace Persistence.Repository
 			// query.ToList searches the database with given criteria
 			return Result<IEnumerable<Resource>>.Success(await query.ToListAsync());
 		}
-    }
+
+		public async Task<IResult<Resource>> UpdateAsync(Resource resource)
+		{
+			// Saves the old rowversion as a local variable
+			byte[] oldVersion = resource.RowVersion;
+
+			// Increment the RowVersion
+			resource.IncrementRowVersion();
+
+			try
+			{
+				_db.Resources.Update(resource);
+
+				// Notify which RowVersion should be compared
+				// Needs to be the old one otherwise you'll compare the new RowVersion with Database RowVersion, which would always throw DbUpdateConcurrencyException
+				_db.Entry(resource).OriginalValues["RowVersion"] = oldVersion;
+
+				await _db.SaveChangesAsync();
+
+				return Result<Resource>.Success(resource);
+			}
+			catch (DbUpdateConcurrencyException ex)
+			{
+				throw new ConflictException("En anden bruger har allerede opdateret produktet");
+			}
+		}
+	}
 }

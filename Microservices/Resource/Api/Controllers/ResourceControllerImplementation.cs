@@ -14,14 +14,16 @@ namespace Api.Controllers
 		private readonly ICreateResourceCommandHandler _createResourceHandler;
 		private readonly IReadResourceWithCriteriaQueryHandler _readResourceWithCriteriaQueryHandler;
 		private readonly IReadResourceByIdQueryHandler _readResourceByIdQueryHandler;
+		private readonly IUpdateResourceByIdCommandHandler _updateResourceByIdQueryHandler;
 		private readonly IHttpContextAccessor _contextAccessor;
 
-		public ResourceControllerImplementation(ICreateResourceCommandHandler createResourceHandler, IReadResourceWithCriteriaQueryHandler readResourceWithCriteriaQueryHandler, IReadResourceByIdQueryHandler readResourceByIdQueryHandler, IHttpContextAccessor contextAccessor)
+		public ResourceControllerImplementation(ICreateResourceCommandHandler createResourceHandler, IReadResourceWithCriteriaQueryHandler readResourceWithCriteriaQueryHandler, IReadResourceByIdQueryHandler readResourceByIdQueryHandler, IHttpContextAccessor contextAccessor, IUpdateResourceByIdCommandHandler updateResourceByIdQueryHandler)
 		{
 			_createResourceHandler = createResourceHandler;
 			_readResourceWithCriteriaQueryHandler = readResourceWithCriteriaQueryHandler;
 			_readResourceByIdQueryHandler = readResourceByIdQueryHandler;
 			_contextAccessor = contextAccessor;
+			_updateResourceByIdQueryHandler = updateResourceByIdQueryHandler;
 		}
 
 		public async Task<ResourceResponseDto> CreateResourceAsync(CreateResourceCommandDto body)
@@ -82,9 +84,18 @@ namespace Api.Controllers
 			return result.GetSuccess().OriginalType;
 		}
 
-		public Task<ResourceResponseDto> UpdateResourceByIdAsync(int id, UpdateResourceByIdCommandDto body)
+		public async Task<ResourceResponseDto> UpdateResourceByIdAsync(int id, UpdateResourceByIdCommandDto body)
 		{
-			throw new NotImplementedException();
+			var result = await _updateResourceByIdQueryHandler.HandleAsync(id, body);
+
+			if (result.IsSucces() is false)
+			{
+				// Shoud always be succesfuld if not let ExceptionHandler Middleware handle it
+				throw result.GetError().Exception!;
+			}
+
+			_contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.OK.ToInt();
+			return result.GetSuccess().OriginalType;
 		}
 	}	
 }

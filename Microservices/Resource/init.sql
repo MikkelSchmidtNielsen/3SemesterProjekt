@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS `Resource` (
     `Location` INT NOT NULL,
     `Description` TEXT NULL,
     `IsAvailable` BOOLEAN NOT NULL DEFAULT TRUE,
-    `RowVersion` BINARY(8) NOT NULL DEFAULT 0x0000000000000000
+    `RowVersion` BINARY(8) NOT NULL
 );

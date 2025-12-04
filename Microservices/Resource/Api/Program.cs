@@ -32,19 +32,7 @@ namespace Api
 
 			var app = builder.Build();
 
-			// Ensure DB created. Was not need in Home Test
-			//IocServiceRegistration.EnsureDatabaseCreated(app.Services);
-
-			// Middleware if Swagger for Dev Only
-			if (app.Environment.IsDevelopment())
-			{
-
-			}
-
-			// Set for all uses, so I can use it via Docker
-			//app.UseSwagger();
-			//app.UseSwaggerUI();
-
+			app.UseExceptionHandler();
 			app.UseHttpsRedirection();
 
 			app.UseMiddleware<ApiKeyAuthMiddleware>();
