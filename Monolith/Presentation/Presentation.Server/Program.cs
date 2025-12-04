@@ -1,4 +1,5 @@
 using InversionOfControlContainers.InversionOfControl;
+using Presentation.Server;
 using Presentation.Server.Components;
 using Radzen;
 
@@ -21,7 +22,10 @@ namespace Presentation
             // Register services to IoC
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
 
-            var app = builder.Build();
+            // ServerApis as Refit for Client side
+            builder.Services.RegisterRefit();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

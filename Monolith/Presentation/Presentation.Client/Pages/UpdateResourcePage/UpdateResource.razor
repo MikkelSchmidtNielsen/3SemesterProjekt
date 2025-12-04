@@ -1,0 +1,21 @@
+﻿@page "/admin/update-resource"
+
+@rendermode InteractiveAuto
+<RadzenStack AlignItems="AlignItems.Center">
+    <RadzenText>Vælg en Resource du ønsker at opdater</RadzenText>
+    <RadzenDropDown Style="width: 100%; max-width: 300px;"
+                    TValue="UpdateResourceModel"
+                    @bind-Value="selectedResource"
+                    Placeholder="Select resource"
+                    AllowFiltering="true"
+                    Data="@resources"
+                    TextProperty="Name"
+     />
+
+     <br />
+</RadzenStack>
+
+ @if (selectedResource is not null)
+{
+    <UpdateResourceComponent resource="selectedResource" OnModelSubmit="OnModelSubmitAsync"></UpdateResourceComponent>
+}
