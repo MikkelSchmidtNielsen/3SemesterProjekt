@@ -38,7 +38,7 @@ namespace Application.Services.Command
                 // Mapping success
                 CreateResourceUIResponseDto succesDto = Mapper.Map<CreateResourceUIResponseDto>(succes);
 
-                // Returb to UI
+                // Return to UI
                 return Result<CreateResourceUIResponseDto>.Success(succesDto);
             }
         }
