@@ -9,5 +9,6 @@
         public bool IsAvailable { get; set; }
         public int Location { get; set; }
         public string Description { get; set; } = string.Empty;
+        public byte[] RowVersion { get; set; }
     }
 }
