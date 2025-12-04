@@ -1,4 +1,5 @@
 ﻿using Application.ServiceInterfaces.Command;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,12 @@ namespace Application.Services.Command
     {
         public Task Handle(string email)
         {
-            throw new NotImplementedException();
+            Random random = new Random();
+            int value = random.Next(100000, 999999);
+            DateTime expiryTime = DateTime.UtcNow.AddMinutes(30);
+            Otp otp = new Otp(value, expiryTime);
+
+
         }
     }
 }

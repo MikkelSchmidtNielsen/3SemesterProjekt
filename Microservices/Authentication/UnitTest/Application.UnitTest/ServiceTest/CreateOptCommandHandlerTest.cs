@@ -19,6 +19,8 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Act
 
+            sut.Handle(email);
+
             // Assert
         }
     }
