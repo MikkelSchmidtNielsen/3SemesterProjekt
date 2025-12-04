@@ -14,6 +14,6 @@ namespace Application.ApplicationDto
 		public int? Location { get; set; }
 		public string? Description { get; set; }
 		public bool? IsAvailable { get; set; }
-		public byte[] RowVersions { get; set; }
+		public byte[] RowVersion { get; set; }
 	}
 }
