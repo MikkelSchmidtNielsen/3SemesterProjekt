@@ -19,7 +19,7 @@
     <ProjectReference Include="..\InversionOfControl\InversionOfControl.csproj" />
   </ItemGroup>
 
-	<!-- Makes sure that NSwag script automaticly runs before building, so we only need to update our OpenApiSpec and build for the update to be implemented
+	<!-- Makes sure that NSwag script automatically runs before building, so we only need to update our OpenApiSpec and build for the update to be implemented
 	Condition is set, so our Release versions is not depedent on NSwag ConsoleCore tool-->
 	<Target Name="NSwag" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
 		<Exec Command="nswag run OpenApiScript/open-api-script.nswag" />
