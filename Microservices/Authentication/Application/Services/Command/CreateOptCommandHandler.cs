@@ -19,6 +19,7 @@ namespace Application.Services.Command
             DateTime expiryTime = DateTime.UtcNow.AddMinutes(30);
             Otp otp = new Otp(value, expiryTime);
 
+            // Call to email method here
         }
     }
 }
