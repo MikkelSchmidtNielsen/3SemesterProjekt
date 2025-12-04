@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace Application.Services.Command
 {
@@ -16,7 +18,6 @@ namespace Application.Services.Command
             int value = random.Next(100000, 999999);
             DateTime expiryTime = DateTime.UtcNow.AddMinutes(30);
             Otp otp = new Otp(value, expiryTime);
-
 
         }
     }
