@@ -27,6 +27,6 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
         /// </summary>
         /// <returns>List of resources</returns>
         [Get("/resources")]
-        Task<ICollection<ReadResourceByApiQueryResponse>> ReadAllResourcesAsync([Query] InternalResourceApiFilterDto filter);
+        Task<ICollection<ReadResourceByApiQueryResponseDto>> ReadAllResourcesAsync([Query] InternalResourceApiFilterDto filter);
     }
 }

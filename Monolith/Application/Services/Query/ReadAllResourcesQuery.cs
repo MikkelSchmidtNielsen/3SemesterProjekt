@@ -17,7 +17,7 @@ namespace Application.Services.Query
 
         public async Task<IResult<IEnumerable<ReadResourceQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter)
         {
-            IResult<IEnumerable<ReadResourceByApiQueryResponse>> response = await _apiService.ReadAllResourcesAsync(filter);
+            IResult<IEnumerable<ReadResourceByApiQueryResponseDto>> response = await _apiService.ReadAllResourcesAsync(filter);
 
             if (response.IsSucces() == false)
             {
@@ -30,7 +30,7 @@ namespace Application.Services.Query
             else
             {
                 // Get success
-                IEnumerable<ReadResourceByApiQueryResponse> succes = response.GetSuccess().OriginalType;
+                IEnumerable<ReadResourceByApiQueryResponseDto> succes = response.GetSuccess().OriginalType;
 
                 List<ReadResourceQueryResponseDto> listOfSuccess = new List<ReadResourceQueryResponseDto>();
 

@@ -9,6 +9,6 @@ namespace Application.ServiceInterfaces.Query
     {
         public Task<IResult<CreateResourceByApiResponseDto>> CreateResourceAsync(CreateResourceCommandDto dto);
         public Task<IResult<ReadResourceByIdByApiResponseDto>> ReadResourceByIdAsync(int id);
-        public Task<IResult<IEnumerable<ReadResourceByApiQueryResponse>>> ReadAllResourcesAsync(ResourceFilterDto filter);
+        public Task<IResult<IEnumerable<ReadResourceByApiQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter);
     }
 }

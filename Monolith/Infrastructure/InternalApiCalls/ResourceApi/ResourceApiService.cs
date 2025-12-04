@@ -110,7 +110,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
             }
         }
 
-        public async Task<IResult<IEnumerable<ReadResourceByApiQueryResponse>>> ReadAllResourcesAsync(ResourceFilterDto uiFilter)
+        public async Task<IResult<IEnumerable<ReadResourceByApiQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto uiFilter)
         {
             InternalResourceApiFilterDto filter = Mapper.Map<InternalResourceApiFilterDto>(uiFilter);
 
@@ -118,7 +118,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
             {
                 var result = await _api.ReadAllResourcesAsync(filter);
 
-                return Result<IEnumerable<ReadResourceByApiQueryResponse>>.Success(result);
+                return Result<IEnumerable<ReadResourceByApiQueryResponseDto>>.Success(result);
             }
             catch (ApiException ex)
             {
@@ -146,7 +146,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
                     original: ex
                 );
 
-                return Result<IEnumerable<ReadResourceByApiQueryResponse>>.Error(
+                return Result<IEnumerable<ReadResourceByApiQueryResponseDto>>.Error(
                     originalType: null,
                     exception: apiErrorException
                 );
@@ -154,7 +154,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
             catch (Exception ex)
             {
                 // If something breaks which is not from an Api Response return
-                return Result<IEnumerable<ReadResourceByApiQueryResponse>>.Error(originalType: null, exception: ex);
+                return Result<IEnumerable<ReadResourceByApiQueryResponseDto>>.Error(originalType: null, exception: ex);
             }
         }
     }
