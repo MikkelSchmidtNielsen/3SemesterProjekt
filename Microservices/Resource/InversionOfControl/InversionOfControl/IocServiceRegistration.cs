@@ -34,8 +34,6 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IReadResourceByIdQueryHandler, ReadResourceByIdQueryHandler>();
             services.AddScoped<IReadResourceWithCriteriaQueryHandler, ReadResourceWithCriteriaQueryHandler>();
 
-            //services.AddScoped<ICreateUserCommandHandler, CreateUserCommandHandler>();
-
             // Add repositories
             services.AddScoped<IResourceRepository, ResourceRepository>();
         }
