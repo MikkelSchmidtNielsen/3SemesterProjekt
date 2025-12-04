@@ -21,7 +21,7 @@ namespace Application.Services.Command
 
             // Call to email method here
 
-            // Save to SessionStorage (?)
+            var Result = 
         }
     }
 }

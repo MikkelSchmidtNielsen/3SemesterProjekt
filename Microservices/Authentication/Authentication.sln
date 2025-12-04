@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "init", "init", "{02EA681E-C
 		init.sql = init.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{EF789147-035B-4AE2-B08A-5971C0CB82B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{0FC4C767-A4D3-446E-819D-DE4E1CEE360D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FC4C767-A4D3-446E-819D-DE4E1CEE360D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FC4C767-A4D3-446E-819D-DE4E1CEE360D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF789147-035B-4AE2-B08A-5971C0CB82B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF789147-035B-4AE2-B08A-5971C0CB82B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF789147-035B-4AE2-B08A-5971C0CB82B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF789147-035B-4AE2-B08A-5971C0CB82B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
