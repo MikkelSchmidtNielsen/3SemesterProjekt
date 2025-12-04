@@ -59,17 +59,18 @@ namespace Api.Controllers
 
 		public async Task<ICollection<ResourceResponseDto>> GetResourcesAsync(string name = null, IEnumerable<string> type = null, int? location = null, bool? isAvailable = null, decimal? minPrice = null, decimal? maxPrice = null)
 		{
-			ReadResourceListQueryDto criterias = new ReadResourceListQueryDto();
+			// Takes the criterias from monolith into a microservice dto because of NSWAGs limitations of converting query parameters
+			ReadResourceListQueryDto criteria = new ReadResourceListQueryDto();
 			{
-				criterias.Name = name;
-				criterias.Type = type;
-				criterias.Location = location;
-				criterias.IsAvailable = isAvailable;
-				criterias.MinPrice = minPrice;
-				criterias.MaxPrice = maxPrice;
+				criteria.Name = name;
+				criteria.Type = type;
+				criteria.Location = location;
+				criteria.IsAvailable = isAvailable;
+				criteria.MinPrice = minPrice;
+				criteria.MaxPrice = maxPrice;
 			}
 
-			var result = await _readResourceWithCriteriaQueryHandler.HandleAsync(criterias);
+			var result = await _readResourceWithCriteriaQueryHandler.HandleAsync(criteria);
 
 			if (result.IsSucces() is false)
 			{
