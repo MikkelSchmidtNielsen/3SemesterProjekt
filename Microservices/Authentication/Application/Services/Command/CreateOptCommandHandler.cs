@@ -20,6 +20,8 @@ namespace Application.Services.Command
             Otp otp = new Otp(value, expiryTime);
 
             // Call to email method here
+
+            // Save to SessionStorage (?)
         }
     }
 }
