@@ -8,16 +8,16 @@ namespace Application.Services.Query
 {
     public class ReadAllResourcesQuery : IReadAllResourcesQuery
     {
-        private readonly IResourceApiService _apiService;
+        private readonly IResourceApiService _resourceApiService;
 
-        public ReadAllResourcesQuery(IResourceApiService apiService)
+        public ReadAllResourcesQuery(IResourceApiService resourceApiService)
         {
-            _apiService = apiService;
+            _resourceApiService = resourceApiService;
         }
 
         public async Task<IResult<IEnumerable<ReadResourceQueryResponseDto>>> ReadAllResourcesAsync(ResourceFilterDto filter)
         {
-            IResult<IEnumerable<ReadResourceByApiQueryResponseDto>> response = await _apiService.ReadAllResourcesAsync(filter);
+            IResult<IEnumerable<ReadResourceByApiQueryResponseDto>> response = await _resourceApiService.ReadAllResourcesAsync(filter);
 
             if (response.IsSucces() == false)
             {
