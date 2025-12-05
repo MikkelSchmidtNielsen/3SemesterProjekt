@@ -19,6 +19,7 @@ namespace Authentication.Api.Controllers
 
         public async Task<string> RegisterUserAsync(string email)
         {
+            // Creates a user and assigns a token to it
             IResult<CreateUserResponseDto> result = await _handler.HandleAsync(email);
 
             // Handles failures
