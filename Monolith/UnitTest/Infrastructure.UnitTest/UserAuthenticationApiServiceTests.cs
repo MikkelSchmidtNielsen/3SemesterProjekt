@@ -99,7 +99,7 @@ namespace UnitTest.Infrastructure.UnitTest
 			// Assert
 			Assert.True(result.IsError());
 			var ex = Assert.IsType<ApiErrorException>(result.GetError().Exception);
-			Assert.Equal("Unexpected error format from API", ex.ApiErrorMessage);
+			Assert.Equal("Uventet fejl fra API", ex.ApiErrorMessage);
 			Assert.Equal(409, ex.StatusCode);
 		}
 
