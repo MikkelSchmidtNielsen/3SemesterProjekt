@@ -55,6 +55,9 @@ namespace InversionOfControlContainers.InversionOfControl
 			//Add UnitOfWork
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            //Add message handler
+            services.AddTransient<ResourceMessageHandler>();
+
 			HttpClientModule.RegisterHttpClients(services, configuration);
         }
     }
