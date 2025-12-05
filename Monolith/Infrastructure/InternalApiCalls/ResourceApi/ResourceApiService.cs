@@ -3,6 +3,7 @@ using Application.ApplicationDto.Query;
 using Application.InfrastructureDto;
 using Application.ServiceInterfaces.Query;
 using Common;
+using Common.CustomExceptions;
 using Common.ResultInterfaces;
 using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Refit;

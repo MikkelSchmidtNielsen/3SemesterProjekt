@@ -7,7 +7,7 @@ namespace Presentation.Shared.Refit
 	public interface IUpdateResourceApi
 	{
 		[Get("/api/UpdateResource")]
-		Task<IResult<UpdateResourceModel>> GetAllResources();
+		Task<IResult<IEnumerable<UpdateResourceModel>>> GetAllResources();
 
 		[Put("/api/UpdateResource/{id}")]
 		Task<IResult<UpdateResourceModel>> UpdateResource(int id, [Body] UpdateResourceModel resource);

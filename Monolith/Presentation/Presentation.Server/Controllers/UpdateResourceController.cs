@@ -9,7 +9,7 @@ namespace Presentation.Server.Controllers
 	public class UpdateResourceController : ControllerBase
 	{
 		[HttpGet]
-		public Task<IResult<UpdateResourceModel>> GetAllResources()
+		public Task<IResult<IEnumerable<UpdateResourceModel>>> GetAllResources()
 		{
 			throw new NotImplementedException();
 		}
