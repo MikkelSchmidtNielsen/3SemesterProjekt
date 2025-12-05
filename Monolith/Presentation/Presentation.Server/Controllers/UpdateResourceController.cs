@@ -13,6 +13,7 @@ namespace Presentation.Server.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<UpdateResourceModel>> GetAllResources()
 		{
+			// TODO Change to API from Microservice
 			return new List<UpdateResourceModel>
 				{
 					new UpdateResourceModel
