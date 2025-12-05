@@ -30,12 +30,12 @@ namespace Application.Services.Query
             else
             {
                 // Get success
-                IEnumerable<ReadResourceByApiQueryResponseDto> succes = response.GetSuccess().OriginalType;
+                IEnumerable<ReadResourceByApiQueryResponseDto> success = response.GetSuccess().OriginalType;
 
                 List<ReadResourceQueryResponseDto> listOfSuccess = new List<ReadResourceQueryResponseDto>();
 
                 // Mapping success
-                foreach (var resource in succes)
+                foreach (var resource in success)
                 {
                     ReadResourceQueryResponseDto succesDto = Mapper.Map<ReadResourceQueryResponseDto>(resource);
 

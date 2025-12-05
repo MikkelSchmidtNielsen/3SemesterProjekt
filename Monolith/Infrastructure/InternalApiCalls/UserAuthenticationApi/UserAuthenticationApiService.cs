@@ -40,7 +40,7 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 					// If parsing from Json didnt work manual create BadResponse
 					error = new BadResponseDto
 					{
-						Message = "Unexpected error format from API",
+						Message = "Uventet fejl fra API",
 					};
 				}
 

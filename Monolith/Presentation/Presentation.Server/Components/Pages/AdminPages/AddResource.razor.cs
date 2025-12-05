@@ -16,7 +16,11 @@ namespace Presentation.Server.Components.Pages.AdminPages
         {
             public string Name { get; set; }
             public string Type { get; set; }
+
+            // Sets the baseline of the base price to zero
             public decimal BasePrice { get; set; } = 0;
+
+            // Sets the baseline of location to one
             public int Location { get; set; } = 1;
             public string? Description { get; set; }
         }

@@ -11,18 +11,18 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
 {
     public class ResourceApiService : IResourceApiService
     {
-        private readonly IResourceApi _api;
+        private readonly IResourceApi _resourceApi;
 
-        public ResourceApiService(IResourceApi api)
+        public ResourceApiService(IResourceApi resourceApi)
         {
-            _api = api;
+            _resourceApi = resourceApi;
         }
 
         public async Task<IResult<CreateResourceByApiResponseDto>> CreateResourceAsync(CreateResourceCommandDto dto)
         {
             try
             {
-                CreateResourceByApiResponseDto result = await _api.CreateResourceAsync(dto);
+                CreateResourceByApiResponseDto result = await _resourceApi.CreateResourceAsync(dto);
 
                 return Result<CreateResourceByApiResponseDto>.Success(result);
             }
@@ -41,11 +41,11 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
                     // If parsing from Json didnt work manual create BadResponse
                     error = new BadResponseDto
                     {
-                        Message = "Unexpected error format from API",
+                        Message = "Uventet fejl fra API",
                     };
                 }
 
-                // A custom Exception, so I can get BadReponse error message, status code and original ApiException message all in one exception
+                // A custom Exception, returns BadReponse error message, status code and original ApiException message all in one exception
                 ApiErrorException apiErrorException = new ApiErrorException(
                     apiErrorMessage: error?.Message,
                     statusCode: (int)ex.StatusCode,
@@ -68,7 +68,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
         {
             try
             {
-                ReadResourceByIdByApiResponseDto result = await _api.ReadResourceByIdAsync(id);
+                ReadResourceByIdByApiResponseDto result = await _resourceApi.ReadResourceByIdAsync(id);
 
                 return Result<ReadResourceByIdByApiResponseDto>.Success(result);
             }
@@ -87,11 +87,11 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
                     // If parsing from Json didnt work manual create BadResponse
                     error = new BadResponseDto
                     {
-                        Message = "Unexpected error format from API",
+                        Message = "Uventet fejl fra API",
                     };
                 }
 
-                // A custom Exception, so I can get BadReponse error message, status code and original ApiException message all in one exception
+                // A custom Exception, returns BadReponse error message, status code and original ApiException message all in one exception
                 ApiErrorException apiErrorException = new ApiErrorException(
                     apiErrorMessage: error?.Message,
                     statusCode: (int)ex.StatusCode,
@@ -116,7 +116,7 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
 
             try
             {
-                var result = await _api.ReadAllResourcesAsync(filter);
+                var result = await _resourceApi.ReadAllResourcesAsync(filter);
 
                 return Result<IEnumerable<ReadResourceByApiQueryResponseDto>>.Success(result);
             }
@@ -135,11 +135,11 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
                     // If parsing from Json didnt work manual create BadResponse
                     error = new BadResponseDto
                     {
-                        Message = "Unexpected error format from API",
+                        Message = "Uventet fejl fra API",
                     };
                 }
 
-                // A custom Exception, so I can get BadReponse error message, status code and original ApiException message all in one exception
+                // A custom Exception, returns BadReponse error message, status code and original ApiException message all in one exception
                 ApiErrorException apiErrorException = new ApiErrorException(
                     apiErrorMessage: error?.Message,
                     statusCode: (int)ex.StatusCode,
