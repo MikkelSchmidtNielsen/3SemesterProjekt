@@ -86,7 +86,7 @@
 		resourceModel.Name = textInfo.ToTitleCase(resourceModel.Name);
 		var result = await DialogService.OpenAsync("Oprettelse af ny ressource", ds =>
         @<RadzenStack Gap="1.5rem">
-            <h3>Ønsker du at oprette en ny ressource?</h3>
+            <h3>Vil du gerne opdater denne resource?</h3>
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
                 <RadzenStack Orientation="Orientation.Horizontal">
                     <RadzenButton Text="Ja" Click="() => OnModelSubmitAsync(resourceModel, ds)" Style="width: 80px;" />

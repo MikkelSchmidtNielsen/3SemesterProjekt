@@ -27,9 +27,9 @@ namespace Presentation.Client.Services.Implementation
 		{
 			try
 			{
-				IResult<IEnumerable<UpdateResourceModel>> result = await _api.GetAllResources();
+				IEnumerable<UpdateResourceModel> result = await _api.GetAllResources();
 
-				return result;
+				return Result<IEnumerable<UpdateResourceModel>>.Success(result);
 			}
 			catch (ApiException ex)
 			{
@@ -75,9 +75,9 @@ namespace Presentation.Client.Services.Implementation
 		{
 			try
 			{
-				IResult<UpdateResourceModel> result = await _api.UpdateResource(resource.Id, resource);
+				UpdateResourceModel result = await _api.UpdateResource(resource.Id, resource);
 
-				return result;
+				return Result<UpdateResourceModel>.Success(result);
 			}
 			catch (ApiException ex)
 			{

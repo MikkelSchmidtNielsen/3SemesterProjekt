@@ -1,4 +1,5 @@
-﻿using Presentation.Client.Services.Interfaces;
+﻿using Common.ResultInterfaces;
+using Presentation.Client.Services.Interfaces;
 using Presentation.Shared.Models;
 using System.Resources;
 
@@ -10,16 +11,26 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 
 		protected override async Task OnInitializedAsync()
 		{
-			resources = (IEnumerable<UpdateResourceModel>)await _updateService.GetAllResourcesAsync();
+			IResult<IEnumerable<UpdateResourceModel>> apiResponse = await _updateService.GetAllResourcesAsync();
+
+			if (apiResponse.IsSucces() is false)
+			{
+				resources = Array.Empty<UpdateResourceModel>();
+			}
+			else
+			{
+				resources = apiResponse.GetSuccess().OriginalType;
+			}
 		}
 	
 		UpdateResourceModel? selectedResource;
 
 
-		private async Task OnModelSubmitAsync(UpdateResourceModel registerModel)
+		private async Task OnModelSubmitAsync(UpdateResourceModel updateModel)
 		{ 
-			// TODO
+			await _updateService.UpdateResourceAsync(updateModel);
 		
+			// TODO
 		}
 	}
 }
