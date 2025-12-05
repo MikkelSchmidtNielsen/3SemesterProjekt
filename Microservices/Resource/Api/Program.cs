@@ -41,10 +41,6 @@ namespace Api
 
 			}
 
-			// Set for all uses, so I can use it via Docker
-			//app.UseSwagger();
-			//app.UseSwaggerUI();
-
 			app.UseHttpsRedirection();
 
 			app.UseMiddleware<ApiKeyAuthMiddleware>();
