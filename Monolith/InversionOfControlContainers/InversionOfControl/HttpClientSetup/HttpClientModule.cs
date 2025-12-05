@@ -48,7 +48,8 @@ namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 					IHttpClientFactory factory = sp.GetRequiredService<IHttpClientFactory>();
 					HttpClient http = factory.CreateClient("Resource");
 					client.BaseAddress = http.BaseAddress;
-				});
+				})
+				.AddHttpMessageHandler<ResourceMessageHandler>();
 		}
     }
 }
