@@ -17,5 +17,9 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 		/// <returns>JWT token as string</returns>
 		[Post("/register-user/{email}")]
 		Task<string> RegisterUserAsync([AliasAs("email")] string email);
+
+		// Generates an One Time Password and uses the given email as the OTP's key.
+		[Post("/login")]
+		Task GenerateOtpAsync([AliasAs("email")] string email);
 	}
 }

@@ -15,7 +15,7 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 			_userAuthenticationApi = userAuthenticationApi;
 		}
 
-		public async Task<IResult<CreateUserByApiReponseDto>> RegisterUserAsync(string email)
+        public async Task<IResult<CreateUserByApiReponseDto>> RegisterUserAsync(string email)
 		{
 			try
 			{
@@ -62,5 +62,38 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 				return Result<CreateUserByApiReponseDto>.Error(originalType: null, exception: ex);
 			}
 		}
-	}
+        public async Task GenerateOtpAsync(string email)
+        {
+			try
+			{
+				await _userAuthenticationApi.GenerateOtpAsync(email);
+			}
+            catch (ApiException ex)
+            {
+                BadResponseDto? error = null;
+
+                // If its anything else but a 201 response (409 or 500 reponse code) try gets its value from api call
+                try
+                {
+                    // Try to parse Content from Json to BadReponse
+                    error = await ex.GetContentAsAsync<BadResponseDto>();
+                }
+                catch (Exception)
+                {
+                    // If parsing from Json didnt work manual create BadResponse
+                    error = new BadResponseDto
+                    {
+                        Message = "Uventet fejl fra API",
+                    };
+                }
+
+                // A custom Exception, so I can get BadReponse error message, status code and original ApiException message all in one exception
+                ApiErrorException apiErrorException = new ApiErrorException(
+                    apiErrorMessage: error?.Message,
+                    statusCode: (int)ex.StatusCode,
+                    original: ex
+                );
+            }
+        }
+    }
 }
