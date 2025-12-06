@@ -1,7 +1,7 @@
 ﻿@page "/guest/guest-create-booking"
 @rendermode InteractiveServer
 @inject DialogService _dialogService
-@inject IReadAllResourcesQueryHandler _getAllResourcesService
+@inject IReadAllResourcesQuery _resourcesQuery
 @inject ICreateBookingByGuestCommandHandler _guestCreateBookingService
 @using Application.ApplicationDto.Command
 
@@ -29,11 +29,11 @@
 		<RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
 		@if (_listOfResources != null && _listOfResources.Any())
 		{
-			<RadzenDropDown TValue="int?" @bind-Value="_guestBookingModel.ResourceId" Data="_listOfResources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+			<RadzenDropDown TValue="int" @bind-Value="_guestBookingModel.ResourceId" Data="_listOfResources" TextProperty="Name" ValueProperty="Id" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
 		}
 		else
 		{
-            <RadzenDropDown TValue="int" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" Name="DropDownClear" />
+            <RadzenDropDown TValue="int" Data="_listOfResources" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" Name="DropDownClear" />
 		}
         <RadzenRequiredValidator Component="DropDownClear" Text="Vælg en ressource" />
 	</RadzenStack>
@@ -67,8 +67,8 @@
     private async Task GuestEnteredCorrectInfoConfirmationPopupAsync()
     {
         // Find selected resource
-        var selectedResource = _listOfResources.First(r => r.Id == _guestBookingModel.ResourceId);
-        _guestBookingModel.Resource = selectedResource;
+        _selectedResource = _listOfResources.First(r => r.Id == _guestBookingModel.ResourceId);
+        _guestBookingModel.ResourceId = _selectedResource.Id;
 
         // Open confirmation dialog
         var result = await _dialogService.OpenAsync("Oprettelse af ny booking", ds => @<RadzenStack Gap="1.5rem">
@@ -76,10 +76,10 @@
                 <h3>Er du sikker på at du vil oprette denne booking?</h3>
 
                 <p><b>Email:</b> @_guestBookingModel.Email</p>
-                <p><b>Ressource:</b> @_guestBookingModel.Resource.Name</p>
+                <p><b>Ressource:</b> @_selectedResource.Name</p>
                 <p><b>Start:</b> @_guestBookingModel.StartDate</p>
                 <p><b>Slut:</b> @_guestBookingModel.EndDate</p>
-                <p><b>Total pris:</b> @CalculateTotalPrice(_guestBookingModel)</p>
+                <p><b>Total pris:</b> @CalculateTotalPrice(_guestBookingModel, _selectedResource)</p>
 
                 <RadzenStack Orientation="Orientation.Horizontal"
                              Gap="0.5rem"
@@ -114,7 +114,7 @@
 
                 <h3>Velkommen tilbage!</h3>
 
-                <p>Din booking er oprettet for: @bookingCreatedDto.Resource.Name</p>
+                <p>Din booking er oprettet for: @_selectedResource!.Name</p>
                 <p><b>Fra:</b> @bookingCreatedDto.StartDate</p>
                 <p><b>Til:</b> @bookingCreatedDto.EndDate</p>
                 <p><b>Pris:</b> @bookingCreatedDto.TotalPrice</p>

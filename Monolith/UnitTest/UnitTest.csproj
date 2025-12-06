@@ -34,7 +34,6 @@
   <ItemGroup>
     <Folder Include="Common.UnitTest\" />
     <Folder Include="Persistence.UnitTest\" />
-    <Folder Include="Infrastructure.UnitTest\" />
   </ItemGroup>
 
 </Project>

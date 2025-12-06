@@ -10,6 +10,6 @@ namespace Application.ServiceInterfaces.Query
 {
     public interface IBookingCheckOutQuery
     {
-        Task<IResult<List<BookingMissingCheckOutResponseDto>>> GetFinishedBookingsWithMissingCheckOutsAsync();
+        Task<IResult<List<ReadBookingMissingCheckOutQueryResponseDto>>> GetFinishedBookingsWithMissingCheckOutsAsync();
     }
 }

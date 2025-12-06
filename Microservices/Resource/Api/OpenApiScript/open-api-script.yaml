@@ -1,0 +1,310 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Resource API
+  description: API for managing Resources
+
+security:
+  - ApiKeyAuth: []
+  
+paths:
+  # CREATE
+  /resources:
+    post:
+      summary: Create a new resource
+      operationId: CreateResource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResourceCommandDto'
+      responses:
+        '201':
+          description: Resource created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceResponseDto'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '409':
+          $ref: '#/components/responses/409Error'
+        '500':
+          $ref: '#/components/responses/500Error'
+
+    # READ (LIST)
+    get:
+      summary: Get filtered list of resources
+      operationId: GetResources
+      parameters:
+        - $ref: '#/components/parameters/NameQueryParam'
+        - $ref: '#/components/parameters/TypeQueryParam'
+        - $ref: '#/components/parameters/LocationQueryParam'
+        - $ref: '#/components/parameters/IsAvailableQueryParam'
+        - $ref: '#/components/parameters/MinPriceQueryParam'
+        - $ref: '#/components/parameters/MaxPriceQueryParam'
+      responses:
+        '200':
+          description: List of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceResponseDto'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+        '500':
+          $ref: '#/components/responses/500Error'
+
+  # READ (SINGLE)
+  /resources/{id}:
+    get:
+      summary: Get a single resource by ID
+      operationId: GetResourceById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Resource found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceResponseDto'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+        '500':
+          $ref: '#/components/responses/500Error'
+
+    # UPDATE
+    put:
+      summary: Update an existing resource
+      operationId: UpdateResourceById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResourceByIdCommandDto'
+      responses:
+        '200':
+          description: Resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceResponseDto'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+        '409':
+          $ref: '#/components/responses/409Error'
+        '500':
+          $ref: '#/components/responses/500Error'
+
+    # DELETE
+    delete:
+      summary: Delete a resource by ID
+      operationId: DeleteResourceById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Resource deleted successfully
+        '401':
+          $ref: '#/components/responses/401Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+        '500':
+          $ref: '#/components/responses/500Error'
+
+
+components:
+  schemas:
+    securitySchemes:
+      ApiKeyAuth:
+        type: apiKey
+        in: header
+        name: X-Api-Key
+
+  # DTOs
+    ResourceResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        location:
+          type: integer
+        isAvailable:
+          type: boolean
+        description:
+          type: string
+        rowVersion:
+          type: string
+          format: byte
+
+    CreateResourceCommandDto:
+      type: object
+      required:
+        - name
+        - type
+        - basePrice
+        - location
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        location:
+          type: integer
+        description:
+          type: string
+
+    UpdateResourceByIdCommandDto:
+      type: object
+      required:
+        - rowVersion
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        basePrice:
+          type: number
+          format: decimal
+        location:
+          type: integer
+        description:
+          type: string
+        isAvailable:
+          type: boolean
+        rowVersion:
+          type: string
+          format: byte
+
+    BadResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+  # Error Responses
+  responses:
+    400Error:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+
+    401Error:
+      description: Unathorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+
+    404Error:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+
+    409Error:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+
+    500Error:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadResponse'
+
+  # Parameters for queries
+  parameters:
+    NameQueryParam:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+
+    TypeQueryParam:
+      name: type
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: true
+      description: Multi-value filter for resource types
+
+    LocationQueryParam:
+      name: location
+      in: query
+      required: false
+      schema:
+        type: integer
+
+    IsAvailableQueryParam:
+      name: isAvailable
+      in: query
+      required: false
+      schema:
+        type: boolean
+
+    MinPriceQueryParam:
+      name: minPrice
+      in: query
+      required: false
+      schema:
+        type: number
+        format: decimal
+
+    MaxPriceQueryParam:
+      name: maxPrice
+      in: query
+      required: false
+      schema:
+        type: number
+        format: decimal

@@ -1,8 +1,8 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
@@ -13,10 +13,10 @@ namespace Application.Services.Command
 {
     public class GuestCreateCommand : IGuestCreateCommand
     {
-		IGuestFactory _guestFactory;
-		IGuestRepository _repo;
-		IUnitOfWork _uow;
-		IUserAuthenticationApiService _userAuthenticationApiService;
+		private readonly IGuestFactory _guestFactory;
+        private readonly IGuestRepository _repo;
+        private readonly IUnitOfWork _uow;
+        private readonly IUserAuthenticationApiService _userAuthenticationApiService;
 
 		public GuestCreateCommand(IGuestFactory guestFactory, IGuestRepository repo, IUnitOfWork uow, IUserAuthenticationApiService userAuthenticationApiService)
 		{
@@ -48,6 +48,13 @@ namespace Application.Services.Command
 			if (result.IsSucces() is false)
 			{
 				_uow.Rollback();
+				return result;
+			}
+
+			// Create a commit if email isn't provided
+			if (guest.Email is null)
+			{
+				_uow.Commit();
 				return result;
 			}
 

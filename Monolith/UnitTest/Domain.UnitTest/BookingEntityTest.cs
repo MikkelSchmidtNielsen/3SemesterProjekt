@@ -1,12 +1,4 @@
-﻿using Castle.Core.Resource;
-using Domain.Models;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
+﻿using Domain.Models;
 
 namespace UnitTest.Domain.UnitTest
 {
@@ -103,15 +95,11 @@ namespace UnitTest.Domain.UnitTest
             DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
             decimal totalPrice = 1000;
 
-            // Act
-            Resource resource = new Resource(name: "Paradis", type: "Hytte", basePrice: 500, location: 5, description: "");
-
-            // Assert
+            // Act & Assert
             Assert.Throws<ArgumentException>(() => new Booking(guestId, resourceId, startDate, endDate, totalPrice));
         }
 
         // Testing for totalPrice
-
         [Theory]
         [InlineData(1000, true)]
         [InlineData(1000.1, true)]

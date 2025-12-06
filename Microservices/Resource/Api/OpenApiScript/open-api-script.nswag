@@ -1,0 +1,28 @@
+{
+  "runtime": "Net90",
+  "defaultVariables": null,
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "open-api-script.yaml",
+      "output": null,
+      "newLineBehavior": "Auto"
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpController": {
+      "controllerBaseClass": "Microsoft.AspNetCore.Mvc.ControllerBase",
+      "controllerTarget": "AspNetCore",
+      "className": "Resource",
+      "namespace": "Api.Controllers",
+      "generateOptionalParameters": true,
+      "generateDtoTypes": false,
+      "additionalNamespaceUsages": [
+        "Microsoft.AspNetCore.Mvc",
+        "System.CodeDom.Compiler",
+        "System.Threading.Tasks",
+        "Application.ApplicationDto"
+      ],
+      "output": "../Controllers/ResourceController.cs"
+    }
+  }
+}

@@ -10,8 +10,8 @@ namespace Presentation.Server.Components.Pages.AdminPages
         bool checkInButtonDisabled = true;
         bool checkOutButtonDisabled = false;
 
-        IEnumerable<BookingMissingCheckInResponseDto> _missingCheckIns = new List<BookingMissingCheckInResponseDto>();
-        IEnumerable<BookingMissingCheckOutResponseDto> _missingCheckOuts = new List<BookingMissingCheckOutResponseDto>();
+        IEnumerable<ReadBookingMissingCheckInQueryResponseDto> _missingCheckIns = new List<ReadBookingMissingCheckInQueryResponseDto>();
+        IEnumerable<ReadBookingMissingCheckOutQueryResponseDto> _missingCheckOuts = new List<ReadBookingMissingCheckOutQueryResponseDto>();
 
         private void checkInSelected()
         {

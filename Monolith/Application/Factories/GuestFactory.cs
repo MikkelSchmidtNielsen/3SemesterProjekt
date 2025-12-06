@@ -25,14 +25,26 @@ namespace Application.Factories
 
 		public async Task<IResult<Guest>> CreateAsync(CreatedGuestDto dto)
 		{
-			var repoResult = await _guestRepository.CheckIfEmailIsAvailableAsync(dto.Email!);
+			Guest guest;
 
-			if (repoResult.IsSucces() is false)
+			if (dto.Email is null)
 			{
-				return Result<Guest>.Error(null, new Exception("Email already exist"));
-			}
+                guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);
+            }
+			else
+			{
+                var repoResult = await _guestRepository.CheckIfEmailIsAvailableAsync(dto.Email!);
 
-			Guest guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);
+
+                if (repoResult.IsSucces() is false)
+                {
+                    return Result<Guest>.Error(null, new Exception("Email already exist"));
+                }
+
+                guest = new Guest(dto.FirstName, dto.LastName, dto.PhoneNumber, dto.Email, dto.Country, dto.Language, dto.Address);
+
+            }
+
 			return Result<Guest>.Success(guest);
 		}
 	}

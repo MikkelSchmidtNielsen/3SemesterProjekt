@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\InversionOfControl\InversionOfControl.csproj" />
+  </ItemGroup>
+
+	<!-- Makes sure that NSwag script automatically runs before building, so we only need to update our OpenApiSpec and build for the update to be implemented
+	Condition is set, so our Release versions is not depedent on NSwag ConsoleCore tool-->
+	<Target Name="NSwag" BeforeTargets="Build" Condition="'$(Configuration)'=='Debug'">
+		<Exec Command="nswag run OpenApiScript/open-api-script.nswag" />
+	</Target>
+
+</Project>

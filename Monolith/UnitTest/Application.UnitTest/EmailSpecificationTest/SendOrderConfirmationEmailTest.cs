@@ -1,4 +1,5 @@
-﻿using Application.InfrastructureInterfaces;
+﻿using Application.ApplicationDto.Query;
+using Application.InfrastructureInterfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace UnitTest.Application.UnitTest.EmailSpecificationTest
 		[Fact]
 		public void CreateMessage_ShouldPass_WhenGivenDtoWithAllInformation()
 		{
-			// Arrange
-			Resource resource = Impression.Of<Resource>().
+            // Arrange
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>().
 									Randomize().
 									Create();
 
@@ -39,8 +40,8 @@ namespace UnitTest.Application.UnitTest.EmailSpecificationTest
 		[Fact]
 		public void CreateMessage_ShouldThrowException_WhenGivenDtoWithMissingCustomerName()
 		{
-			// Arrange
-			Resource resource = Impression.Of<Resource>().
+            // Arrange
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>().
 									Randomize().
 									Create();
 

@@ -41,7 +41,6 @@ namespace Persistence.Repository
                     .Where(b => !b.isCheckedIn)
                     .Where(b => b.StartDate <= DateOnly.FromDateTime(DateTime.Now))
                     .Include(b => b.Guest)
-                    .Include(b => b.Resource)
                     .ToListAsync();
 
                 return Result<IEnumerable<Booking>>.Success(bookings);
@@ -60,7 +59,6 @@ namespace Persistence.Repository
                     .Where(b => !b.isCheckedOut)
                     .Where(b => b.EndDate <= DateOnly.FromDateTime(DateTime.Now))
                     .Include(b => b.Guest)
-                    .Include(b => b.Resource)
                     .ToListAsync();
 
                 return Result<IEnumerable<Booking>>.Success(bookings);

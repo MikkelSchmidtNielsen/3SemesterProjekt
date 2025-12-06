@@ -1,30 +1,28 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
 using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
+using Application.Services.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.DomainInterfaces;
 using Domain.Models;
 using Domain.ModelsDto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Command
 {
     public class GuestCreateBookingService : ICreateBookingByGuestCommandHandler
     {
         private readonly IGuestRepository _guestRepository;
-        private readonly IResourceRepository _resourceRepository;
+        private readonly IReadResourceByIdQuery _readResourceByIdQuery;
         private readonly IBookingFactory _bookingFactory;
         private readonly IBookingRepository _bookingRepository;
 
-        public GuestCreateBookingService(IGuestRepository guestRepository, IResourceRepository resourceRepository, IBookingFactory bookingFactory, IBookingRepository bookingRepository)
+        public GuestCreateBookingService(IGuestRepository guestRepository, IReadResourceByIdQuery readResourceByIdQuery, IBookingFactory bookingFactory, IBookingRepository bookingRepository)
         {
             _guestRepository = guestRepository;
-            _resourceRepository = resourceRepository;
+            _readResourceByIdQuery = readResourceByIdQuery;
             _bookingFactory = bookingFactory;
             _bookingRepository = bookingRepository;
         }
@@ -45,20 +43,21 @@ namespace Application.Services.Command
             Guest guestResult = guestUserRequest.GetSuccess().OriginalType;
             
             // Apply the found guest to the domainDto
-            domainDto.Guest = guestResult;
+            domainDto.GuestId = guestResult.Id;
 
             // Get the resource
-            IResult<Resource> resourceRequest = await _resourceRepository.GetResourceByIdAsync(domainDto.Resource.Id);
+            IResult<ReadResourceByIdQueryResponseDto> resourceRequest = await _readResourceByIdQuery.ReadResourceByIdAsync(domainDto.ResourceId);
 
             if (resourceRequest.IsSucces() == false)
             {
                 CreateBookingByGuestResponseDto createdDto = Mapper.Map<CreateBookingByGuestResponseDto>(domainDto);
                 return Result<CreateBookingByGuestResponseDto>.Error(createdDto, resourceRequest.GetError().Exception!);
             }
-            Resource resourceResult = resourceRequest.GetSuccess().OriginalType;
-            
+
+            ReadResourceByIdQueryResponseDto resourceResult = resourceRequest.GetSuccess().OriginalType;
+
             // Apply the found resource & totalPrice to domainDto
-            domainDto.Resource = resourceResult;
+            domainDto.ResourceId = resourceResult.Id;
             domainDto.TotalPrice = CalculateTotalPrice(domainDto, resourceResult);
 
             // Create booking
@@ -82,17 +81,16 @@ namespace Application.Services.Command
             CreateBookingByGuestResponseDto returnToUIDto = new CreateBookingByGuestResponseDto
             {
                 Guest = guestResult,
-                Resource = resourceResult,
                 StartDate = domainDto.StartDate,
                 EndDate = domainDto.EndDate,
-                TotalPrice = CalculateTotalPrice(domainDto, resourceResult)
+                TotalPrice = domainDto.TotalPrice
             };
 
             return Result<CreateBookingByGuestResponseDto>.Success(returnToUIDto);
         }
 
         // Calculate TotalPrice for resource
-        protected decimal CalculateTotalPrice(CreateBookingFactoryDto domainDto, Resource resource)
+        protected decimal CalculateTotalPrice(CreateBookingFactoryDto domainDto, ReadResourceByIdQueryResponseDto resource)
         {
             // Today + total days of staying
             int days = domainDto.EndDate.DayNumber - domainDto.StartDate.DayNumber + 1;
