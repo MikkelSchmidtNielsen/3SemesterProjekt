@@ -10,7 +10,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 {
     internal class BookingCheckInAndOutQueryTestClass : Booking
     {
-        public BookingCheckInAndOutQueryTestClass(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest, Resource resource) : base(guestId, resourceId, startDate, endDate, totalPrice, guest, resource)
+        public BookingCheckInAndOutQueryTestClass(int guestId, int resourceId, DateOnly startDate, DateOnly endDate, decimal totalPrice, Guest guest) : base(guestId, resourceId, startDate, endDate, totalPrice, guest)
         {
         }
     }

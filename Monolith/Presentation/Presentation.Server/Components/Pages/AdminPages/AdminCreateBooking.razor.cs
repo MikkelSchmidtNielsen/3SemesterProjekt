@@ -1,24 +1,23 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
 using Common;
 using Common.ResultInterfaces;
-using Domain.Models;
 using Domain.ModelsDto;
-using Microsoft.VisualBasic;
-using Org.BouncyCastle.Asn1.Cmp;
 using Radzen;
-using Radzen.Blazor;
-using System.Globalization;
 
 namespace Presentation.Server.Components.Pages.AdminPages
 {
     public partial class AdminCreateBooking
     {
+        private readonly ResourceFilterDto _filter = new ResourceFilterDto();
         private decimal _tempTotalPrice;
         private string? _tempResource;
 
-        string _bookingResult = "";
+        private string? _initializationError;
+        private bool _hasShownErrorDialog;
+        private string _bookingResult = "";
 
-        IEnumerable<Resource> _resources = Array.Empty<Resource>();
+        IEnumerable<ReadResourceQueryResponseDto> _resources = Array.Empty<ReadResourceQueryResponseDto>();
 
         BookingModel _bookingModel = new BookingModel
         {
@@ -29,23 +28,31 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         protected override async Task OnInitializedAsync()
         {
-            IResult<IEnumerable<Resource>> result = await _resourceQuery.GetAllResourcesAsync();
+            IResult<IEnumerable<ReadResourceQueryResponseDto>> result = await _resourceQuery.ReadAllResourcesAsync(_filter);
 
             if (result.IsSucces())
             {
-                IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
+                IEnumerable<ReadResourceQueryResponseDto> resources = result.GetSuccess().OriginalType;
 
                 _resources = resources;
             }
             else
             {
-                IResultError<IEnumerable<Resource>> error = result.GetError();
+                IResultError<IEnumerable<ReadResourceQueryResponseDto>> error = result.GetError();
 
-                string message = error.Exception!.Message;
-
-                await DialogService.Alert(message, "Error");
+                _initializationError = error.Exception!.Message;
             }
-		}
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (!string.IsNullOrEmpty(_initializationError) && !_hasShownErrorDialog)
+            {
+                _hasShownErrorDialog = true;
+
+                await DialogService.Alert(_initializationError, "Error");
+            }
+        }
 
         private void UpdateBookingPreview(int? resourceId, DateOnly startDate, DateOnly endDate)
         {
@@ -57,7 +64,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
 
         private void GetResourceNameById(int resourceId)
         {
-            foreach (Resource resource in _resources)
+            foreach (ReadResourceQueryResponseDto resource in _resources)
             {
                 if (resource.Id == resourceId)
                 {
@@ -70,7 +77,7 @@ namespace Presentation.Server.Components.Pages.AdminPages
         {
             int days = endDate.DayNumber - startDate.DayNumber + 1;
 
-            foreach (Resource resource in _resources)
+            foreach (ReadResourceQueryResponseDto resource in _resources)
             {
                 if (resource.Id == resourceId)
                 {
@@ -105,6 +112,13 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 IResultSuccess<BookingRequestResultDto> success = result.GetSuccess();
 
                 _bookingResult = $"Bookingen er oprettet for {_resources.FirstOrDefault(resource => resource.Id == model.ResourceId)!.Name} med en total pris på {success.OriginalType.TotalPrice}";
+
+                _bookingModel = new BookingModel
+                {
+                    StartDate = DateOnly.FromDateTime(DateTime.Now),
+                    EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                    Guest = new GuestCreateRequestDto()
+                };
             }
             else if (result.IsError())
             {
@@ -119,23 +133,15 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 _bookingResult = $"{error.Exception!.Message}";
             }
 
-            _bookingModel = new BookingModel
-            {
-                StartDate = DateOnly.FromDateTime(DateTime.Now),
-                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-                Guest = new GuestCreateRequestDto()
-            };
-
             _tempResource = null;
             _tempTotalPrice = 0;
             await ShowDialog();
         }
-
     }
 
     internal class BookingModel
     {
-        public int? ResourceId { get; set; }
+        public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public GuestCreateRequestDto Guest { get; set; }

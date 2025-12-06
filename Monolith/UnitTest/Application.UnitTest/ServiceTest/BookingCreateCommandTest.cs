@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
 using Application.InfrastructureInterfaces;
 using Application.InfrastructureInterfaces.SendEmailSpecifications;
 using Application.RepositoryInterfaces;
@@ -13,6 +14,7 @@ using Domain.ModelsDto;
 using Moq;
 using System.Data.Common;
 using UnitTest.UnitTestHelpingTools;
+using Xunit.Sdk;
 
 namespace UnitTest.Application.UnitTest.ServiceTest
 {
@@ -23,13 +25,14 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         {
             // Arrange
             Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IReadResourceByIdQuery> resourceIdQuery = new Mock<IReadResourceByIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<IReadGuestByEmailQuery> guestByEmailQuery = new Mock<IReadGuestByEmailQuery>();
+            Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
             Mock<ISendEmailSpecification> emailSpec = new Mock<ISendEmailSpecification>();
 
-			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -43,25 +46,23 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 }
             };
 
-            Resource resource = new Resource
-            (
-                name: "Test Hytte",
-                type: "Hytte",
-                basePrice: 100,
-                location: 3,
-                description: null
-            );
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>()
+                .Randomize()
+                .Create();
 
             Guest guest = new Guest
             (
                 firstName: "FirstName",
                 lastName: "LastName",
-                phoneNumber: 25252525, 
-                email: "Email@email.dk", 
-                country: "Country", 
-                language: "Language", 
+                phoneNumber: 25252525,
+                email: "Email@email.dk",
+                country: "Country",
+                language: "Language",
                 address: "Address"
             );
+
+            // Guest creation by email exception
+            Exception emailException = new Exception("Email not found");
 
             Booking booking = new Booking(guest.Id, bookingDto.ResourceId, bookingDto.StartDate, bookingDto.EndDate, totalPrice: 300);
 
@@ -74,12 +75,15 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 EndDate = bookingDto.EndDate,
                 TotalPrice = 300
             };
-            
 
-			// Mock Resource query
-			resourceIdQuery
-                .Setup(query => query.GetResourceByIdAsync(bookingDto.ResourceId))
-                .ReturnsAsync(Result<Resource>.Success(resource));
+            // Mock Resource query
+            resourceIdQuery
+                .Setup(query => query.ReadResourceByIdAsync(bookingDto.ResourceId))
+                .ReturnsAsync(Result<ReadResourceByIdQueryResponseDto>.Success(resource));
+
+            guestByEmailQuery
+                .Setup(query => query.ReadGuestByEmailAsync(bookingDto.Guest.Email))
+                .ReturnsAsync(Result<Guest>.Error(guest, emailException));
 
             // Mock Guest creation
             guestCreateCommand
@@ -106,6 +110,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
+                guestByEmailQuery.Object,
                 guestCreateCommand.Object,
                 sendEmail.Object
             );
@@ -124,7 +129,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(expectedDto.EndDate, success.EndDate);
 
             // Verify mocks were called
-            resourceIdQuery.Verify(query => query.GetResourceByIdAsync(bookingDto.ResourceId), Times.Once);
+            resourceIdQuery.Verify(query => query.ReadResourceByIdAsync(bookingDto.ResourceId), Times.Once);
             guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
             bookingFactory.Verify(factory => factory.Create(It.IsAny<CreateBookingFactoryDto>()), Times.Once);
             repository.Verify(repo => repo.CreateBookingAsync(booking), Times.Once);
@@ -135,12 +140,14 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         {
             // Arrange
             Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IReadResourceByIdQuery> resourceIdQuery = new Mock<IReadResourceByIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<IReadGuestByEmailQuery> guestByEmailQuery = new Mock<IReadGuestByEmailQuery>();
+            Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<ISendEmailSpecification> emailSpec = new Mock<ISendEmailSpecification>();
 
-			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -151,14 +158,15 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
             // Mock Resource query
             resourceIdQuery
-                .Setup(query => query.GetResourceByIdAsync(bookingDto.ResourceId))
-                .ReturnsAsync(Result<Resource>.Error(null!, resourceException));
+                .Setup(query => query.ReadResourceByIdAsync(bookingDto.ResourceId))
+                .ReturnsAsync(Result<ReadResourceByIdQueryResponseDto>.Error(null!, resourceException));
 
             BookingCreateCommand sut = new BookingCreateCommand
             (
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
+                guestByEmailQuery.Object,
                 guestCreateCommand.Object,
                 sendEmail.Object
             );
@@ -172,7 +180,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(resourceException, error.Exception);
 
             // Verify mock were called
-            resourceIdQuery.Verify(query => query.GetResourceByIdAsync(bookingDto.ResourceId), Times.Once);
+            resourceIdQuery.Verify(query => query.ReadResourceByIdAsync(bookingDto.ResourceId), Times.Once);
 
             // Verify mocks weren't called
             guestCreateCommand.Verify(command => command.CreateGuestAsync(It.IsAny<GuestCreateRequestDto>()), Times.Never());
@@ -185,12 +193,14 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         {
             // Arrange
             Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IReadResourceByIdQuery> resourceIdQuery = new Mock<IReadResourceByIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<IReadGuestByEmailQuery> guestByEmailQuery = new Mock<IReadGuestByEmailQuery>();
+            Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<ISendEmailSpecification> emailSpec = new Mock<ISendEmailSpecification>();
 
-			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -198,21 +208,16 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 Guest = new GuestCreateRequestDto()
             };
 
-            Resource resource = new Resource
-            (
-                name: "Test Hytte",
-                type: "Hytte",
-                basePrice: 100,
-                location: 3,
-                description: null
-            );
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>()
+                .WithDefaults()
+                .Create();
 
             Exception guestException = new Exception("Guest creation failed");
 
             // Mock Resource query
             resourceIdQuery
-                .Setup(x => x.GetResourceByIdAsync(bookingDto.ResourceId))
-                .ReturnsAsync(Result<Resource>.Success(resource));
+                .Setup(x => x.ReadResourceByIdAsync(bookingDto.ResourceId))
+                .ReturnsAsync(Result<ReadResourceByIdQueryResponseDto>.Success(resource));
 
             // Mock Guest creation
             guestCreateCommand
@@ -224,6 +229,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
+                guestByEmailQuery.Object,
                 guestCreateCommand.Object,
                 sendEmail.Object
             );
@@ -237,7 +243,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
             Assert.Equal(guestException, error.Exception);
 
             // Verify mock were called
-            resourceIdQuery.Verify(query => query.GetResourceByIdAsync(bookingDto.ResourceId), Times.Once);
+            resourceIdQuery.Verify(query => query.ReadResourceByIdAsync(bookingDto.ResourceId), Times.Once);
             guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
 
             // Verify mocks weren't called
@@ -250,12 +256,14 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         {
             // Arrange
             Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IReadResourceByIdQuery> resourceIdQuery = new Mock<IReadResourceByIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<IReadGuestByEmailQuery> guestByEmailQuery = new Mock<IReadGuestByEmailQuery>();
+            Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
+            Mock<ISendEmailSpecification> emailSpec = new Mock<ISendEmailSpecification>();
 
-			BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
+            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
             {
                 ResourceId = 1,
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -269,33 +277,29 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 }
             };
 
-            Resource resource = new Resource
-            (
-                name: "Test Hytte",
-                type: "Hytte",
-                basePrice: 100,
-                location: 3,
-                description: null
-            );
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>()
+                .WithDefaults()
+                .Create();
 
-            Guest guest = new Guest
-            (
-                firstName: "FirstName",
-                lastName: "LastName",
-                phoneNumber: 25252525,
-                email: "Email@email.dk",
-                country: "Country",
-                language: "Language",
-                address: "Address"
-            );
+            Guest guest = Impression.Of<Guest>()
+                .WithDefaults()
+                .Create();
 
             Booking booking = new Booking(guest.Id, bookingDto.ResourceId, bookingDto.StartDate, bookingDto.EndDate, totalPrice: 300);
 
+            // Guest creation by email exception
+            Exception emailException = new Exception("Email not found");
+
+            // Repo (test) exception
             Exception repoException = new Exception("Database error");
 
             resourceIdQuery
-                .Setup(query => query.GetResourceByIdAsync(bookingDto.ResourceId))
-                .ReturnsAsync(Result<Resource>.Success(resource));
+                .Setup(query => query.ReadResourceByIdAsync(bookingDto.ResourceId))
+                .ReturnsAsync(Result<ReadResourceByIdQueryResponseDto>.Success(resource));
+
+            guestByEmailQuery
+                .Setup(query => query.ReadGuestByEmailAsync(bookingDto.Guest.Email))
+                .ReturnsAsync(Result<Guest>.Error(guest, emailException));
 
             guestCreateCommand
                 .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
@@ -309,10 +313,12 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 .Setup(repo => repo.CreateBookingAsync(booking))
                 .ReturnsAsync(Result<Booking>.Error(booking, repoException));
 
-            BookingCreateCommand sut = new BookingCreateCommand(
+            BookingCreateCommand sut = new BookingCreateCommand
+            (
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
+                guestByEmailQuery.Object,
                 guestCreateCommand.Object,
                 sendEmail.Object
             );
@@ -338,9 +344,10 @@ namespace UnitTest.Application.UnitTest.ServiceTest
         {
             // Arrange
             Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
+            Mock<IReadResourceByIdQuery> resourceIdQuery = new Mock<IReadResourceByIdQuery>();
             Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
             Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
+            Mock<IReadGuestByEmailQuery> guestByEmailQuery = new Mock<IReadGuestByEmailQuery>();
             Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
 
             BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass
@@ -348,6 +355,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 repository.Object,
                 resourceIdQuery.Object,
                 bookingFactory.Object,
+                guestByEmailQuery.Object,
                 guestCreateCommand.Object,
                 sendEmail.Object
             );
@@ -358,124 +366,16 @@ namespace UnitTest.Application.UnitTest.ServiceTest
                 EndDate = new DateOnly(2025, 11, end)
             };
 
-            Resource resource = new Resource
-            (
-                name: "Test Hytte",
-                type: "Hytte",
-                basePrice: 100,
-                location: 3,
-                description: null
-            ); 
+            ReadResourceByIdQueryResponseDto resource = Impression.Of<ReadResourceByIdQueryResponseDto>()
+                .With("BasePrice", 100.00m)
+                .WithDefaults()
+                .Create();
 
             // Act
             testClass.AddPriceToDto(dto, resource);
 
             // Assert
             Assert.Equal(expected, dto.TotalPrice);
-        }
-
-
-
-		[Fact]
-        public async Task CreateGuestAsync_SetsGuestId_WhenGuestCreationSucceeds()
-        {
-            // Arrange
-            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
-            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
-            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
-
-			BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass
-            (
-                repository.Object,
-                resourceIdQuery.Object,
-                bookingFactory.Object,
-                guestCreateCommand.Object,
-                sendEmail.Object
-            );
-
-            int guestId = 1;
-            Guest guest = new Guest(
-                firstName: "FirstName",
-                lastName: "LastName",
-                phoneNumber: 25252525,
-                email: "Email@email.dk",
-                country: "Country",
-                language: "Language",
-                address: "Address"
-            )
-            // Insert Id into guest
-            {
-                Id = guestId 
-            };
-
-            BookingRequestResultDto dto = new BookingRequestResultDto();
-            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
-            {
-                Guest = new GuestCreateRequestDto 
-                { 
-                    FirstName = "Mikkel" 
-                }
-            };
-
-            guestCreateCommand
-                .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
-                .ReturnsAsync(Result<Guest>.Success(guest));
-
-            // Act
-            IResult<Guest> result = await testClass.CreateGuestAsync(dto, bookingDto);
-
-            // Assert
-            Assert.True(result.IsSucces());
-            Assert.Equal(guestId, dto.GuestId); // dto.GuestId skal være sat
-            Assert.Equal(guest, result.GetSuccess().OriginalType);
-
-            guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
-        }
-
-        [Fact]
-        public async Task CreateGuestAsync_DoesntSetGuestId_WhenGuestCreationFails()
-        {
-            // Arrange
-            Mock<IBookingRepository> repository = new Mock<IBookingRepository>();
-            Mock<IResourceIdQuery> resourceIdQuery = new Mock<IResourceIdQuery>();
-            Mock<IBookingFactory> bookingFactory = new Mock<IBookingFactory>();
-            Mock<IGuestCreateCommand> guestCreateCommand = new Mock<IGuestCreateCommand>();
-			Mock<ISendEmail> sendEmail = new Mock<ISendEmail>();
-
-			BookingCreateCommandTestClass testClass = new BookingCreateCommandTestClass(
-                repository.Object,
-                resourceIdQuery.Object,
-                bookingFactory.Object,
-                guestCreateCommand.Object,
-                sendEmail.Object
-            );
-
-            BookingRequestResultDto dto = new BookingRequestResultDto();
-            BookingCreateRequestDto bookingDto = new BookingCreateRequestDto
-            {
-                Guest = new GuestCreateRequestDto
-                {
-                    FirstName = "Mikkel"
-                }
-            };
-
-            Exception exception = new Exception("Error");
-
-            guestCreateCommand
-                .Setup(command => command.CreateGuestAsync(bookingDto.Guest))
-                .ReturnsAsync(Result<Guest>.Error(null!, exception));
-
-            // Act
-            IResult<Guest> result = await testClass.CreateGuestAsync(dto, bookingDto);
-
-            // Assert
-            Assert.True(result.IsError());
-            Assert.Equal(0, dto.GuestId);
-            Assert.Equal(exception, result.GetError().Exception);
-
-            guestCreateCommand.Verify(command => command.CreateGuestAsync(bookingDto.Guest), Times.Once);
         }
     }
 }

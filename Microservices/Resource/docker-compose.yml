@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  resource-mysql-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: resourcedb
+    expose:
+      - "3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 3s
+
+  resource-service:
+    build:
+      context: .
+    environment:
+      - ASPNETCORE_URLS=http://+:8081
+      - ConnectionStrings__Default=server=resource-mysql-db;port=3306;database=resourcedb;user=root;password=root
+    ports:
+      - "8081:8081"  
+    depends_on:
+      resource-mysql-db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

@@ -1,6 +1,6 @@
 ﻿@page "/admin/add-resource"
 @inject DialogService DialogService
-@inject ICreateResourceService _createResourceService
+@inject ICreateResourceCommand _createResourceCommand
 @rendermode InteractiveServer
 @using System.Globalization
 
@@ -12,8 +12,6 @@
 <div id="main-content">
 	<div id="resource-content">
 	<h3 class="text-center padding-10px">Opret en ny ressource</h3>
-
-	
 
 		<RadzenTemplateForm TItem="ResourceModel" Data="@resourceModel" Submit="@ShowDialog">
 			<RadzenStack>
@@ -55,7 +53,7 @@
 					</RadzenLabel>
 					<RadzenTextArea id="Description" @bind-Value=resourceModel.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea>
 				</RadzenStack>
-			<RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
+			<RadzenButton ButtonType="ButtonType.Submit" Text="Opret ressource" />
 			</RadzenStack>
 		</RadzenTemplateForm>
 	</div>
@@ -79,20 +77,7 @@
 </div>
 
 @code {
-	List<string> resourceTypes = new List<string>() { "Hytte", "Campingvognplads", "Teltplads" };
-	TextInfo textInfo = new CultureInfo("da-DK", false).TextInfo;
-
-	class ResourceModel
-	{
-		public string Name { get; set; }
-		public string Type { get; set; }
-		public decimal BasePrice { get; set; } = 0;
-		public int Location { get; set; } = 1;
-		public string? Description { get; set; }
-	}
-
-	ResourceModel resourceModel = new ResourceModel();
-
+	// DIALOG MESSAGES FOR THE CLIENT
 
 	private async Task ShowDialog(ResourceModel resourceModel)
 	{
@@ -107,26 +92,7 @@
                 </RadzenStack>
             </RadzenStack>
         </RadzenStack>
-	);
-	}
-
-	private async Task CreateResource(ResourceModel resourceModel, DialogService ds)
-	{
-		var uiDto = Mapper.Map<UICreateResourceDto>(resourceModel);
-		var result = await _createResourceService.CreateResourceAsync(uiDto);
-
-		ds.Close(true);
-
-		if (result.IsSucces())
-		{
-			await SuccessDialog();
-		}
-		else if (result.IsError())
-		{
-			var errorMessage = result.GetError().Exception;
-			await ErrorDialog(errorMessage);
-		}
-
+		);
 	}
 
 	private async Task SuccessDialog()
@@ -141,7 +107,7 @@
                 </RadzenStack>
             </RadzenStack>
         </RadzenStack>
-	);
+		);
 	}
 
 	private async Task ErrorDialog(Exception errorMessage)

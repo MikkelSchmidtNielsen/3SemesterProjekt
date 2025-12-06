@@ -1,14 +1,8 @@
 ﻿using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
+using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
 using Refit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 {
@@ -46,7 +40,7 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 					// If parsing from Json didnt work manual create BadResponse
 					error = new BadResponseDto
 					{
-						Message = "Unexpected error format from API",
+						Message = "Uventet fejl fra API",
 					};
 				}
 

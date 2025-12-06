@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 @inject DialogService DialogService
 @inject IBookingCreateCommand _bookingCommand
-@inject IResourceAllQuery _resourceQuery
+@inject IReadAllResourcesQuery _resourceQuery
 <RadzenDialog />
 
 <PageTitle>Booking</PageTitle>
@@ -41,11 +41,11 @@
             <RadzenLabel Text="Vælg ressource" Component="DropDownClear" />
             @if (_resources != null && _resources.Any())
             {
-                <RadzenDropDown TValue="int?" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
+                <RadzenDropDown TValue="int" @bind-Value="_bookingModel.ResourceId" Data="_resources" TextProperty="Name" ValueProperty="Id" Change="() => UpdateBookingPreview(_bookingModel.ResourceId, _bookingModel.StartDate, _bookingModel.EndDate)" AllowClear="true" Placeholder="Vælg ressource" Style="width: 100%; max-width: 400px;" Name="DropDownClear" />
             }
             else
             {
-                <RadzenDropDown TValue="int?" Data="Array.Empty<Resource>()" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" Name="DropDownClear"/>
+                <RadzenDropDown TValue="int?" Data="_resources" Placeholder="Loading..." Style="width: 100%; max-width: 400px;" Disabled="true" Name="DropDownClear"/>
             }     
             <RadzenRequiredValidator Component="DropDownClear" Text="Vælg en ressource"/>
         </RadzenStack>

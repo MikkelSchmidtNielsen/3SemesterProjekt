@@ -71,7 +71,7 @@
             <RadzenTableBody>
                     @if (checkInActive)
                     {
-                        @foreach (BookingMissingCheckInResponseDto booking in _missingCheckIns)
+                        @foreach (ReadBookingMissingCheckInQueryResponseDto booking in _missingCheckIns)
                         {
                             <RadzenTableRow>
                                 <RadzenTableCell>
@@ -95,7 +95,7 @@
 
                     @if (checkOutActive)
                     {
-                        @foreach (BookingMissingCheckOutResponseDto booking in _missingCheckOuts)
+                        @foreach (ReadBookingMissingCheckOutQueryResponseDto booking in _missingCheckOuts)
                         {
                             <RadzenTableRow>
                                 <RadzenTableCell>

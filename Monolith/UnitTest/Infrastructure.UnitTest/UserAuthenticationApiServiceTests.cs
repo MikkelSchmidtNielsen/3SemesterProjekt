@@ -1,15 +1,9 @@
-﻿using Application.InfrastructureDto;
-using Application.InfrastructureInterfaces;
-using Common;
-using Common.ResultInterfaces;
-using global::Infrastructure.InternalApiCalls.UserAuthenticationApi;
+﻿using global::Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Infrastructure.InternalApiCalls;
-using Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Moq;
 using Refit;
 using System.Net;
 using System.Text;
-using Xunit;
 
 namespace UnitTest.Infrastructure.UnitTest
 {
@@ -105,7 +99,7 @@ namespace UnitTest.Infrastructure.UnitTest
 			// Assert
 			Assert.True(result.IsError());
 			var ex = Assert.IsType<ApiErrorException>(result.GetError().Exception);
-			Assert.Equal("Unexpected error format from API", ex.ApiErrorMessage);
+			Assert.Equal("Uventet fejl fra API", ex.ApiErrorMessage);
 			Assert.Equal(409, ex.StatusCode);
 		}
 

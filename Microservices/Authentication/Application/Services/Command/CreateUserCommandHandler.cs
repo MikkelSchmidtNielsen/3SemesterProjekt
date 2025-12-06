@@ -18,7 +18,7 @@ namespace Application.Services.Command
             _tokenHandler = tokenHandler;
         }
 
-        public async Task<IResult<CreateUserResponseDto>> Handle(string command)
+        public async Task<IResult<CreateUserResponseDto>> HandleAsync(string command)
         {
             // Creates dto to handle different returns
             CreateUserResponseDto dto = new CreateUserResponseDto();

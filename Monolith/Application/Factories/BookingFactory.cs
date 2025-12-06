@@ -18,8 +18,8 @@ namespace Application.Factories
             try
             {
                 Booking booking = new Booking(
-                    dto.Guest.Id,
-                    dto.Resource.Id,
+                    dto.GuestId,
+                    dto.ResourceId,
                     dto.StartDate,
                     dto.EndDate,
                     dto.TotalPrice);

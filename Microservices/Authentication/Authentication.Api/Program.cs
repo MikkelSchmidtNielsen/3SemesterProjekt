@@ -19,6 +19,7 @@ namespace Authentication.Api
             builder.Services.AddScoped<IAuthController, AuthControllerImplementation>();
 
             builder.Services.AddControllers();
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>

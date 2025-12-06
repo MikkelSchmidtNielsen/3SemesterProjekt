@@ -11,7 +11,7 @@ namespace Domain.ModelsDto
     {
         public string Email { get; set; }
         public Guest? Guest { get; set; } // Nullable because the guest might not exist yet.
-        public Resource Resource { get; set; }
+        public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
         public decimal TotalPrice { get; set; }

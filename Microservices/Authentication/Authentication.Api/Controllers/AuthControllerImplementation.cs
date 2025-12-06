@@ -1,22 +1,26 @@
-﻿using Application.ServiceInterfaces.Command;
-using Application.ApplicationDto;
+﻿using Application.ApplicationDto;
+using Application.ServiceInterfaces.Command;
+using Common.ExtensionMethods;
 using Common.ResultInterfaces;
-using Common.Exceptions;
+using System.Net;
 
 namespace Authentication.Api.Controllers
 {
     public class AuthControllerImplementation : IAuthController
     {
-        ICreateUserCommandHandler _handler;
+        private readonly ICreateUserCommandHandler _handler;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public AuthControllerImplementation(ICreateUserCommandHandler handler)
+        public AuthControllerImplementation(ICreateUserCommandHandler handler, IHttpContextAccessor contextAccessor)
         {
             _handler = handler;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<string> RegisterUserAsync(string email)
         {
-            IResult<CreateUserResponseDto> result = await _handler.Handle(email);
+            // Creates a user and assigns a token to it
+            IResult<CreateUserResponseDto> result = await _handler.HandleAsync(email);
 
             // Handles failures
             if (result.IsSuccess() == false)
@@ -28,6 +32,7 @@ namespace Authentication.Api.Controllers
 
             CreateUserResponseDto dto = result.GetSuccess().OriginalType;
 
+            _contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.Created.ToInt();
             return dto.Token;
         }
     }

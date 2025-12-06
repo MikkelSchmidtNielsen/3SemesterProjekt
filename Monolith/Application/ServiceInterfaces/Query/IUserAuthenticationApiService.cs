@@ -1,12 +1,7 @@
 ﻿using Application.InfrastructureDto;
 using Common.ResultInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.InfrastructureInterfaces
+namespace Application.ServiceInterfaces.Query
 {
 	public interface IUserAuthenticationApiService
 	{

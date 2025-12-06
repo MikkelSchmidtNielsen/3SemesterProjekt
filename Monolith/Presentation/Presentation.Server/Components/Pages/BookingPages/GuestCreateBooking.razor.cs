@@ -1,18 +1,15 @@
 ﻿using Application.ApplicationDto.Command;
-using Application.ServiceInterfaces.Query;
+using Application.ApplicationDto.Query;
 using Common;
 using Common.ResultInterfaces;
-using Domain.Models;
-using Domain.ModelsDto;
-using Microsoft.VisualBasic;
-using Radzen;
-using Radzen.Blazor;
 
 namespace Presentation.Server.Components.Pages.BookingPages
 {
     public partial class GuestCreateBooking
     {
-        IEnumerable<Resource> _listOfResources = Array.Empty<Resource>();
+        private readonly ResourceFilterDto _filter = new ResourceFilterDto();
+        IEnumerable<ReadResourceQueryResponseDto> _listOfResources = Array.Empty<ReadResourceQueryResponseDto>();
+        private ReadResourceQueryResponseDto? _selectedResource;
 
         string _guestBookingMessage = "";
 
@@ -28,17 +25,17 @@ namespace Presentation.Server.Components.Pages.BookingPages
         // Load resources
         protected override async Task OnInitializedAsync()
         {
-            IResult<IEnumerable<Resource>> result = await _getAllResourcesService.HandleAsync();
+            IResult<IEnumerable<ReadResourceQueryResponseDto>> result = await _resourcesQuery.ReadAllResourcesAsync(_filter);
 
             if (result.IsSucces())
             {
-                IEnumerable<Resource> resources = result.GetSuccess().OriginalType;
+                IEnumerable<ReadResourceQueryResponseDto> resources = result.GetSuccess().OriginalType;
 
                 _listOfResources = resources;
             }
             else
             {
-                IResultError<IEnumerable<Resource>> error = result.GetError();
+                IResultError<IEnumerable<ReadResourceQueryResponseDto>> error = result.GetError();
 
                 string message = error.Exception!.Message;
 
@@ -63,31 +60,31 @@ namespace Presentation.Server.Components.Pages.BookingPages
             {
                 CreateBookingByGuestResponseDto bookingCreatedDto = result.GetSuccess().OriginalType;
 
+                // Reset the page
+                _guestBookingModel = new GuestBookingModel
+                {
+                    StartDate = DateOnly.FromDateTime(DateTime.Now),
+                    EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                };
+
                 await BookingConfirmationPopupAsync(bookingCreatedDto);
             }
-            // Reset the page
-            _guestBookingModel = new GuestBookingModel
-            {
-                StartDate = DateOnly.FromDateTime(DateTime.Now),
-                EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
-            };
         }
         
-        private decimal CalculateTotalPrice(GuestBookingModel guestBookingModel)
+        private decimal CalculateTotalPrice(GuestBookingModel guestBookingModel, ReadResourceQueryResponseDto selectedResource)
         {
             // Today + total days of staying
             int days = guestBookingModel.EndDate.DayNumber - guestBookingModel.StartDate.DayNumber + 1;
             decimal totalPrice = 0;
-            totalPrice += guestBookingModel.Resource.BasePrice * days;
+            totalPrice += selectedResource.BasePrice * days;
             return totalPrice;
         }
     }
     internal class GuestBookingModel
     {
         public string Email { get; set; }
-        public int? ResourceId { get; set; }
+        public int ResourceId { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
-        public Resource Resource { get; set; }
     }
 }
