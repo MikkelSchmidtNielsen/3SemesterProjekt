@@ -62,11 +62,13 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 				return Result<CreateUserByApiReponseDto>.Error(originalType: null, exception: ex);
 			}
 		}
-        public async Task GenerateOtpAsync(string email)
+        public async Task<IResult<string>> GenerateOtpAsync(string email)
         {
 			try
 			{
-				await _userAuthenticationApi.GenerateOtpAsync(email);
+				string response = await _userAuthenticationApi.GenerateOtpAsync(email);
+
+				return Result<string>.Success(response);
 			}
             catch (ApiException ex)
             {
@@ -92,6 +94,11 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
                     apiErrorMessage: error?.Message,
                     statusCode: (int)ex.StatusCode,
                     original: ex
+                );
+
+                return Result<string>.Error(
+                    originalType: null,
+                    exception: apiErrorException
                 );
             }
         }
