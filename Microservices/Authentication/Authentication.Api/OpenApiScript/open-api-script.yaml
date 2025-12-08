@@ -31,6 +31,23 @@ paths:
         schema:
           type: string
 
+  '/request-otp/{email}':
+    summary: Path to create an one-time password.
+    description: An OTP is created and sent to the user's email address.
+    put:
+        responses:
+          '201':
+            description: Successful response
+          '500':
+            $ref: '#/components/responses/500Error'
+
+    parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+
 components:
   schemas: 
     userResponse:

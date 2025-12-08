@@ -31,6 +31,8 @@ namespace InversionOfControlContainers.InversionOfControl
 
             services.AddScoped<ICreateUserCommandHandler, CreateUserCommandHandler>();
 
+            services.AddScoped<ICreateOtpCommandHandler, CreateOtpCommandHandler>();
+
             // Add repositories
             services.AddScoped<IUserRepository, UserRepository>();
         }

@@ -19,6 +19,7 @@ COPY ["Common/*.csproj", "Common/"]
 COPY ["Domain/*.csproj", "Domain/"]
 COPY ["Persistence/*.csproj", "Persistence/"]
 COPY ["Application/*.csproj", "Application/"]
+COPY ["Infrastructure/*.csproj", "Infrastructure/"]
 COPY ["UnitTest/*.csproj", "UnitTest/"]
 COPY ["InversionOfControlContainers/*.csproj", "InversionOfControlContainers/"]
 
@@ -31,6 +32,7 @@ COPY Common/ Common/
 COPY Domain/ Domain/
 COPY Persistence/ Persistence/
 COPY Authentication.Api/ Authentication.Api/
+COPY Infrastructure/ Infrastructure/
 COPY InversionOfControlContainers/ InversionOfControlContainers/
 
 # Install NSwag globally

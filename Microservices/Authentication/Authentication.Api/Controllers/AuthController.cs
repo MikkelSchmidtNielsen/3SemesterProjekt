@@ -38,6 +38,11 @@ namespace Authentication.Api.Controllers
 
         System.Threading.Tasks.Task<string> RegisterUserAsync(string email);
 
+
+        /// <returns>Successful response</returns>
+
+        System.Threading.Tasks.Task RequestOtpAsync(string email);
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -57,6 +62,14 @@ namespace Authentication.Api.Controllers
         {
 
             return _implementation.RegisterUserAsync(email);
+        }
+
+        /// <returns>Successful response</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("request-otp/{email}")]
+        public System.Threading.Tasks.Task RequestOtp(string email)
+        {
+
+            return _implementation.RequestOtpAsync(email);
         }
 
     }

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Application.ServiceInterfaces.Command
 {
-    public interface ICreateOptCommandHandler
+    public interface ICreateOtpCommandHandler
     {
-        public Task<Result<string>> Handle(string email);
+        public Task Handle(string email);
     }
 }

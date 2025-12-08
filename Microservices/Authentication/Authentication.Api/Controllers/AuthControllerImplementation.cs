@@ -8,19 +8,21 @@ namespace Authentication.Api.Controllers
 {
     public class AuthControllerImplementation : IAuthController
     {
-        private readonly ICreateUserCommandHandler _handler;
+        private readonly ICreateUserCommandHandler _createUserHandler;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ICreateOtpCommandHandler _createOtpHandler;
 
-        public AuthControllerImplementation(ICreateUserCommandHandler handler, IHttpContextAccessor contextAccessor)
+        public AuthControllerImplementation(ICreateUserCommandHandler createUserHandler, IHttpContextAccessor contextAccessor, ICreateOtpCommandHandler createOtpHandler)
         {
-            _handler = handler;
+            _createUserHandler = createUserHandler;
             _contextAccessor = contextAccessor;
+            _createOtpHandler = createOtpHandler;
         }
 
         public async Task<string> RegisterUserAsync(string email)
         {
             // Creates a user and assigns a token to it
-            IResult<CreateUserResponseDto> result = await _handler.HandleAsync(email);
+            IResult<CreateUserResponseDto> result = await _createUserHandler.HandleAsync(email);
 
             // Handles failures
             if (result.IsSuccess() == false)
@@ -34,6 +36,11 @@ namespace Authentication.Api.Controllers
 
             _contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.Created.ToInt();
             return dto.Token;
+        }
+
+        public Task RequestOtpAsync(string email)
+        {
+            return _createOtpHandler.Handle(email);
         }
     }
 }
