@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationDto;
+using Common;
 using Common.ResultInterfaces;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface ICreateOptCommandHandler
     {
-        public Task<string> Handle(string email);
+        public Task<Result<string>> Handle(string email);
     }
 }

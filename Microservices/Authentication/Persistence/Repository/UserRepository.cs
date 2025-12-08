@@ -39,9 +39,19 @@ namespace Persistence.Repository
             return Result<User>.Success(user);
         }
 
-        public async Task<IResult<User>> UpdateOtpAsync(User user)
+        public async Task<IResult<User>> UpdateUserAsync(User user)
         {
+            try
+            {
+                _db.Update(user);
+                await _db.SaveChangesAsync();
 
+                return Result<User>.Success(user);
+            }
+            catch (Exception ex)
+            {
+                return Result<User>.Error(user, ex);
+            }
         }
     }
 }

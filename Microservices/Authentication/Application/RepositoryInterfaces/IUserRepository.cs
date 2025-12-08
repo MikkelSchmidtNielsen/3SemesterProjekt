@@ -9,6 +9,6 @@ namespace Application.RepositoryInterfaces
 
         Task<IResult<User>> ReadUserByEmailAsync(string email);
 
-        Task<IResult<User>> UpdateOtpAsync(string email, int otp, DateTime expiryTime);
+        Task<IResult<User>> UpdateUserAsync(User user);
     }
 }
