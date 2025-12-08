@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Application.ApplicationDto;
+using Application.ApplicationDto.Query;
 
 namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 {
@@ -21,5 +23,9 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 		// Generates an One Time Password and uses the given email as the OTP's key.
 		[Put("/request-otp/{email}")]
 		Task RequestOtpAsync([AliasAs("email")] string email);
+
+        // Validates user and the given one time password. Returns JWT Token as a string.
+        [Get("/validate-user/{userInfo}")]
+        Task<string> ValidateUserAsync([AliasAs("userInput")] ValidateUserQueryDto userInfo);
 	}
 }

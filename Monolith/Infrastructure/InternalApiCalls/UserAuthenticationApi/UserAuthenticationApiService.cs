@@ -1,4 +1,5 @@
-﻿using Application.InfrastructureDto;
+﻿using Application.ApplicationDto.Query;
+using Application.InfrastructureDto;
 using Application.ServiceInterfaces.Query;
 using Common;
 using Common.ResultInterfaces;
@@ -93,6 +94,49 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
                     statusCode: (int)ex.StatusCode,
                     original: ex
                 );
+            }
+        }
+
+        public async Task<IResult<ValidateUserByApiResponseDto>> ValidateUserAsync(ValidateUserQueryDto dto)
+        {
+            try
+            {
+                string jwt = await _userAuthenticationApi.ValidateUserAsync(dto);
+
+                ValidateUserByApiResponseDto response = new() { JwtToken = jwt };
+                return Result<ValidateUserByApiResponseDto>.Success(response);
+            }
+            catch (ApiException ex)
+            {
+                BadResponseDto? error = null;
+
+                try
+                {
+                    error = await ex.GetContentAsAsync<BadResponseDto>();
+                }
+                catch (Exception)
+                {
+                    error = new BadResponseDto
+                    {
+                        Message = "Uventet fejl fra API",
+                    };
+                }
+
+                
+                ApiErrorException apiErrorException = new ApiErrorException(
+                    apiErrorMessage: error?.Message,
+                    statusCode: (int)ex.StatusCode,
+                    original: ex
+                );
+
+                return Result<ValidateUserByApiResponseDto>.Error(
+                    originalType: null,
+                    exception: apiErrorException
+                );
+            }
+            catch (Exception ex)
+            {
+                return Result<ValidateUserByApiResponseDto>.Error(originalType: null, exception: ex);
             }
         }
     }

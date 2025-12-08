@@ -45,10 +45,20 @@ namespace Presentation.Server.Components.Pages.LoginPages
 			NotificationService.Notify(message);
 		}
 
-		//private async Task OnOtpSubmitAsync()
-		//{
+		private async Task OnOtpSubmitAsync()
+		{
+			var result = await _validateUserService.ValidateOtpAsync(_email, _oneTimePassword);
 
-		//}
+			if (!result.IsSucces())
+			{
+				SendNotification(NotificationSeverity.Error, "Fejl", "Ugyldig engangskode. Prøv igen.");
+				return;
+			}
+			else
+			{
+				SendNotification(NotificationSeverity.Success, "Succes", "Velkommen tilbage");
+			}
+		}
 
 		private async Task OnModelSubmitAsync(RegisterModel registerModel)
 		{
