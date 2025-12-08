@@ -14,7 +14,7 @@ namespace Api.Controllers
 		private readonly ICreateResourceCommandHandler _createResourceHandler;
 		private readonly IReadResourceWithCriteriaQueryHandler _readResourceWithCriteriaQueryHandler;
 		private readonly IReadResourceByIdQueryHandler _readResourceByIdQueryHandler;
-		private readonly IUpdateResourceByIdCommandHandler _updateResourceByIdQueryHandler;
+		private readonly IUpdateResourceByIdCommandHandler _updateResourceByIdCommandHandler;
 		private readonly IHttpContextAccessor _contextAccessor;
 
 		public ResourceControllerImplementation(ICreateResourceCommandHandler createResourceHandler, IReadResourceWithCriteriaQueryHandler readResourceWithCriteriaQueryHandler, IReadResourceByIdQueryHandler readResourceByIdQueryHandler, IHttpContextAccessor contextAccessor, IUpdateResourceByIdCommandHandler updateResourceByIdQueryHandler)
@@ -23,7 +23,7 @@ namespace Api.Controllers
 			_readResourceWithCriteriaQueryHandler = readResourceWithCriteriaQueryHandler;
 			_readResourceByIdQueryHandler = readResourceByIdQueryHandler;
 			_contextAccessor = contextAccessor;
-			_updateResourceByIdQueryHandler = updateResourceByIdQueryHandler;
+			_updateResourceByIdCommandHandler = updateResourceByIdQueryHandler;
 		}
 
 		public async Task<ResourceResponseDto> CreateResourceAsync(CreateResourceCommandDto body)
@@ -86,7 +86,7 @@ namespace Api.Controllers
 
 		public async Task<ResourceResponseDto> UpdateResourceByIdAsync(int id, UpdateResourceByIdCommandDto body)
 		{
-			var result = await _updateResourceByIdQueryHandler.HandleAsync(id, body);
+			var result = await _updateResourceByIdCommandHandler.HandleAsync(id, body);
 
 			if (result.IsSucces() is false)
 			{

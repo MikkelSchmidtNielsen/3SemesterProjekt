@@ -15,6 +15,7 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 
 		private async Task OnModelSubmitAsync(UpdateResourceModel model, DialogService ds)
 		{
+			ds.Close();
 			await OnModelSubmit.InvokeAsync(model);
 		}
 
