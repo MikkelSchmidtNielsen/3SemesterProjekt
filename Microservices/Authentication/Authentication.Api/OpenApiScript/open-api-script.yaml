@@ -38,6 +38,7 @@ paths:
         responses:
           '201':
             description: Successful response
+
           '500':
             $ref: '#/components/responses/500Error'
 
@@ -47,6 +48,27 @@ paths:
         required: true
         schema:
           type: string
+  '/validate-user/{userInfo}':
+    summary: Path to validate OTP
+    description: Entered OTP gets validated and a JWT should be returned.
+    get:
+        responses:
+          '201':
+            description: Successful response, returns JWT
+            content:
+              application/jwt:
+                schema: 
+                  $ref: '#/components/schemas/userResponse'
+          '400':
+            $ref: '#/components/responses/400Error'
+          '500':
+            $ref: '#/components/responses/500Error'
+    parameters:
+      - name: userInfo
+        in: path
+        required: true
+        schema:
+          type: 
 
 components:
   schemas: 

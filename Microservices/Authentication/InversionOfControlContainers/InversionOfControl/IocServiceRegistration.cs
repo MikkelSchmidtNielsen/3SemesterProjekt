@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Persistence.Repository;
 using Infrastructure.Email;
+using Application.ServiceInterfaces.Query;
+using Application.Services.Query;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -39,6 +41,8 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<ISendEmailSpecification, SendOtpEmail>();
 
             services.AddScoped<ISendEmail, SendEmailMailKit>();
+
+            services.AddScoped<IValidateUserHandler, ValidateUserHandler>();
 
 
             // Add repositories

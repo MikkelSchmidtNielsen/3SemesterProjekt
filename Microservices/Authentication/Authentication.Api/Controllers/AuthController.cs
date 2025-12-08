@@ -43,6 +43,11 @@ namespace Authentication.Api.Controllers
 
         System.Threading.Tasks.Task RequestOtpAsync(string email);
 
+
+        /// <returns>Successful response, returns JWT</returns>
+
+        System.Threading.Tasks.Task<string> ValidateUserAsync();
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -70,6 +75,14 @@ namespace Authentication.Api.Controllers
         {
 
             return _implementation.RequestOtpAsync(email);
+        }
+
+        /// <returns>Successful response, returns JWT</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("validate-user/{userInfo}")]
+        public System.Threading.Tasks.Task<string> ValidateUser()
+        {
+
+            return _implementation.ValidateUserAsync();
         }
 
     }
