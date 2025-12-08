@@ -21,6 +21,7 @@ namespace Authentication.Api.Controllers
 
         public async Task<string> RegisterUserAsync(string email)
         {
+            Console.WriteLine("trin 1");
             // Creates a user and assigns a token to it
             IResult<CreateUserResponseDto> result = await _createUserHandler.HandleAsync(email);
 

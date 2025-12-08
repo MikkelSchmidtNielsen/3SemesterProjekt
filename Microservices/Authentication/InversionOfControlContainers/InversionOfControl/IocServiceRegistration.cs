@@ -1,4 +1,6 @@
-﻿using Application.RepositoryInterfaces;
+﻿using Application.InfrastructureInterfaces;
+using Application.InfrastructureInterfaces.SendEmailSpecifications;
+using Application.RepositoryInterfaces;
 using Application.ServiceInterfaces.Command;
 using Application.Services.Command;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Persistence.Repository;
+using Infrastructure.Email;
 
 namespace InversionOfControlContainers.InversionOfControl
 {
@@ -29,9 +32,14 @@ namespace InversionOfControlContainers.InversionOfControl
             // Add services
             services.AddScoped<ICreateTokenCommandHandler>(_ => new CreateTokenCommandHandler(secretKey));
 
+            services.AddScoped<ICreateOtpCommandHandler, CreateOtpCommandHandler>();
+
             services.AddScoped<ICreateUserCommandHandler, CreateUserCommandHandler>();
 
-            services.AddScoped<ICreateOtpCommandHandler, CreateOtpCommandHandler>();
+            services.AddScoped<ISendEmailSpecification, SendOtpEmail>();
+
+            services.AddScoped<ISendEmail, SendEmailMailKit>();
+
 
             // Add repositories
             services.AddScoped<IUserRepository, UserRepository>();

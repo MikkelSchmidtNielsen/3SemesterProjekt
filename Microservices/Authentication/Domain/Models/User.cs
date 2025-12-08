@@ -33,8 +33,8 @@
 
         public void SetOtp(int otp, DateTime expiryTime)
         {
-            Otp = otp;
-            OtpExpiryTime = expiryTime;
+            this.Otp = otp;
+            this.OtpExpiryTime = expiryTime;
         }
     }
 }

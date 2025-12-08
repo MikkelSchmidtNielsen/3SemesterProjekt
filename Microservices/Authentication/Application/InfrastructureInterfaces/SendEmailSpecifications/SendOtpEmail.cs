@@ -25,7 +25,7 @@ namespace Application.InfrastructureInterfaces.SendEmailSpecifications
         }
         protected static string GenerateBody(User user)
         {
-            if (user.Otp is 0 || user.OtpExpiryTime.AddMinutes(30) > DateTime.UtcNow)
+            if (user.Otp is 0 || user.OtpExpiryTime < DateTime.UtcNow)
             {
                 throw new Exception("Invalid One Time Password");
             }
