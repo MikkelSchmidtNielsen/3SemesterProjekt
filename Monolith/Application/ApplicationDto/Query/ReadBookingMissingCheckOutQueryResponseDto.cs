@@ -11,6 +11,7 @@ namespace Application.ApplicationDto.Query
         public int BookingId { get; set; }
         public string ResourceName { get; set; }
         public int ResourceLocation { get; set; }
+        public DateOnly BookingStartDate { get; set; }
         public DateOnly BookingEndDate { get; set; }
         public string GuestName { get; set; }
     }

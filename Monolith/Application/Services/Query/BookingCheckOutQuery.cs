@@ -64,6 +64,7 @@ namespace Application.Services.Query
                         BookingId = booking.Id,
                         ResourceName = matchingResource.Name,
                         ResourceLocation = matchingResource.Location,
+                        BookingStartDate = booking.StartDate,
                         BookingEndDate = booking.StartDate,
                         GuestName = $"{booking.Guest.FirstName} {booking.Guest.LastName}"
                     };

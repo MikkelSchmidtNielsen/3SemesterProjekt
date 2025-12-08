@@ -4,31 +4,11 @@ namespace Presentation.Server.Components.Pages.AdminPages
 {
     public partial class CampingAdministration
     {
-        DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-        bool checkInActive = true;
-        bool checkOutActive = false;
-        bool checkInButtonDisabled = true;
-        bool checkOutButtonDisabled = false;
+        DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now); // Displays the current date at top of page.
+
 
         IEnumerable<ReadBookingMissingCheckInQueryResponseDto> _missingCheckIns = new List<ReadBookingMissingCheckInQueryResponseDto>();
         IEnumerable<ReadBookingMissingCheckOutQueryResponseDto> _missingCheckOuts = new List<ReadBookingMissingCheckOutQueryResponseDto>();
-
-        private void checkInSelected()
-        {
-            checkInActive = true;
-            checkOutActive = false;
-            checkInButtonDisabled = true;
-            checkOutButtonDisabled = false;
-            StateHasChanged();
-        }
-        private void checkOutSelected()
-        {
-            checkOutActive = true;
-            checkInActive = false;
-            checkInButtonDisabled = false;
-            checkOutButtonDisabled = true;
-            StateHasChanged();
-        }
 
         protected override async Task OnInitializedAsync()
         {
