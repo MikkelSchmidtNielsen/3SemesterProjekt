@@ -8,26 +8,30 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Persistence;
+using Application.RepositoryInterfaces;
 
 namespace Application.Services.Command
 {
     public class CreateOptCommandHandler : ICreateOptCommandHandler
     {
-        private TempOtpStorage _tempOtpStorage;
-        public CreateOptCommandHandler(TempOtpStorage tempOtpStorage)
+        private readonly IUserRepository _repository;
+        public CreateOptCommandHandler(IUserRepository repository)
         {
-            _tempOtpStorage = tempOtpStorage;
+            _repository = repository;
         }
-        public Task Handle(string email)
+        public async Task<string> Handle(string email)
         {
-            Random random = new Random();
-            int value = random.Next(100000, 999999);
-            DateTime expiryTime = DateTime.UtcNow.AddMinutes(30);
-            Otp otp = new Otp(value, expiryTime);
+            var userResult = await _repository.ReadUserByEmailAsync(email);
 
-            _tempOtpStorage.OtpDictionary.Add(email, otp);
+            if (userResult.GetSuccess().OriginalType != null)
+            {
+                Random random = new Random();
+                int otp = random.Next(100000, 999999);
+                DateTime expiryTime = DateTime.UtcNow.AddMinutes(30);
 
+                userResult.GetSuccess().OriginalType.SetOtp(otp, expiryTime);
+
+            }
 
         }
     }

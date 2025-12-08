@@ -10,6 +10,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface ICreateOptCommandHandler
     {
-        public Task Handle(string email);
+        public Task<string> Handle(string email);
     }
 }
