@@ -20,10 +20,11 @@ namespace Presentation.Server.Controllers
 		private readonly IHttpContextAccessor _httpContext;
 		private readonly IUpdateResourceCommand _command;
 
-		public UpdateResourceController(IReadAllResourcesQuery query, IHttpContextAccessor httpContext)
+		public UpdateResourceController(IReadAllResourcesQuery query, IHttpContextAccessor httpContext, IUpdateResourceCommand command)
 		{
 			_query = query;
 			_httpContext = httpContext;
+			_command = command;
 		}
 
 		[HttpGet]
