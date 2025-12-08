@@ -28,6 +28,7 @@ namespace Presentation
             // ServerApis as Refit for Client side
             builder.Services.RegisterRefit();
             builder.Services.AddScoped<IUpdateResourceService, UpdateResourceService>();
+            builder.Services.AddHttpContextAccessor();
 
 			var app = builder.Build();
 

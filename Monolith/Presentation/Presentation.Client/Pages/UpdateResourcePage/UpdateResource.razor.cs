@@ -28,8 +28,19 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 
 		private async Task OnModelSubmitAsync(UpdateResourceModel updateModel)
 		{ 
-			await _updateService.UpdateResourceAsync(updateModel);
-		
+			IResult<UpdateResourceModel> apiReponse = await _updateService.UpdateResourceAsync(updateModel);
+			
+			if (apiReponse.IsError())
+			{
+
+			}
+			else if (apiReponse.IsConflict())
+			{ 
+			}
+			else // If its not error or conflict then it should be a succes
+			{
+
+			}
 			// TODO
 		}
 	}
