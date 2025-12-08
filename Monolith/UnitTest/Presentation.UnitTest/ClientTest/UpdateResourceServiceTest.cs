@@ -27,7 +27,7 @@ namespace UnitTest.Presentation.UnitTest.ClientTest
 
 			Mock<IUpdateResourceApi> apiMock = new Mock<IUpdateResourceApi>();
 			apiMock.Setup(x => x.UpdateResource(It.IsAny<int>(), It.IsAny<UpdateResourceModel>()))
-				.ReturnsAsync(Result<UpdateResourceModel>.Success(model));
+				.ReturnsAsync(model);
 
 
 			UpdateResourceService sut =
@@ -95,7 +95,7 @@ namespace UnitTest.Presentation.UnitTest.ClientTest
 
 			Mock<IUpdateResourceApi> apiMock = new Mock<IUpdateResourceApi>();
 			apiMock.Setup(x => x.GetAllResources())
-				.ReturnsAsync(Result<IEnumerable<UpdateResourceModel>>.Success(modelAsArray));
+				.ReturnsAsync(modelAsArray);
 
 
 			UpdateResourceService sut =

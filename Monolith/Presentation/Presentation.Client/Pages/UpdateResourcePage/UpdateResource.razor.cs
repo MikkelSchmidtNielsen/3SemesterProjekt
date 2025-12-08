@@ -30,18 +30,14 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 		{ 
 			IResult<UpdateResourceModel> apiReponse = await _updateService.UpdateResourceAsync(updateModel);
 			
-			if (apiReponse.IsError())
+			if (apiReponse.IsSucces())
 			{
-
+				await SuccessDialog();
 			}
-			else if (apiReponse.IsConflict())
-			{ 
-			}
-			else // If its not error or conflict then it should be a succes
+			else
 			{
-
+				await ErrorDialog(apiReponse.GetError().Exception!);
 			}
-			// TODO
 		}
 	}
 }

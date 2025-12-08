@@ -1,5 +1,9 @@
 ﻿@page "/admin/update-resource"
+@using Common.CustomExceptions
 @inject IUpdateResourceService _updateService
+@inject DialogService DialogService
+
+<RadzenDialog/>
 
 @rendermode InteractiveAuto
 <RadzenStack AlignItems="AlignItems.Center">
@@ -19,4 +23,44 @@
  @if (selectedResource is not null)
 {
     <UpdateResourceComponent resource="selectedResource" OnModelSubmit="OnModelSubmitAsync"></UpdateResourceComponent>
+}
+
+@code {
+	private async Task SuccessDialog()
+	{
+		var result = await DialogService.OpenAsync("Resourcen er blevet opdateret", ds =>
+		@<RadzenStack Gap="1.5rem">
+            <h3>Ressourcen er blevet tilføjet.</h3>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ok" Click="() => ds.Close(true)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+    );
+    }
+
+    private async Task ErrorDialog(Exception error)
+    {
+        string message = error.Message;
+
+        // If the Exception is a custom ApiException
+        if (error is ApiErrorException apiErrorException)
+        {
+            message = apiErrorException.ApiErrorMessage!;
+        }
+
+		var result = await DialogService.OpenAsync("Der er opstået en fejl", ds =>
+		@<RadzenStack Gap="1.5rem">
+            <h3>@message</h3>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ok" Click="() => ds.Close(true)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+		);
+	}
 }

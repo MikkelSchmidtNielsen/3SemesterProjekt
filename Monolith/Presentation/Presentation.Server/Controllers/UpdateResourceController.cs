@@ -1,8 +1,14 @@
-﻿using Common;
+﻿using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
+using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
+using Common;
+using Common.CustomExceptions;
 using Common.ResultInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Shared.Models;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Presentation.Server.Controllers
 {
@@ -10,63 +16,65 @@ namespace Presentation.Server.Controllers
 	[ApiController]
 	public class UpdateResourceController : ControllerBase
 	{
+		private readonly IReadAllResourcesQuery _query;
+		private readonly IHttpContextAccessor _httpContext;
+		private readonly IUpdateResourceCommand _command;
+
+		public UpdateResourceController(IReadAllResourcesQuery query, IHttpContextAccessor httpContext)
+		{
+			_query = query;
+			_httpContext = httpContext;
+		}
+
 		[HttpGet]
 		public async Task<IEnumerable<UpdateResourceModel>> GetAllResources()
 		{
-			// TODO Change to API from Microservice
-			return new List<UpdateResourceModel>
+			IResult<IEnumerable<ReadResourceQueryResponseDto>> result = await _query.ReadAllResourcesAsync(new ResourceFilterDto());
+
+			if (result.IsError())
+			{
+				_httpContext.HttpContext!.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+				if(result.GetError() is ApiErrorException apiErrorException)
 				{
-					new UpdateResourceModel
-					{
-						Id = 1,
-						Name = "Resource A",
-						Type = "Type 1",
-						BasePrice = 100.0m,
-						Location = 1,
-						Description = "This is resource A",
-						IsAvailable = true,
-						RowVersion = new byte[] { 1, 0, 0, 0 }
-					},
-					new UpdateResourceModel
-					{
-						Id = 2,
-						Name = "Resource B",
-						Type = "Type 2",
-						BasePrice = 200.0m,
-						Location = 2,
-						Description = "This is resource B",
-						IsAvailable = false,
-						RowVersion = new byte[] { 1, 0, 0, 1 }
-					},
-					new UpdateResourceModel
-					{
-						Id = 3,
-						Name = "Resource C",
-						Type = "Type 1",
-						BasePrice = 150.0m,
-						Location = 1,
-						Description = "This is resource C",
-						IsAvailable = true,
-						RowVersion = new byte[] { 1, 0, 0, 2 }
-					},
-					new UpdateResourceModel
-					{
-						Id = 4,
-						Name = "Resource D",
-						Type = "Type 3",
-						BasePrice = 300.0m,
-						Location = 3,
-						Description = "This is resource D",
-						IsAvailable = true,
-						RowVersion = new byte[] { 1, 0, 0, 3 }
-					}
-				};
+					_httpContext.HttpContext.Response.StatusCode = apiErrorException.StatusCode;
+				}
+
+				return Array.Empty<UpdateResourceModel>();
+			}
+
+			List<UpdateResourceModel> resultList = new List<UpdateResourceModel>();
+
+			foreach (var resource in result.GetSuccess().OriginalType)
+			{
+				resultList.Add(Mapper.Map<UpdateResourceModel>(resource));
+			}
+
+			_httpContext.HttpContext!.Response.StatusCode = (int)HttpStatusCode.OK;
+			return resultList;
 		}
 
 		[HttpPut("{id}")]
-		public Task<UpdateResourceModel> UpdateResource(int id, [FromBody]UpdateResourceModel resource)
+		public async Task<UpdateResourceModel> UpdateResource(int id, [FromBody]UpdateResourceModel resource)
 		{
-			throw new NotImplementedException();
+			UpdateResourceCommandDto dto = Mapper.Map<UpdateResourceCommandDto>(resource);
+
+			IResult<UpdateResourceResponseDto> result = await _command.HandleAsync(dto);
+
+			if (result.IsError())
+			{
+				_httpContext.HttpContext!.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+				if (result.GetError() is ApiErrorException apiErrorException)
+				{
+					_httpContext.HttpContext.Response.StatusCode = apiErrorException.StatusCode;
+				}
+				return new UpdateResourceModel();
+			}
+
+			_httpContext.HttpContext!.Response.StatusCode = (int)HttpStatusCode.OK;
+
+			return Mapper.Map<UpdateResourceModel>(result.GetSuccess().OriginalType);
 		}
 	}
 }

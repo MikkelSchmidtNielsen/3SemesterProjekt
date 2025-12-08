@@ -158,5 +158,10 @@ namespace Infrastructure.InternalApiCalls.ResourceApi
                 return Result<IEnumerable<ReadResourceByApiQueryResponseDto>>.Error(originalType: null, exception: ex);
             }
         }
-    }
+
+		public Task<IResult<UpdateResourceByApiResponseDto>> UpdateAsync(UpdateResourceCommandDto dto)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
