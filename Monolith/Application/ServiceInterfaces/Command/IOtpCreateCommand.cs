@@ -9,6 +9,6 @@ namespace Application.ServiceInterfaces.Command
 {
     public interface IOtpCreateCommand
     {
-        public Task<IResult<string>> CreateOtpAsync(string email);
+        public Task CreateOtpAsync(string email);
     }
 }

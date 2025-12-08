@@ -3,7 +3,8 @@
 @rendermode InteractiveServer
 @inject DialogService DialogService
 @inject NotificationService NotificationService
-@inject IGuestCreateCommand _command
+@inject IGuestCreateCommand _guestCreateCommand
+@inject IOtpCreateCommand _otpCreateCommand
 <RadzenNotification />
 
 
@@ -21,7 +22,8 @@
 @if (_accountAlreadyExists is true)
 {
 <RadzenFormField Text="Indtast Engangskode" Style="width: auto;">
-    <RadzenTextBox @bind-Value="@_oneTimePassword" MaxLength="6" />
+    <RadzenNumeric TValue="int" MaxLength="6" Value="@_oneTimePassword"/>
+    @* <RadzenButton Text="Indsend engangskode" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnOtpSubmitAsync())/> *@
 </RadzenFormField>
 }
 

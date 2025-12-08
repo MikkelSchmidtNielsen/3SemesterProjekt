@@ -12,9 +12,15 @@ namespace Application.Services.Command
     public class OtpCreateCommand : IOtpCreateCommand
     {
         private readonly IUserAuthenticationApiService _apiService;
-        public Task<IResult<string>> CreateOtpAsync(string email)
+
+        public OtpCreateCommand(IUserAuthenticationApiService apiService)
         {
-            IResult<string> response = _apiService.GenerateOtpAsync(email);
+            _apiService = apiService;
+        }
+
+        public async Task CreateOtpAsync(string email)
+        {
+            await _apiService.RequestOtpAsync(email);
         }
     }
 }
