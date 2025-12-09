@@ -13,7 +13,7 @@ namespace Presentation.Shared.Models
 		public string Type { get; set; } = string.Empty;
 		public decimal BasePrice { get; set; }
 		public int Location { get; set; }
-		public string Description { get; set; } = string.Empty;
+		public string? Description { get; set; }
 		public bool IsAvailable { get; set; } = true;
 		public byte[] RowVersion { get; set; }
 	}
