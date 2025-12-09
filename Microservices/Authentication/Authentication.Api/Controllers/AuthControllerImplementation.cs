@@ -49,6 +49,19 @@ namespace Authentication.Api.Controllers
         public async Task<string> ValidateUserAsync(ValidateUserQueryDto body)
         {
             IResult<ValidateUserResponseDto> result = await _validateUserHandler.Handle(body);
+
+            // Handles failures
+            if (result.IsSuccess() == false)
+            {
+                Exception error = result.GetError().Exception!;
+
+                throw error;
+            }
+
+            ValidateUserResponseDto dto = result.GetSuccess().OriginalType;
+
+            _contextAccessor.HttpContext!.Response.StatusCode = HttpStatusCode.Created.ToInt();
+            return dto.Token;
         }
     }
 }

@@ -15,10 +15,12 @@
       "className": "Auth",
       "namespace": "Authentication.Api.Controllers",
       "generateOptionalParameters": true,
+      "generateDtoTypes": false,
       "additionalNamespaceUsages": [
         "Microsoft.AspNetCore.Mvc",
         "System.CodeDom.Compiler",
-        "System.Threading.Tasks"
+        "System.Threading.Tasks",
+        "Application.ApplicationDto"
       ],
       "output": "../Controllers/AuthController.cs"
     }
