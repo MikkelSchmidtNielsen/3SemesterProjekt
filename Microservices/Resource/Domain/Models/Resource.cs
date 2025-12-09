@@ -1,4 +1,5 @@
-﻿using Domain.ModelsDto;
+﻿using Domain.DomainDtos;
+using Domain.ModelsDto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Resource
+    public class Resource : Entity
     {
         public int Id { get; init; }
         public string Name { get; private set; }
@@ -17,7 +18,6 @@ namespace Domain.Models
         public int Location { get; private set; }
         public string? Description { get; private set; }
         public bool IsAvailable { get; private set; }
-        public byte[] RowVersion { get; private set; } = new byte[8];
 
 		public Resource(CreateResourceFactoryDto dto)
         {
@@ -50,5 +50,18 @@ namespace Domain.Models
                 return true;
             }
         }
+
+        public void UpdateResource(UpdateResourceDomainDto dto)
+        {
+			Name = dto.Name;
+			Type = dto.Type;
+			BasePrice = dto.BasePrice;
+			Location = dto.Location;
+			Description = dto.Description;
+            IsAvailable = dto.IsAvailable;
+            RowVersion = dto.RowVersion;
+
+            ValidateInformation() ;
+		}
     }
 }

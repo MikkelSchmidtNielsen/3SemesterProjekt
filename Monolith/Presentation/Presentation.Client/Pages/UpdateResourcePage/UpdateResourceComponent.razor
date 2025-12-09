@@ -1,0 +1,99 @@
+﻿@rendermode InteractiveAuto
+@using Presentation.Shared.Models
+@inject DialogService DialogService
+
+<RadzenDialog/>
+
+<div id="main-content">
+	<div id="resource-content">
+		<h3 class="text-center padding-10px">Udfyld nye informationer</h3>
+
+		<RadzenTemplateForm TItem="UpdateResourceModel" 
+							Data="@resource" 
+							Submit="@ShowDialog">
+
+			<RadzenStack>
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel>
+						Ressourcenavn 
+					</RadzenLabel>
+					<RadzenTextBox @bind-Value=@resource.Name Style="width: 100%; max-width: 400px;" />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel>
+						Ressourcetype
+					</RadzenLabel>
+					<RadzenDropDown TValue="string" @bind-Value="resource.Type" Data="@_resourceTypes" Placeholder="Vælg type" Style="width: 100%; max-width: 400px;" />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel>
+						Pris pr. dag 
+					</RadzenLabel>
+					<RadzenNumeric Min="0" @bind-Value=@resource.BasePrice TValue="decimal" ShowUpDown="false" Placeholder="Pris i DKK..." />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel>
+						Pladsnr.
+					</RadzenLabel>
+					<RadzenNumeric Min="1" @bind-Value=@resource.Location TValue="int" ShowUpDown="false" Placeholder="Pladsnr..." />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Horizontal" Gap="0.5 rem">
+					<RadzenLabel>
+						Tilgængelighed
+					</RadzenLabel>
+					<RadzenSwitch @bind-Value=@resource.IsAvailable TValue="bool" Placeholder="Tilgængelighed..." />
+				</RadzenStack>
+
+				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
+					<RadzenLabel Component="Description">
+						Beskrivelse
+					</RadzenLabel>
+					<RadzenTextArea id="Description" @bind-Value=resource.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea>
+				</RadzenStack>
+				<RadzenButton ButtonType="ButtonType.Submit" Text="Opdater ressource" />
+			</RadzenStack>
+		</RadzenTemplateForm>
+
+
+	</div>
+	<div id="preview-content">
+		<h3 class="text-center padding-10px">Forhåndsvisning</h3>
+
+		<div id="resource-preview">
+
+			<b><p>@resource.Name</p></b>
+			<p><b>Type: </b>@resource.Type</p>
+			<p><b>Pladsnr.: </b>@resource.Location</p>
+
+			<hr />
+
+			<p><b>Beskrivelse: </b>@resource.Description</p>
+
+			<p><b>Pris pr. dag:</b></p>
+			<h4>DKK @resource.BasePrice ,-</h4>
+		</div>
+	</div>
+</div>
+
+@code {
+
+		private async Task ShowDialog(UpdateResourceModel resourceModel)
+	{
+		resourceModel.Name = _textInfo.ToTitleCase(resourceModel.Name);
+		var result = await DialogService.OpenAsync("Oprettelse af ny ressource", ds =>
+        @<RadzenStack Gap="1.5rem">
+            <h3>Vil du gerne opdatere denne ressource?</h3>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ja" Click="() => OnModelSubmitAsync(resourceModel, ds)" Style="width: 80px;" />
+                    <RadzenButton Text="Nej" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+		);
+	}
+}

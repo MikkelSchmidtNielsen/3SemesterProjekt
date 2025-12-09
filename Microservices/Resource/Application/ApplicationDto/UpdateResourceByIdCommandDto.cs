@@ -10,10 +10,10 @@ namespace Application.ApplicationDto
 	{
 		public string? Name { get; set; }
 		public string? Type { get; set; }
-		public decimal? BasePrice { get; set; }
-		public int? Location { get; set; }
+		public decimal BasePrice { get; set; }
+		public int Location { get; set; }
 		public string? Description { get; set; }
-		public bool? IsAvailable { get; set; }
+		public bool IsAvailable { get; set; }
 		public byte[] RowVersion { get; set; }
 	}
 }

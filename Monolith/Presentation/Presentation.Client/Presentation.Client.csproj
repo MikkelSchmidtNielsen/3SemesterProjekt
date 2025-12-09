@@ -16,10 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\" />
+    <ProjectReference Include="..\Presentation.Shared\Presentation.Shared.csproj" />
   </ItemGroup>
 
 </Project>

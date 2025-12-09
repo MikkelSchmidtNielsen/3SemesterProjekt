@@ -21,6 +21,7 @@ COPY Infrastructure/*.csproj Infrastructure/
 COPY Persistence/*.csproj Persistence/
 COPY Presentation/Presentation.Client/*.csproj Presentation/Presentation.Client/
 COPY Presentation/Presentation.Server/*.csproj Presentation/Presentation.Server/
+COPY Presentation/Presentation.Shared/*.csproj Presentation/Presentation.Shared/
 COPY UnitTest/*.csproj UnitTest/
 COPY InversionOfControlContainers/*.csproj InversionOfControlContainers/
 
@@ -35,6 +36,7 @@ COPY Infrastructure/ Infrastructure/
 COPY Persistence/ Persistence/
 COPY Presentation/Presentation.Client Presentation/Presentation.Client/
 COPY Presentation/Presentation.Server Presentation/Presentation.Server/
+COPY Presentation/Presentation.Shared Presentation/Presentation.Shared/
 COPY InversionOfControlContainers/ InversionOfControlContainers
 
 # Byg projektet med tidligere sat konfiguration

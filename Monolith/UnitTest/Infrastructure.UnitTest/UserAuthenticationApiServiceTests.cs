@@ -1,4 +1,5 @@
-﻿using global::Infrastructure.InternalApiCalls.UserAuthenticationApi;
+﻿using Common.CustomExceptions;
+using global::Infrastructure.InternalApiCalls.UserAuthenticationApi;
 using Infrastructure.InternalApiCalls;
 using Moq;
 using Refit;

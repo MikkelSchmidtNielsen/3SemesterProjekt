@@ -1,4 +1,5 @@
 ﻿using Common.CustomExceptions;
+using Domain.DomainDtos;
 using Domain.Models;
 using Domain.ModelsDto;
 using System;
@@ -75,5 +76,31 @@ namespace UnitTest.Domain.UnitTest
 			ArgumentException actualException = Assert.Throws<ArgumentException>(() => new Resource(dto));
 			Assert.Equal(expectedException.Message, actualException.Message);
 		}
-    }
+
+		[Fact]
+		public static void ResourceUpdate_ShouldPass_WhenNewInformationIsValid()
+		{
+			// Arrange
+			UpdateResourceDomainDto dto =
+				Impression.Of<UpdateResourceDomainDto>()
+				.Randomize()
+				.Create();
+
+			Resource resource =
+				Impression.Of<Resource>()
+				.Randomize()
+				.Create();
+
+			// Act
+			resource.UpdateResource(dto);
+
+			// Assert
+			Assert.Equal(dto.Name, resource.Name);
+			Assert.Equal(dto.Type, resource.Type);
+			Assert.Equal(dto.BasePrice, resource.BasePrice);
+			Assert.Equal(dto.Location, resource.Location);
+			Assert.Equal(dto.Description, resource.Description);
+			Assert.Equal(dto.IsAvailable, resource.IsAvailable);
+		}
+	}
 }

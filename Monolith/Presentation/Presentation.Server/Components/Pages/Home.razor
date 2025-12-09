@@ -1,12 +1,9 @@
 ﻿@page "/"
-
-<PageTitle>Foxtrox Bookingportal</PageTitle>
-
-<h3 class="text-center">Velkommen til</h3>
-<h1 class="text-center">Foxtrox Bookingportal</h1>
-
-<div id="login-button">
-	<a href="/register">
-		<RadzenButton Text="Log ind" ButtonStyle="ButtonStyle.Primary" />
-	</a>
-</div>
+@inject NavigationManager _nav
+@code 
+{
+	protected override async Task OnInitializedAsync()
+	{
+		_nav.NavigateTo("/admin/manage-camp");
+	}
+}

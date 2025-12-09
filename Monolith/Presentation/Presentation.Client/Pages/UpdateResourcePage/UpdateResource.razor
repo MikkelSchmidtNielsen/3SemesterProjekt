@@ -1,0 +1,66 @@
+﻿@page "/admin/update-resource"
+@using Common.CustomExceptions
+@inject IUpdateResourceService _updateService
+@inject DialogService _dialogService
+
+<RadzenDialog/>
+
+@rendermode InteractiveAuto
+<RadzenStack AlignItems="AlignItems.Center">
+    <RadzenText>Vælg en ressource du ønsker at opdatere</RadzenText>
+    <RadzenDropDown Style="width: 100%; max-width: 300px;"
+                    TValue="UpdateResourceModel"
+                    @bind-Value="_selectedResource"
+                    Placeholder="Select resource"
+                    AllowFiltering="true"
+                    Data="@_resources"
+                    TextProperty="Name"
+     />
+
+     <br />
+</RadzenStack>
+
+ @if (_selectedResource is not null)
+{
+    <UpdateResourceComponent resource="_selectedResource" OnModelSubmit="OnModelSubmitAsync"></UpdateResourceComponent>
+}
+
+@code {
+	private async Task SuccessDialog()
+	{
+		var result = await _dialogService.OpenAsync("Resourcen er blevet opdateret", ds =>
+		@<RadzenStack Gap="1.5rem">
+            <h3>Ændringerne blev gemt</h3>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ok" Click="() => ds.Close(true)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+    );
+    }
+
+    private async Task ErrorDialog(Exception error)
+    {
+        string message = error.Message;
+
+        // If the Exception is a custom ApiException
+        if (error is ApiErrorException apiErrorException)
+        {
+            message = apiErrorException.ApiErrorMessage!;
+        }
+
+		var result = await _dialogService.OpenAsync("Der er opstået en fejl", ds =>
+		@<RadzenStack Gap="1.5rem">
+            <h3>@message</h3>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenButton Text="Ok" Click="() => ds.Close(true)" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenStack>
+		);
+	}
+}

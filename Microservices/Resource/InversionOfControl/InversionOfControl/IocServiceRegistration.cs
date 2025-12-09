@@ -33,6 +33,7 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<ICreateResourceCommandHandler, CreateResourceCommandHandler>();
             services.AddScoped<IReadResourceByIdQueryHandler, ReadResourceByIdQueryHandler>();
             services.AddScoped<IReadResourceWithCriteriaQueryHandler, ReadResourceWithCriteriaQueryHandler>();
+            services.AddScoped<IUpdateResourceByIdCommandHandler, UpdateResourceByIdCommandHandler>();
 
             // Add repositories
             services.AddScoped<IResourceRepository, ResourceRepository>();

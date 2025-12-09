@@ -1,5 +1,6 @@
 ﻿using Application.ApplicationDto.Command;
 using Application.InfrastructureDto;
+using Common.CustomExceptions;
 using Common.ResultInterfaces;
 using Infrastructure.InternalApiCalls;
 using Infrastructure.InternalApiCalls.ResourceApi;
@@ -204,7 +205,7 @@ namespace UnitTest.Infrastructure.UnitTest
         }
 
         // Helper Method
-        private async Task<ApiException> CreateApiException(HttpStatusCode code, string body)
+        public async Task<ApiException> CreateApiException(HttpStatusCode code, string body)
         {
             var response = new HttpResponseMessage(code)
             {
