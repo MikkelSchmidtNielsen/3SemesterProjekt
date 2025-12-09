@@ -54,6 +54,7 @@ namespace Presentation.Server.Components.Pages.LoginPages
 				SendNotification(NotificationSeverity.Error, "Fejl", "Ugyldig engangskode. Prøv igen.");
 				return;
 			}
+
 			else
 			{
 				SendNotification(NotificationSeverity.Success, "Succes", "Velkommen tilbage");
