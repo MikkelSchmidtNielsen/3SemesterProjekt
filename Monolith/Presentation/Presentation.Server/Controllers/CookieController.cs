@@ -8,7 +8,7 @@ namespace Presentation.Server.Controllers
         {
             CookieOptions options = new CookieOptions
             {
-                HttpOnly = true, // Ensures that JavaScript code can't access this cookie
+                HttpOnly = true, // Ensures that malicious JavaScript code can't access this cookie
                 Secure = true,
                 Expires = DateTime.UtcNow.AddDays(1)
             };
