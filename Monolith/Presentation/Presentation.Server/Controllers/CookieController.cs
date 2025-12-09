@@ -13,7 +13,7 @@ namespace Presentation.Server.Controllers
                 Expires = DateTime.UtcNow.AddDays(1)
             };
 
-            Response.Cookies.Append("auth_cookie", token, options);
+            Response.Cookies.Append("authCookie", token, options);
         }
     }
 }
