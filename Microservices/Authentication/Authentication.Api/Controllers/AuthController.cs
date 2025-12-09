@@ -46,7 +46,7 @@ namespace Authentication.Api.Controllers
 
         /// <returns>Successful response, returns JWT</returns>
 
-        System.Threading.Tasks.Task<string> ValidateUserAsync();
+        System.Threading.Tasks.Task<string> ValidateUserAsync(ValidateUserQueryDto body);
 
     }
 
@@ -78,11 +78,11 @@ namespace Authentication.Api.Controllers
         }
 
         /// <returns>Successful response, returns JWT</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("validate-user/{userInfo}")]
-        public System.Threading.Tasks.Task<string> ValidateUser()
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("validate-user")]
+        public System.Threading.Tasks.Task<string> ValidateUser([Microsoft.AspNetCore.Mvc.FromBody] ValidateUserQueryDto body)
         {
 
-            return _implementation.ValidateUserAsync();
+            return _implementation.ValidateUserAsync(body);
         }
 
     }
@@ -93,6 +93,29 @@ namespace Authentication.Api.Controllers
 
         [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Message { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ValidateUserQueryDto
+    {
+
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Email { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("otp", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public object Otp { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 

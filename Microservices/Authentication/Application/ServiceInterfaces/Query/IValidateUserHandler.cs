@@ -11,6 +11,6 @@ namespace Application.ServiceInterfaces.Query
 {
     public interface IValidateUserHandler
     {
-        public Task<IResult<ValidateUserResponseDto>> Handle(ValidateUserDto dto);
+        public Task<IResult<ValidateUserResponseDto>> Handle(ValidateUserQueryDto dto);
     }
 }

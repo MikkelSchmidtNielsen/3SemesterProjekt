@@ -101,7 +101,9 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
         {
             try
             {
-                ValidateUserByApiResponseDto response = await _userAuthenticationApi.ValidateUserAsync(dto);
+                string jwt = await _userAuthenticationApi.ValidateUserAsync(dto);
+
+                ValidateUserByApiResponseDto response = new() { JwtToken  = jwt };
                 return Result<ValidateUserByApiResponseDto>.Success(response);
             }
             catch (ApiException ex)

@@ -48,10 +48,17 @@ paths:
         required: true
         schema:
           type: string
-  '/validate-user/{userInfo}':
+
+  '/validate-user':
     summary: Path to validate OTP
     description: Entered OTP gets validated and a JWT should be returned.
     get:
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateUserQueryDto'
         responses:
           '201':
             description: Successful response, returns JWT
@@ -63,12 +70,6 @@ paths:
             $ref: '#/components/responses/400Error'
           '500':
             $ref: '#/components/responses/500Error'
-    parameters:
-      - name: userInfo
-        in: path
-        required: true
-        schema:
-          type: 
 
 components:
   schemas: 
@@ -81,7 +82,18 @@ components:
       properties:
         message:
           type: string
-
+    
+    ValidateUserQueryDto:
+      type: object
+      required:
+        - email
+        - otp
+      properties:
+       email:
+        type: string
+       otp:
+        type: int
+    
   responses:
     400Error:
       description: Error response - Invalid input

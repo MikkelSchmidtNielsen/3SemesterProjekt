@@ -28,6 +28,6 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 
         // Validates user and the given one time password. Returns JWT Token as a string.
         [Get("/validate-user")]
-        Task<ValidateUserByApiResponseDto> ValidateUserAsync([Body] ValidateUserQueryDto dto);
+        Task<string> ValidateUserAsync([Body] ValidateUserQueryDto dto);
     }
 }

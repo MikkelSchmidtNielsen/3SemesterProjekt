@@ -1,5 +1,6 @@
 ﻿using Application.ApplicationDto;
 using Application.ServiceInterfaces.Command;
+using Application.ServiceInterfaces.Query;
 using Common.ExtensionMethods;
 using Common.ResultInterfaces;
 using System.Net;
@@ -11,17 +12,18 @@ namespace Authentication.Api.Controllers
         private readonly ICreateUserCommandHandler _createUserHandler;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly ICreateOtpCommandHandler _createOtpHandler;
+        private readonly IValidateUserHandler _validateUserHandler;
 
-        public AuthControllerImplementation(ICreateUserCommandHandler createUserHandler, IHttpContextAccessor contextAccessor, ICreateOtpCommandHandler createOtpHandler)
+        public AuthControllerImplementation(ICreateUserCommandHandler createUserHandler, IHttpContextAccessor contextAccessor, ICreateOtpCommandHandler createOtpHandler, IValidateUserHandler validateUserHandler)
         {
             _createUserHandler = createUserHandler;
             _contextAccessor = contextAccessor;
             _createOtpHandler = createOtpHandler;
+            _validateUserHandler = validateUserHandler;
         }
 
         public async Task<string> RegisterUserAsync(string email)
         {
-            Console.WriteLine("trin 1");
             // Creates a user and assigns a token to it
             IResult<CreateUserResponseDto> result = await _createUserHandler.HandleAsync(email);
 
@@ -42,6 +44,11 @@ namespace Authentication.Api.Controllers
         public Task RequestOtpAsync(string email)
         {
             return _createOtpHandler.Handle(email);
+        }
+
+        public async Task<string> ValidateUserAsync(ValidateUserQueryDto body)
+        {
+            IResult<ValidateUserResponseDto> result = await _validateUserHandler.Handle(body);
         }
     }
 }

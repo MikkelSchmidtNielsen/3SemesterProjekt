@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ApplicationDto
 {
-    public class ValidateUserDto
+    public class ValidateUserQueryDto
     {
         public string Email { get; set; }
         public int Otp {  get; set; }

@@ -25,7 +25,7 @@ namespace Application.Services.Query
             _tokenHandler = tokenHandler;
         }
 
-        public async Task<IResult<ValidateUserResponseDto>> Handle(ValidateUserDto dto)
+        public async Task<IResult<ValidateUserResponseDto>> Handle(ValidateUserQueryDto dto)
         {
             var userResult = await _userRepository.ReadUserByEmailAsync(dto.Email);
             ValidateUserResponseDto response = Mapper.Map<ValidateUserResponseDto>(dto);
