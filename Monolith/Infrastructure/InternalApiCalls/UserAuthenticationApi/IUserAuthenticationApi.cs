@@ -1,12 +1,14 @@
-﻿using Refit;
+﻿using Application.ApplicationDto;
+using Application.ApplicationDto.Command;
+using Application.ApplicationDto.Query;
+using Application.InfrastructureDto;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Application.ApplicationDto;
-using Application.ApplicationDto.Query;
 
 namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 {
@@ -25,7 +27,7 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 		Task RequestOtpAsync([AliasAs("email")] string email);
 
         // Validates user and the given one time password. Returns JWT Token as a string.
-        [Get("/validate-user/{userInfo}")]
-        Task<string> ValidateUserAsync([AliasAs("userInput")] ValidateUserQueryDto userInfo);
-	}
+        [Get("/validate-user")]
+        Task<ValidateUserByApiResponseDto> ValidateUserAsync([Body] ValidateUserQueryDto dto);
+    }
 }
