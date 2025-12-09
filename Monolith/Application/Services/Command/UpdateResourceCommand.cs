@@ -14,7 +14,7 @@ namespace Application.Services.Command
 {
 	public class UpdateResourceCommand : IUpdateResourceCommand
 	{
-		private readonly IResourceApiService _apiService;
+		private readonly IResourceApiService _resourceApiService;
 
 		private UpdateResourceCommand() // Used for UnitTest
 		{
@@ -22,11 +22,11 @@ namespace Application.Services.Command
 
 		public UpdateResourceCommand(IResourceApiService apiService)
 		{
-			_apiService = apiService;
+			_resourceApiService = apiService;
 		}
 		public async Task<IResult<UpdateResourceResponseDto>> HandleAsync(UpdateResourceCommandDto command)
 		{
-			IResult<UpdateResourceByApiResponseDto> apiResponse = await _apiService.UpdateAsync(command);
+			IResult<UpdateResourceByApiResponseDto> apiResponse = await _resourceApiService.UpdateAsync(command);
 
 			if (apiResponse.IsSucces())
 			{

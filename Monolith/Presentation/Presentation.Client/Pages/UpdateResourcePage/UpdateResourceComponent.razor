@@ -24,7 +24,7 @@
 					<RadzenLabel>
 						Ressourcetype
 					</RadzenLabel>
-					<RadzenDropDown TValue="string" @bind-Value="resource.Type" Data="@resourceTypes" Placeholder="Vælg type" Style="width: 100%; max-width: 400px;" />
+					<RadzenDropDown TValue="string" @bind-Value="resource.Type" Data="@_resourceTypes" Placeholder="Vælg type" Style="width: 100%; max-width: 400px;" />
 				</RadzenStack>
 
 				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
@@ -43,7 +43,7 @@
 
 				<RadzenStack Orientation="Orientation.Horizontal" Gap="0.5 rem">
 					<RadzenLabel>
-						Tilgængelighed.
+						Tilgængelighed
 					</RadzenLabel>
 					<RadzenSwitch @bind-Value=@resource.IsAvailable TValue="bool" Placeholder="Tilgængelighed..." />
 				</RadzenStack>
@@ -54,7 +54,7 @@
 					</RadzenLabel>
 					<RadzenTextArea id="Description" @bind-Value=resource.Description Placeholder="Beskrivelse af ressource..." Rows="3" Cols="30"></RadzenTextArea>
 				</RadzenStack>
-				<RadzenButton ButtonType="ButtonType.Submit" Text="Opdater resource" />
+				<RadzenButton ButtonType="ButtonType.Submit" Text="Opdater ressource" />
 			</RadzenStack>
 		</RadzenTemplateForm>
 
@@ -83,10 +83,10 @@
 
 		private async Task ShowDialog(UpdateResourceModel resourceModel)
 	{
-		resourceModel.Name = textInfo.ToTitleCase(resourceModel.Name);
+		resourceModel.Name = _textInfo.ToTitleCase(resourceModel.Name);
 		var result = await DialogService.OpenAsync("Oprettelse af ny ressource", ds =>
         @<RadzenStack Gap="1.5rem">
-            <h3>Vil du gerne opdater denne resource?</h3>
+            <h3>Vil du gerne opdatere denne ressource?</h3>
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
                 <RadzenStack Orientation="Orientation.Horizontal">
                     <RadzenButton Text="Ja" Click="() => OnModelSubmitAsync(resourceModel, ds)" Style="width: 80px;" />

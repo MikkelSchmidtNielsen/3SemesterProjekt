@@ -50,7 +50,7 @@ namespace Presentation.Client.Services.Implementation
 					};
 				}
 
-				// A custom Exception, so I can get error message, status code and original ApiException message all in one exception
+				// A custom Exception, so we can get error message, status code and original ApiException message all in one exception
 				ApiErrorException apiErrorException = new ApiErrorException(
 					apiErrorMessage: error?.Message,
 					statusCode: (int)ex.StatusCode,
@@ -98,7 +98,7 @@ namespace Presentation.Client.Services.Implementation
 					};
 				}
 
-				// A custom Exception, so I can get error message, status code and original ApiException message all in one exception
+				// A custom Exception, so we can get error message, status code and original ApiException message all in one exception
 				ApiErrorException apiErrorException = new ApiErrorException(
 					apiErrorMessage: error?.Message,
 					statusCode: (int)ex.StatusCode,

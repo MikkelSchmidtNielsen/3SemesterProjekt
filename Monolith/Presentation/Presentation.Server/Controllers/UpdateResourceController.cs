@@ -41,7 +41,7 @@ namespace Presentation.Server.Controllers
 					_httpContext.HttpContext.Response.StatusCode = apiErrorException.StatusCode;
 				}
 
-				return Array.Empty<UpdateResourceModel>();
+				await _httpContext.HttpContext.Response.WriteAsJsonAsync(result.GetError().Exception!.Message);
 			}
 
 			List<UpdateResourceModel> resultList = new List<UpdateResourceModel>();

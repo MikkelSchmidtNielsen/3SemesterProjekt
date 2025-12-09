@@ -7,7 +7,7 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 {
 	public partial class UpdateResource
 	{
-		IEnumerable<UpdateResourceModel>? resources;
+		IEnumerable<UpdateResourceModel>? _resources;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -15,28 +15,29 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 
 			if (apiResponse.IsSucces() is false)
 			{
-				resources = Array.Empty<UpdateResourceModel>();
+				_resources = Array.Empty<UpdateResourceModel>();
 			}
 			else
 			{
-				resources = apiResponse.GetSuccess().OriginalType;
+				_resources = apiResponse.GetSuccess().OriginalType;
 			}
 		}
 	
-		UpdateResourceModel? selectedResource;
+		UpdateResourceModel? _selectedResource;
 
 
 		private async Task OnModelSubmitAsync(UpdateResourceModel updateModel)
 		{ 
-			IResult<UpdateResourceModel> apiReponse = await _updateService.UpdateResourceAsync(updateModel);
+			IResult<UpdateResourceModel> apiResponse = await _updateService.UpdateResourceAsync(updateModel);
 			
-			if (apiReponse.IsSucces())
+			if (apiResponse.IsSucces())
 			{
 				await SuccessDialog();
+				_selectedResource.RowVersion = apiResponse.GetSuccess().OriginalType.RowVersion;
 			}
 			else
 			{
-				await ErrorDialog(apiReponse.GetError().Exception!);
+				await ErrorDialog(apiResponse.GetError().Exception!);
 			}
 		}
 	}

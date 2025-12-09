@@ -19,7 +19,7 @@ namespace Presentation.Client.Pages.UpdateResourcePage
 			await OnModelSubmit.InvokeAsync(model);
 		}
 
-		TextInfo textInfo = new CultureInfo("da-DK", false).TextInfo;
-		List<string> resourceTypes = new List<string>() { "Hytte", "Campingvognplads", "Teltplads" };
+		TextInfo _textInfo = new CultureInfo("da-DK", false).TextInfo;
+		List<string> _resourceTypes = new List<string>() { "Hytte", "Campingvognsplads", "Teltplads" };
 	}
 }

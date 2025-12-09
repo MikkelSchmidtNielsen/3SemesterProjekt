@@ -51,7 +51,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 			UpdateResourceCommand sut = 
 				Impression.Of<UpdateResourceCommand>()
-				.With("_apiService", mockApiService.Object)
+				.With("_resourceApiService", mockApiService.Object)
 				.Create();
 
 			// Act
@@ -93,7 +93,7 @@ namespace UnitTest.Application.UnitTest.ServiceTest
 
 			UpdateResourceCommand sut =
 				Impression.Of<UpdateResourceCommand>()
-				.With("_apiService", mockApiService.Object)
+				.With("_resourceApiService", mockApiService.Object)
 				.Create();
 
 			// Act
