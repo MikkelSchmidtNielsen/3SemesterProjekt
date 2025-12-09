@@ -4,12 +4,14 @@
     {
         public int Id { get; init; }
         public string Email { get; private set; }
+        public string Role { get; private set; }
         public int Otp { get; private set; }
         public DateTime OtpExpiryTime { get; private set; }
 
         public User(string email)
         {
             Email = email;
+            Role = "Guest";
 
             ValidateInformation();
         }
