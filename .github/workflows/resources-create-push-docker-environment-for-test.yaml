@@ -1,0 +1,36 @@
+name: (Resource) Create & push docker environment for test
+
+on:
+  pull_request_target:
+    paths: 
+       - 'Microservices/Resource/**'
+    branches: [ "development" ]
+    types: [closed] 
+  workflow_dispatch:
+  
+jobs:
+  build:
+    if: ${{ github.event.pull_request.merged == true}}
+    runs-on: ubuntu-latest
+
+    env:
+      TAG: pr-${{ github.event.pull_request.number }}
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - uses: docker/build-push-action@v5
+        with:
+          context: Microservices/Resource
+          file: Microservices/Resource/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO_RESOURCE }}:latest
+            ${{ secrets.DOCKER_HUB_USER }}/${{ secrets.DOCKER_HUB_REPO_RESOURCE }}:${{ env.TAG }}

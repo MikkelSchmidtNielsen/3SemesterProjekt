@@ -1,4 +1,7 @@
 using InversionOfControlContainers.InversionOfControl;
+using Presentation.Client.Services.Implementation;
+using Presentation.Client.Services.Interfaces;
+using Presentation.Server;
 using Presentation.Server.Components;
 using Radzen;
 
@@ -17,11 +20,17 @@ namespace Presentation
 
             // Add Radzen components
             builder.Services.AddRadzenComponents();
+            builder.Services.AddControllers();
 
             // Register services to IoC
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
 
-            var app = builder.Build();
+            // ServerApis as Refit for Client side
+            builder.Services.RegisterRefit();
+            builder.Services.AddScoped<IUpdateResourceService, UpdateResourceService>();
+            builder.Services.AddHttpContextAccessor();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -44,6 +53,8 @@ namespace Presentation
                 .AddInteractiveServerRenderMode()
                 .AddInteractiveWebAssemblyRenderMode()
                 .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+
+            app.MapControllers();
 
             app.Run();
         }

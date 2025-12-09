@@ -26,6 +26,12 @@ namespace InversionOfControlContainers.InversionOfControl.HttpClientSetup
 				client.Timeout = TimeSpan.FromSeconds(30);
 			});
 
+			services.AddHttpClient("ServerBaseUrl", client =>
+			{
+				client.BaseAddress = new Uri(configuration["ServerBaseUrl"]!);
+				client.Timeout = TimeSpan.FromSeconds(30);
+			});
+
 			RegisterRefit(services);
 		}
 
