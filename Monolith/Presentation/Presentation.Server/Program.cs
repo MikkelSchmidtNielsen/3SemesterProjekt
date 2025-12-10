@@ -25,6 +25,7 @@ namespace Presentation
             builder.Services.AddControllers();
 
             //Authentication and authorization
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddAuthentication(options =>
                                               {

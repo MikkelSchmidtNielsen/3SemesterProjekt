@@ -10,20 +10,17 @@ namespace Presentation.Server
     {
         /* IHttpContextAccessorr is used to access data from an HttpOnly Cookie. In this case, it's authCookie from CookieController.cs */
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly HttpClient _httpClient;
 
-        public TokenAuthenticationStateProvider(IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory)
+        public TokenAuthenticationStateProvider(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _httpClient = httpClientFactory.CreateClient("ServerBaseUrl");
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string? authCookie = _httpContextAccessor.HttpContext.Request.Cookies["authCookie"];
+            //string? authCookie = _httpContextAccessor.HttpContext.Request.Cookies["authCookie"];
+            string authCookie = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJzYXJhaHNvZXJlbnNlbjY0QGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ikd1ZXN0IiwiZXhwIjoxNzY1Mzc2NzM0fQ.6X8v0nb0yIPNecqokNkaiDiyp0bphO_VQik60_8q5ac";
 
             AuthenticationState notAuthenticated = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-
 
             if (authCookie == null) // THe current user will be marked as not authenticated, if the authCookie can't be found
             {
@@ -34,7 +31,6 @@ namespace Presentation.Server
             try
             {
                 JwtSecurityToken token = new JwtSecurityTokenHandler().ReadJwtToken(authCookie);
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.ToString().Replace("\"", ""));
 
                 /*Retrieving claims and roles*/
                 IEnumerable<Claim> claims = token.Claims;

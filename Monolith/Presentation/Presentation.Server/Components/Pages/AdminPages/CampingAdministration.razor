@@ -3,189 +3,202 @@
 @inject IBookingCheckInQuery _checkInQuery
 @inject IBookingCheckOutQuery _checkOutQuery
 @rendermode RenderMode.InteractiveServer
-@* @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Admin")] *@
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Guest")]
 
-<div id="main-container">
-	<h1 id="header-text">Administrer campingplads</h1>
-	<h3 id="middle-aligned-text">@currentDate</h3>
+<CascadingAuthenticationState>
+	<AuthorizeView Roles="Guest">
+	<Authorized Context="test">
+			<div id="main-container">
+				<h1 id="header-text">Administrer campingplads</h1>
+				<h3 id="middle-aligned-text">@currentDate</h3>
 
-	<RadzenAccordion Multiple="true"> @* Tilføj og sæt Multiple til true for at tillade flere udvidelser samtidig. *@
-		<Items>
+				<RadzenAccordion Multiple="true">
+					@* Tilføj og sæt Multiple til true for at tillade flere udvidelser samtidig. *@
+					<Items>
 
-			@* Check-Ind *@
+						@* Check-Ind *@
 
-			<RadzenAccordionItem Text="Check-Ind" Icon="star" CollapseTitle="Fold Ind"
-								 ExpandTitle="Fold Ud"
-								 ExpandAriaLabel="Fold check-ind sektionen ind/ud"> @* (Kun brugt til skærmoplæsning) *@
+						<RadzenAccordionItem Text="Check-Ind" Icon="star" CollapseTitle="Fold Ind"
+											 ExpandTitle="Fold Ud"
+											 ExpandAriaLabel="Fold check-ind sektionen ind/ud">
+							@* (Kun brugt til skærmoplæsning) *@
 
-				@* Aktive Check-Ind *@
+							@* Aktive Check-Ind *@
 
-				@if (_missingCheckIns.Any())
-				{
-					<RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
-						<RadzenTableHeader>
-							<RadzenTableHeaderRow>
-								<RadzenTableHeaderCell>
-									Ressource
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Pladsnr.
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Kundenavn
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Startdato
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Slutdato
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Ledig?
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Betalt?
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Ændre
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Check-ind
-								</RadzenTableHeaderCell>
-							</RadzenTableHeaderRow>
-						</RadzenTableHeader>
-						<RadzenTableBody>
-							@foreach (ReadBookingMissingCheckInQueryResponseDto booking in _missingCheckIns)
+							@if (_missingCheckIns.Any())
 							{
-								<RadzenTableRow>
-									<RadzenTableCell>
-										@($"{booking.ResourceName}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.ResourceLocation}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.GuestName}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.BookingStartDate}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.BookingEndDate}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<div><RadzenIcon Icon="done" /></div>
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<div><RadzenIcon Icon="done" /></div>
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<RadzenButton Text="Ændre" ButtonStyle="ButtonStyle.Success" />
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<RadzenButton Text="Check-ind" ButtonStyle="ButtonStyle.Success" />
-									</RadzenTableCell>
-								</RadzenTableRow>
+								<RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
+									<RadzenTableHeader>
+										<RadzenTableHeaderRow>
+											<RadzenTableHeaderCell>
+												Ressource
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Pladsnr.
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Kundenavn
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Startdato
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Slutdato
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Ledig?
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Betalt?
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Ændre
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Check-ind
+											</RadzenTableHeaderCell>
+										</RadzenTableHeaderRow>
+									</RadzenTableHeader>
+									<RadzenTableBody>
+										@foreach (ReadBookingMissingCheckInQueryResponseDto booking in _missingCheckIns)
+										{
+											<RadzenTableRow>
+												<RadzenTableCell>
+													@($"{booking.ResourceName}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.ResourceLocation}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.GuestName}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.BookingStartDate}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.BookingEndDate}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<div><RadzenIcon Icon="done" /></div>
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<div><RadzenIcon Icon="done" /></div>
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<RadzenButton Text="Ændre" ButtonStyle="ButtonStyle.Success" />
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<RadzenButton Text="Check-ind" ButtonStyle="ButtonStyle.Success" />
+												</RadzenTableCell>
+											</RadzenTableRow>
+										}
+									</RadzenTableBody>
+								</RadzenTable>
 							}
-						</RadzenTableBody>
-					</RadzenTable>
-				}
 
-				@* Hvis ingen Check-Ind *@
+							@* Hvis ingen Check-Ind *@
 
-				@if (!_missingCheckIns.Any())
-				{
-					<h2>Ingen manglende indtjekninger for i dag.</h2>
-				}
-			</RadzenAccordionItem>
-
-			@* Check-Ud *@
-
-			<RadzenAccordionItem Text="Check-Ud" Icon="star" CollapseTitle="Fold Ind"
-								 ExpandTitle="Fold Ud"
-								 ExpandAriaLabel="Fold check-ud sektionen ind/ud"> @* (Kun brugt til skærmoplæsning) *@
-
-				@* Aktive Check-Ud *@
-
-				@if (_missingCheckOuts.Any())
-				{
-					<RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
-						<RadzenTableHeader>
-							<RadzenTableHeaderRow>
-								<RadzenTableHeaderCell>
-									Ressource
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Pladsnr.
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Kundenavn
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Startdato
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Slutdato
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Ledig?
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Betalt?
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Ændre
-								</RadzenTableHeaderCell>
-								<RadzenTableHeaderCell>
-									Check-ind
-								</RadzenTableHeaderCell>
-							</RadzenTableHeaderRow>
-						</RadzenTableHeader>
-						<RadzenTableBody>
-							@foreach (ReadBookingMissingCheckOutQueryResponseDto booking in _missingCheckOuts)
+							@if (!_missingCheckIns.Any())
 							{
-								<RadzenTableRow>
-									<RadzenTableCell>
-										@($"{booking.ResourceName}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.ResourceLocation}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.GuestName}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.BookingStartDate}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										@($"{booking.BookingEndDate}")
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<div><RadzenIcon Icon="done" /></div>
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<div><RadzenIcon Icon="done" /></div>
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<RadzenButton Text="Ændre" ButtonStyle="ButtonStyle.Success" />
-									</RadzenTableCell>
-									<RadzenTableCell>
-										<RadzenButton Text="Check-ud" ButtonStyle="ButtonStyle.Success" />
-									</RadzenTableCell>
-								</RadzenTableRow>
+								<h2>Ingen manglende indtjekninger for i dag.</h2>
 							}
-						</RadzenTableBody>
-					</RadzenTable>
-				}
+						</RadzenAccordionItem>
 
-				@* Hvis ingen Check-Ud *@
+						@* Check-Ud *@
 
-				@if (!_missingCheckOuts.Any())
-				{
-					<h2>Ingen manglende udtjekninger for i dag.</h2>
-				}
-			</RadzenAccordionItem>
-		</Items>
-	</RadzenAccordion>
-</div>
+						<RadzenAccordionItem Text="Check-Ud" Icon="star" CollapseTitle="Fold Ind"
+											 ExpandTitle="Fold Ud"
+											 ExpandAriaLabel="Fold check-ud sektionen ind/ud">
+							@* (Kun brugt til skærmoplæsning) *@
+
+							@* Aktive Check-Ud *@
+
+							@if (_missingCheckOuts.Any())
+							{
+								<RadzenTable GridLines=Radzen.DataGridGridLines.Horizontal AllowAlternatingRows=true>
+									<RadzenTableHeader>
+										<RadzenTableHeaderRow>
+											<RadzenTableHeaderCell>
+												Ressource
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Pladsnr.
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Kundenavn
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Startdato
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Slutdato
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Ledig?
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Betalt?
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Ændre
+											</RadzenTableHeaderCell>
+											<RadzenTableHeaderCell>
+												Check-ind
+											</RadzenTableHeaderCell>
+										</RadzenTableHeaderRow>
+									</RadzenTableHeader>
+									<RadzenTableBody>
+										@foreach (ReadBookingMissingCheckOutQueryResponseDto booking in _missingCheckOuts)
+										{
+											<RadzenTableRow>
+												<RadzenTableCell>
+													@($"{booking.ResourceName}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.ResourceLocation}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.GuestName}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.BookingStartDate}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													@($"{booking.BookingEndDate}")
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<div><RadzenIcon Icon="done" /></div>
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<div><RadzenIcon Icon="done" /></div>
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<RadzenButton Text="Ændre" ButtonStyle="ButtonStyle.Success" />
+												</RadzenTableCell>
+												<RadzenTableCell>
+													<RadzenButton Text="Check-ud" ButtonStyle="ButtonStyle.Success" />
+												</RadzenTableCell>
+											</RadzenTableRow>
+										}
+									</RadzenTableBody>
+								</RadzenTable>
+							}
+
+							@* Hvis ingen Check-Ud *@
+
+							@if (!_missingCheckOuts.Any())
+							{
+								<h2>Ingen manglende udtjekninger for i dag.</h2>
+							}
+						</RadzenAccordionItem>
+					</Items>
+				</RadzenAccordion>
+			</div>
+	</Authorized>
+	<Unauthorized>
+		<p>Du har ikke adgang til denne side</p>
+	</Unauthorized>
+</AuthorizeView>
+</CascadingAuthenticationState>
+
