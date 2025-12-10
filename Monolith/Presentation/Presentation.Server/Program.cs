@@ -1,4 +1,6 @@
 using InversionOfControlContainers.InversionOfControl;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using Presentation.Client.Services.Implementation;
 using Presentation.Client.Services.Interfaces;
 using Presentation.Server;
@@ -21,6 +23,24 @@ namespace Presentation
             // Add Radzen components
             builder.Services.AddRadzenComponents();
             builder.Services.AddControllers();
+
+            //Authentication and authorization
+
+            builder.Services.AddAuthentication(options =>
+                                              {
+                                                  options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                                                  options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                                              })
+                                              .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                                              {
+                                                  options.Cookie.Name = "authCookie";
+                                                  options.Cookie.HttpOnly = true;
+                                                  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                                              });
+
+            builder.Services.AddAuthenticationCore();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
 
             // Register services to IoC
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
@@ -48,6 +68,9 @@ namespace Presentation
 
             app.UseStaticFiles();
             app.UseAntiforgery();
+
+            app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
