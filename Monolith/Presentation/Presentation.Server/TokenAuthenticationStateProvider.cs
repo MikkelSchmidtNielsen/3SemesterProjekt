@@ -2,55 +2,41 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Presentation.Server
 {
     /* This custom AuthenticationStateProvider is necessary in order to use AuthorizeView in Blazor. */
     public class TokenAuthenticationStateProvider : AuthenticationStateProvider
     {
-        /* IHttpContextAccessorr is used to access data from an HttpOnly Cookie. In this case, it's authCookie from CookieController.cs */
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly HttpClient _httpClient;
 
-        public TokenAuthenticationStateProvider(IHttpContextAccessor httpContextAccessor, IHttpClientFactory httpClientFactory)
+		public TokenAuthenticationStateProvider(IHttpContextAccessor httpContextAccessor)
+		{
+			_httpContextAccessor = httpContextAccessor;
+		}
+
+		public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            _httpContextAccessor = httpContextAccessor;
-            _httpClient = httpClientFactory.CreateClient("ServerBaseUrl");
-        }
-        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
-        {
-            string? authCookie = _httpContextAccessor.HttpContext.Request.Cookies["authCookie"];
+            var context = _httpContextAccessor.HttpContext;
 
-            AuthenticationState notAuthenticated = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-            _httpClient.DefaultRequestHeaders.Authorization = null;
+            ClaimsPrincipal user;
 
+			if (context.User?.Identity != null && context.User.Identity.IsAuthenticated)
+			{
+				var identity = new ClaimsIdentity(
+					context.User.Claims,
+					CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (authCookie == null) // THe current user will be marked as not authenticated, if the authCookie can't be found
-            {
-                NotifyAuthenticationStateChanged(Task.FromResult(notAuthenticated));
-                return notAuthenticated;
-            }
+				user = new ClaimsPrincipal(identity);
+			}
+			else
+			{
+				user = new ClaimsPrincipal(new ClaimsIdentity());
+			}
 
-            try
-            {
-                JwtSecurityToken token = new JwtSecurityTokenHandler().ReadJwtToken(authCookie);
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.ToString().Replace("\"", ""));
-
-                /*Retrieving claims and roles*/
-                IEnumerable<Claim> claims = token.Claims;
-                ClaimsIdentity identity = new ClaimsIdentity(claims);
-
-                ClaimsPrincipal currentUser = new ClaimsPrincipal(identity);
-                AuthenticationState currentUserAuthState = new AuthenticationState(currentUser);
-                NotifyAuthenticationStateChanged(Task.FromResult(currentUserAuthState));
-                return currentUserAuthState;
-
-            }
-            catch (Exception ex) // If the cookie is expired, the user will be marked as not authenticated
-            {
-                NotifyAuthenticationStateChanged(Task.FromResult(notAuthenticated));
-                return notAuthenticated;
-            }
-        }
+			
+			return Task.FromResult(new AuthenticationState(user));
+		}
     }
 }

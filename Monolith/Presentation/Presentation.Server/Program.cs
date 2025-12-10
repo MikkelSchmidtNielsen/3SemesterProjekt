@@ -27,20 +27,34 @@ namespace Presentation
             //Authentication and authorization
 
             builder.Services.AddAuthentication(options =>
-                                              {
-                                                  options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                                                  options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                                              })
-                                              .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+			                                {
+				                                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+				                                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			                                })
+											  .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                                               {
                                                   options.Cookie.Name = "authCookie";
                                                   options.Cookie.HttpOnly = true;
                                                   options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                                                  options.Events.OnRedirectToLogin = ctx =>
+                                                  {
+                                                      ctx.Response.Redirect("/register");
+                                                      return Task.CompletedTask;
+                                                  };
+
+                                                  options.Events.OnRedirectToAccessDenied = ctx =>
+                                                  {
+                                                      ctx.Response.StatusCode = 401;
+                                                      //ctx.Response.Redirect("/admin/manage-camp");
+                                                      return Task.CompletedTask;
+                                                  };
                                               });
 
             builder.Services.AddAuthenticationCore();
-            builder.Services.AddAuthorizationCore();
+            //builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
+            builder.Services.AddScoped<JwtCookieMiddleware>();
 
             // Register services to IoC
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
@@ -69,6 +83,7 @@ namespace Presentation
             app.UseStaticFiles();
             app.UseAntiforgery();
 
+            app.UseMiddleware<JwtCookieMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

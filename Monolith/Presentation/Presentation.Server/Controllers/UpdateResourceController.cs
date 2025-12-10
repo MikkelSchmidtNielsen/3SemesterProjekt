@@ -5,6 +5,7 @@ using Application.ServiceInterfaces.Query;
 using Common;
 using Common.CustomExceptions;
 using Common.ResultInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Shared.Models;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Presentation.Server.Controllers
 			_httpContext = httpContext;
 			_command = command;
 		}
-
+		
 		[HttpGet]
 		public async Task<IEnumerable<UpdateResourceModel>> GetAllResources()
 		{
@@ -55,6 +56,7 @@ namespace Presentation.Server.Controllers
 			return resultList;
 		}
 
+		[Authorize(Roles = "Admin")]
 		[HttpPut("{id}")]
 		public async Task<UpdateResourceModel> UpdateResource(int id, [FromBody]UpdateResourceModel resource)
 		{
