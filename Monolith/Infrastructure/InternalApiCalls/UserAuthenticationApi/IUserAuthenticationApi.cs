@@ -22,7 +22,7 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 		[Post("/register-user/{email}")]
 		Task<string> RegisterUserAsync([AliasAs("email")] string email);
 
-		// Generates an One Time Password and uses the given email as the OTP's key.
+		// Generates an One Time Password.
 		[Put("/request-otp/{email}")]
 		Task RequestOtpAsync([AliasAs("email")] string email);
 
