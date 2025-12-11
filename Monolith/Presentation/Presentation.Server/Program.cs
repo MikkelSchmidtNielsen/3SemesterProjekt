@@ -52,7 +52,6 @@ namespace Presentation
                                               });
 
             builder.Services.AddAuthenticationCore();
-            //builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
             builder.Services.AddScoped<JwtCookieMiddleware>();
 
