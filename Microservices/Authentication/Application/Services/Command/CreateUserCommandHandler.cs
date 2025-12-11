@@ -20,7 +20,6 @@ namespace Application.Services.Command
 
         public async Task<IResult<CreateUserResponseDto>> HandleAsync(string command)
         {
-            Console.WriteLine("trin 2");
             // Creates dto to handle different returns
             CreateUserResponseDto dto = new CreateUserResponseDto();
             dto.Email = command;
@@ -58,7 +57,6 @@ namespace Application.Services.Command
             // Create token
             IResult<string> tokenResponse = _tokenHandler.Handle(user);
 
-            Console.WriteLine("trin 3");
             if (tokenResponse.IsSuccess() == false)
             {
                 // Get exception
