@@ -5,7 +5,7 @@
 @inject IBookingCreateCommand _bookingCommand
 @inject IReadAllResourcesQuery _resourceQuery
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Guest")]
+@attribute [Authorize(Roles = "Admin")]
 <RadzenDialog />
 
 <PageTitle>Booking</PageTitle>

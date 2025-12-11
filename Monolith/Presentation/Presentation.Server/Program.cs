@@ -39,15 +39,15 @@ namespace Presentation
 
                                                   options.Events.OnRedirectToLogin = ctx =>
                                                   {
-                                                      ctx.Response.Redirect("/register");
+                                                      ctx.Response.Redirect("/not-allowed");
                                                       return Task.CompletedTask;
                                                   };
 
                                                   options.Events.OnRedirectToAccessDenied = ctx =>
                                                   {
                                                       ctx.Response.StatusCode = 401;
-                                                      //ctx.Response.Redirect("/admin/manage-camp");
-                                                      return Task.CompletedTask;
+													  ctx.Response.Redirect("/not-allowed");
+													  return Task.CompletedTask;
                                                   };
                                               });
 
