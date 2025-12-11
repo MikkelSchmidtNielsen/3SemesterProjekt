@@ -7,6 +7,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.CodeDom.Compiler;
 using System.Threading.Tasks;
+using Application.ApplicationDto;
 
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
@@ -38,6 +39,16 @@ namespace Authentication.Api.Controllers
 
         System.Threading.Tasks.Task<string> RegisterUserAsync(string email);
 
+
+        /// <returns>Successful response</returns>
+
+        System.Threading.Tasks.Task RequestOtpAsync(string email);
+
+
+        /// <returns>Successful response, returns JWT</returns>
+
+        System.Threading.Tasks.Task<string> ValidateUserAsync(ValidateUserQueryDto body);
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -59,25 +70,25 @@ namespace Authentication.Api.Controllers
             return _implementation.RegisterUserAsync(email);
         }
 
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class BadResponse
-    {
-
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        /// <returns>Successful response</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("request-otp/{email}")]
+        public System.Threading.Tasks.Task RequestOtp(string email)
         {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
+
+            return _implementation.RequestOtpAsync(email);
+        }
+
+        /// <returns>Successful response, returns JWT</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("validate-user")]
+        public System.Threading.Tasks.Task<string> ValidateUser([Microsoft.AspNetCore.Mvc.FromBody] ValidateUserQueryDto body)
+        {
+
+            return _implementation.ValidateUserAsync(body);
         }
 
     }
+
+    
 
 
 }

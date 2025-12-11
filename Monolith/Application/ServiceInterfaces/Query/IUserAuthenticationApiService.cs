@@ -1,4 +1,5 @@
-﻿using Application.InfrastructureDto;
+﻿using Application.ApplicationDto.Query;
+using Application.InfrastructureDto;
 using Common.ResultInterfaces;
 
 namespace Application.ServiceInterfaces.Query
@@ -6,5 +7,7 @@ namespace Application.ServiceInterfaces.Query
 	public interface IUserAuthenticationApiService
 	{
 		public Task<IResult<CreateUserByApiReponseDto>> RegisterUserAsync(string email);
+		public Task RequestOtpAsync(string email);
+		public Task<IResult<ValidateUserByApiResponseDto>> ValidateUserAsync(ValidateUserQueryDto dto);
 	}
 }

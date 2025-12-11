@@ -31,6 +31,46 @@ paths:
         schema:
           type: string
 
+  '/request-otp/{email}':
+    summary: Path to create an one-time password.
+    description: An OTP is created and sent to the user's email address.
+    put:
+        responses:
+          '201':
+            description: Successful response
+
+          '500':
+            $ref: '#/components/responses/500Error'
+
+    parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+
+  '/validate-user':
+    summary: Path to validate OTP
+    description: Entered OTP gets validated and a JWT should be returned.
+    get:
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateUserQueryDto'
+        responses:
+          '201':
+            description: Successful response, returns JWT
+            content:
+              application/jwt:
+                schema: 
+                  $ref: '#/components/schemas/userResponse'
+          '400':
+            $ref: '#/components/responses/400Error'
+          '500':
+            $ref: '#/components/responses/500Error'
+
 components:
   schemas: 
     userResponse:
@@ -42,7 +82,18 @@ components:
       properties:
         message:
           type: string
-
+    
+    ValidateUserQueryDto:
+      type: object
+      required:
+        - email
+        - otp
+      properties:
+       email:
+        type: string
+       otp:
+        type: int
+    
   responses:
     400Error:
       description: Error response - Invalid input

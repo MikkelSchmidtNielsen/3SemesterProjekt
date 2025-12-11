@@ -1,4 +1,6 @@
 using InversionOfControlContainers.InversionOfControl;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using Presentation.Client.Services.Implementation;
 using Presentation.Client.Services.Interfaces;
 using Presentation.Server;
@@ -21,6 +23,37 @@ namespace Presentation
             // Add Radzen components
             builder.Services.AddRadzenComponents();
             builder.Services.AddControllers();
+
+            //Authentication and authorization
+
+            builder.Services.AddAuthentication(options =>
+			                                {
+				                                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+				                                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			                                })
+											  .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                                              {
+                                                  options.Cookie.Name = "authCookie";
+                                                  options.Cookie.HttpOnly = true;
+                                                  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                                                  options.Events.OnRedirectToLogin = ctx =>
+                                                  {
+                                                      ctx.Response.Redirect("/not-allowed");
+                                                      return Task.CompletedTask;
+                                                  };
+
+                                                  options.Events.OnRedirectToAccessDenied = ctx =>
+                                                  {
+                                                      ctx.Response.StatusCode = 401;
+													  ctx.Response.Redirect("/not-allowed");
+													  return Task.CompletedTask;
+                                                  };
+                                              });
+
+            builder.Services.AddAuthenticationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
+            builder.Services.AddScoped<JwtCookieMiddleware>();
 
             // Register services to IoC
             IocServiceRegistration.RegisterService(builder.Services, builder.Configuration);
@@ -48,6 +81,10 @@ namespace Presentation
 
             app.UseStaticFiles();
             app.UseAntiforgery();
+
+            app.UseMiddleware<JwtCookieMiddleware>();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()

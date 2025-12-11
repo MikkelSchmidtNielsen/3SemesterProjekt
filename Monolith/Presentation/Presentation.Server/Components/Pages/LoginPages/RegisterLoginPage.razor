@@ -3,7 +3,9 @@
 @rendermode InteractiveServer
 @inject DialogService DialogService
 @inject NotificationService NotificationService
-@inject IGuestCreateCommand _command
+@inject IGuestCreateCommand _guestCreateCommand
+@inject IOtpCreateCommand _otpCreateCommand
+@inject IValidateUserService _validateUserService
 <RadzenNotification />
 
 
@@ -13,12 +15,22 @@
         <RadzenTextBox @bind-Value="@_email" Disabled="@isEmailDisabled"/>
     </RadzenFormField>
 
-    <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnEmailSumbitAsync()) Disabled="@isEmailDisabled"/>
+    <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnEmailSumbitAsync()) Disabled="@isEmailDisabled" Visible="@_submitButtonVisible"/>
 </RadzenStack>
 
 <br />
 
-@if (_emailIsValidated is true)
+@if (_accountAlreadyExists is true)
+{
+<RadzenStack AlignItems="AlignItems.Center">
+        <RadzenFormField Text="Indtast Engangskode" Style="width: auto;">
+            <RadzenNumeric TValue="int" MaxLength="6" @bind-value="@_oneTimePassword"/>
+            <RadzenButton Text="Indsend engangskode" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnOtpSubmitAsync()) />
+        </RadzenFormField>
+</RadzenStack>
+}
+
+@if (_accountDoesNotAlreadyExist is true)
 {
     <RegisterGuestComponent RegisterModelComponent="@_registerModel" OnModelSubmit="@OnModelSubmitAsync"></RegisterGuestComponent>
 }

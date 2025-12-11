@@ -27,7 +27,8 @@ namespace Application.Services.Command
             Claim[] claims =
             [
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
             ];
 
             // Creates a security key from our _secretKey and chooses the HmacSha256 algorithm.

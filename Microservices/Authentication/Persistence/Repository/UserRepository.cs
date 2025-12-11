@@ -2,6 +2,7 @@
 using Common.ResultInterfaces;
 using Application.RepositoryInterfaces;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repository
 {
@@ -20,6 +21,29 @@ namespace Persistence.Repository
             try
             {
                 await _db.Users.AddAsync(user);
+                await _db.SaveChangesAsync();
+
+                return Result<User>.Success(user);
+            }
+            catch (Exception ex)
+            {
+                return Result<User>.Error(user, ex);
+            }
+        }
+
+        public async Task<IResult<User>> ReadUserByEmailAsync(string email)
+        {
+
+            User? user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            return Result<User>.Success(user);
+        }
+
+        public async Task<IResult<User>> UpdateUserAsync(User user)
+        {
+            try
+            {
+                _db.Update(user);
                 await _db.SaveChangesAsync();
 
                 return Result<User>.Success(user);

@@ -43,6 +43,8 @@ namespace InversionOfControlContainers.InversionOfControl
             services.AddScoped<IResourceApiService, ResourceApiService>();
             services.AddScoped<IReadAllResourcesQuery, ReadAllResourcesQuery>();
             services.AddScoped<IReadResourceByIdQuery, ReadResourceByIdQuery>();
+            services.AddScoped<IOtpCreateCommand, OtpCreateCommand>();
+            services.AddScoped<IValidateUserService, ValidateUserService>();
             services.AddScoped<IUpdateResourceCommand, UpdateResourceCommand>();
 
 			//Add repositories

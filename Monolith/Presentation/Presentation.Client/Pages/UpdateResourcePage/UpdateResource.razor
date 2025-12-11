@@ -1,7 +1,9 @@
 ﻿@page "/admin/update-resource"
 @using Common.CustomExceptions
+@using Microsoft.AspNetCore.Authorization
 @inject IUpdateResourceService _updateService
 @inject DialogService _dialogService
+@* @attribute [Authorize(Roles = "Admin")] *@
 
 <RadzenDialog/>
 
