@@ -46,7 +46,7 @@ namespace Infrastructure.InternalApiCalls.UserAuthenticationApi
 					};
 				}
 
-				// A custom Exception, so I can get BadReponse error message, status code and original ApiException message all in one exception
+				// A custom Exception, so we can get BadReponse error message, status code and original ApiException message all in one exception
 				ApiErrorException apiErrorException = new ApiErrorException(
 					apiErrorMessage: error?.Message,
 					statusCode: (int)ex.StatusCode,
