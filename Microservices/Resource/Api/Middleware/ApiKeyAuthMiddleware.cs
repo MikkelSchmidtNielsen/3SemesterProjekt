@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Api.Middleware
 {
-	public class ApiKeyAuthMiddleware
+	public class ApiKeyAuthMiddleware : IMiddleware
 	{
 		private readonly RequestDelegate _next;
 		private readonly IConfiguration _configuration;
