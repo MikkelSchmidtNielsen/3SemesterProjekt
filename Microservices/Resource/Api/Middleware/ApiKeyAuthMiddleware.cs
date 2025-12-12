@@ -5,18 +5,16 @@ namespace Api.Middleware
 {
 	public class ApiKeyAuthMiddleware : IMiddleware
 	{
-		private readonly RequestDelegate _next;
 		private readonly IConfiguration _configuration;
 
-		public ApiKeyAuthMiddleware(RequestDelegate next, IConfiguration configuration)
+		public ApiKeyAuthMiddleware(IConfiguration configuration)
 		{
-			_next = next;
 			_configuration = configuration;
 		}
 
-		public async Task InvokeAsync(HttpContext context)
+		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
-			 if(!context.Request.Headers.TryGetValue(AuthConstants.ApiKeyHeaderName, out var extractedApiKey))
+			if (!context.Request.Headers.TryGetValue(AuthConstants.ApiKeyHeaderName, out var extractedApiKey))
 			{
 				context.Response.StatusCode = HttpStatusCode.Unauthorized.ToInt();
 				await context.Response.WriteAsync("API Key missing");
@@ -31,7 +29,7 @@ namespace Api.Middleware
 				return;
 			}
 
-			await _next(context);
+			await next(context);
 		}
 	}
 
