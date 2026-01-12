@@ -56,7 +56,7 @@ namespace Presentation.Server.Controllers
 			return resultList;
 		}
 
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Guest")]
 		[HttpPut("{id}")]
 		public async Task<UpdateResourceModel> UpdateResource(int id, [FromBody]UpdateResourceModel resource)
 		{

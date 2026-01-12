@@ -4,7 +4,7 @@
 @inject IBookingCheckOutQuery _checkOutQuery
 @rendermode RenderMode.InteractiveServer
 @* @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Admin")] *@
+@attribute [Authorize(Roles = "Guest")] *@
 
 <div id="main-container">
 	<h1 id="header-text">Administrer campingplads</h1>
