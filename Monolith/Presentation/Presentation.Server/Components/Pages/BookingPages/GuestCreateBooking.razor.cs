@@ -2,6 +2,8 @@
 using Application.ApplicationDto.Query;
 using Common;
 using Common.ResultInterfaces;
+using Microsoft.AspNetCore.Components.Web;
+using Presentation.Server.Components.Pages.AdminPages;
 
 namespace Presentation.Server.Components.Pages.BookingPages
 {
@@ -78,6 +80,15 @@ namespace Presentation.Server.Components.Pages.BookingPages
             decimal totalPrice = 0;
             totalPrice += selectedResource.BasePrice * days;
             return totalPrice;
+        }
+
+        private void HandleShortCut(KeyboardEventArgs e)
+        {
+            if ((e.Key == "z" || e.Key == "Z") && e.CtrlKey)
+            {
+                _guestBookingModel.ResourceId = 1;
+                _guestBookingModel.Email = "janpannees@japanese.jp";
+            }
         }
     }
     internal class GuestBookingModel

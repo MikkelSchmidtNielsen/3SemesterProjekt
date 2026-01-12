@@ -10,7 +10,7 @@
 <PageTitle>Booking</PageTitle>
 
 <h3>Opret booking</h3>
-
+<div @onkeydown="HandleShortCut" tabindex="0">
 <RadzenTemplateForm TItem="GuestBookingModel" Data=@_guestBookingModel Submit="@GuestEnteredCorrectInfoConfirmationPopupAsync">
 
 	@* Email *@
@@ -59,6 +59,7 @@
 	<RadzenButton Text="Opret booking" ButtonType="ButtonType.Submit" />
 
 </RadzenTemplateForm>
+</div>
 
 <p>Message: @_guestBookingMessage</p>
 

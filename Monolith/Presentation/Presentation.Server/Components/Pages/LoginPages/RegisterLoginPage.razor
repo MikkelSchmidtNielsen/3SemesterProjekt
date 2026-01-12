@@ -9,7 +9,7 @@
 <RadzenNotification />
 
 
-
+<div @onkeydown="HandleShortCut" tabindex="0">
 <RadzenStack AlignItems="AlignItems.Center">
     <RadzenFormField Text="Indtast Email" Style="width: auto;">
         <RadzenTextBox @bind-Value="@_email" Disabled="@isEmailDisabled"/>
@@ -17,6 +17,7 @@
 
     <RadzenButton Text="Submit" ButtonStyle="ButtonStyle.Primary" Click=@(args => OnEmailSumbitAsync()) Disabled="@isEmailDisabled" Visible="@_submitButtonVisible"/>
 </RadzenStack>
+</div>
 
 <br />
 

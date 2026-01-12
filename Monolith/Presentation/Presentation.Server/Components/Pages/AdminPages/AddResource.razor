@@ -14,7 +14,7 @@
 <div id="main-content">
 	<div id="resource-content">
 	<h3 class="text-center padding-10px">Opret en ny ressource</h3>
-
+	<div @onkeydown="HandleShortCut" tabindex="0">
 		<RadzenTemplateForm TItem="ResourceModel" Data="@resourceModel" Submit="@ShowDialog">
 			<RadzenStack>
 				<RadzenStack Orientation="Orientation.Vertical" Gap="0.5 rem">
@@ -58,6 +58,7 @@
 			<RadzenButton ButtonType="ButtonType.Submit" Text="Opret ressource" />
 			</RadzenStack>
 		</RadzenTemplateForm>
+		</div>
 	</div>
 	<div id="preview-content">
 		<h3 class="text-center padding-10px">Forhåndsvisning</h3>

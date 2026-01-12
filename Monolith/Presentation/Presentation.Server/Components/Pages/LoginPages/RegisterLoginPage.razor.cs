@@ -1,11 +1,12 @@
 ﻿
 using Application.ApplicationDto.Command;
 using Application.ApplicationDto.Query;
+using Application.ServiceInterfaces;
 using Azure;
 using Common;
 using Common.ResultInterfaces;
+using Microsoft.AspNetCore.Components.Web;
 using Radzen;
-using Application.ServiceInterfaces;
 
 namespace Presentation.Server.Components.Pages.LoginPages
 {
@@ -82,7 +83,15 @@ namespace Presentation.Server.Components.Pages.LoginPages
             SendNotification(NotificationSeverity.Success, "Succes", "Konto er nu oprettet");
         }
 
-		private string? _email;
+        private void HandleShortCut(KeyboardEventArgs e)
+        {
+            if ((e.Key == "z" || e.Key == "Z") && e.CtrlKey)
+            {
+				_email = "janpannees@japanese.jp";
+            }
+        }
+
+        private string? _email;
 		private bool isEmailDisabled = false;
 		private RegisterModel _registerModel = new();
 		private bool _accountDoesNotAlreadyExist = false;

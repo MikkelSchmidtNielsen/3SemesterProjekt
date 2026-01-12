@@ -13,7 +13,7 @@
 <div id="main-content">
     <div id="booking-content">
         <h3 class="text-center padding-10px">Opret booking</h3>
-
+        <div @onkeydown="HandleShortCut" tabindex="0">
         <RadzenTemplateForm TItem="BookingModel" Data=@_bookingModel Submit="@CreateBookingAsync">
             <RadzenStack>
                 <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
@@ -75,7 +75,7 @@
                 <RadzenButton ButtonType="ButtonType.Submit" Text="Opret booking" />
             </RadzenStack>
         </RadzenTemplateForm>
-
+        </div>
     </div>
     <div id="preview-content">
         <h3 class="text-center padding-10px">Ordreoversigt</h3>

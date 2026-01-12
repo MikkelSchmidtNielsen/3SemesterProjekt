@@ -1,4 +1,5 @@
-﻿<RadzenTemplateForm TItem="RegisterModel"
+﻿<div @onkeydown="HandleShortCut" tabindex="0">
+<RadzenTemplateForm TItem="RegisterModel"
                     Data=@RegisterModelComponent
                     Submit="@OnModelSubmitAsync">
 
@@ -56,3 +57,4 @@
 
     </RadzenStack>
 </RadzenTemplateForm>
+</div>

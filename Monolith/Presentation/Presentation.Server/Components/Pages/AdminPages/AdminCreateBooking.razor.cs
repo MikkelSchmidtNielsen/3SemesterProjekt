@@ -3,6 +3,7 @@ using Application.ApplicationDto.Query;
 using Common;
 using Common.ResultInterfaces;
 using Domain.ModelsDto;
+using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 
 namespace Presentation.Server.Components.Pages.AdminPages
@@ -136,6 +137,18 @@ namespace Presentation.Server.Components.Pages.AdminPages
             _tempResource = null;
             _tempTotalPrice = 0;
             await ShowDialog();
+        }
+
+        private void HandleShortCut(KeyboardEventArgs e)
+        {
+            if ((e.Key == "z" || e.Key == "Z") && e.CtrlKey)
+            {
+                _bookingModel.ResourceId = 1;
+                _bookingModel.Guest.FirstName = "Jan Pan";
+                _bookingModel.Guest.LastName = "Nees";
+                _bookingModel.Guest.Address = "Japanvej 7";
+                _bookingModel.Guest.PhoneNumber = 12345678;
+            }
         }
     }
 

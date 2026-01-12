@@ -2,6 +2,7 @@
 using Common;
 using Common.ResultInterfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using System.Globalization;
 
@@ -44,6 +45,18 @@ namespace Presentation.Server.Components.Pages.AdminPages
                 await ErrorDialog(errorMessage);
             }
 
+        }
+
+        private void HandleShortCut(KeyboardEventArgs e)
+        {
+            if ((e.Key == "z" || e.Key == "Z") && e.CtrlKey)
+            {
+                resourceModel.Name = "Luksus Hytte";
+                resourceModel.Type = "Hytte";
+                resourceModel.BasePrice = 750;
+                resourceModel.Location = 4;
+                resourceModel.Description = "En luksushytte velegnet til familier eller par. Indeholder sovepladser, mindre køkkenområde og terrasse.";
+            }
         }
     }
 }
